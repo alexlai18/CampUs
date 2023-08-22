@@ -1,6 +1,6 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import Dashboard from '@/app/dashboard/page'
+import Login from '@/pages/login/page'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,7 +14,7 @@ export default function RootLayout({}) {
     <html lang="en">
       <body className={`dark ${inter.className}`}>
         {/* Will put login page here */}
-        <Dashboard />
+        <Login />
       </body>
     </html>
   )
