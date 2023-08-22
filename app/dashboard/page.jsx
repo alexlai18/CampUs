@@ -1,40 +1,24 @@
 import Image from 'next/image'
-import { CalendarDateRangePicker } from '@/components/CalendarDateRangePicker'
-import { Button } from '@/components/ui/button'
+import { CalendarDateRangePicker } from '../components/CalendarDateRangePicker'
+import { Button } from '../components/ui/button'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs"
+} from "../components/ui/tabs"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { FullNav } from '@/components/FullNav'
+} from "../components/ui/card"
+import { FullNav } from '../components/FullNav'
 
 export default function Dashboard() {
   return (
     <>
-      <div className="md:hidden">
-        <Image
-          src="/examples/dashboard-light.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/dashboard-dark.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="hidden dark:block"
-        />
-      </div>
       <div className="hidden flex-col md:flex">
         <FullNav />
         <div className="flex-1 space-y-4 p-8 pt-6">

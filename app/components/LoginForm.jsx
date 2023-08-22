@@ -7,18 +7,26 @@ import { Icons } from "./ui/icons"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
-import { useNavigate } from "react-router-dom"
+import { useRouter } from 'next/navigation'
+
 
 export function LoginForm({ className, ...props }) {
   const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
   async function onSubmit(event) {
     event.preventDefault()
     setIsLoading(true)
+    console.log(email, password)
+    // Submit function
+    //submit(email, password);
 
     setTimeout(() => {
       setIsLoading(false)
-    }, 3000)
+    }, 3000);
+    router.push("/dashboard")
   }
 
   return (
@@ -37,6 +45,8 @@ export function LoginForm({ className, ...props }) {
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div className="grid gap-2">
@@ -49,6 +59,8 @@ export function LoginForm({ className, ...props }) {
               autoCapitalize="none"
               autoCorrect="off"
               disabled={isLoading}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
           <Button disabled={isLoading}>
