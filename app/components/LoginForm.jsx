@@ -3,35 +3,51 @@
 import React, { useState } from "react"
 
 import { cn } from "@/lib/utils"
-import { Icons } from "./ui/icons"
-import { Button } from "./ui/button"
-import { Input } from "./ui/input"
-import { Label } from "./ui/label"
+import { Icons } from "@/components/ui/icons"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { useRouter } from 'next/navigation'
+import { logUser } from "../mockData"
+import { ErrorPopup } from "./ErrorPopup"
 
 
 export function LoginForm({ className, ...props }) {
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState("");
+  const [error, setError] = useState(false);
   const [password, setPassword] = useState("");
   const router = useRouter();
 
   async function onSubmit(event) {
-    event.preventDefault()
-    setIsLoading(true)
-    console.log(email, password)
+    event.preventDefault();
     // Submit function
     //submit(email, password);
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000);
-    router.push("/dashboard")
+    setIsLoading(true)
+    if(!logUser(email, password)) {
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 3000);
+      setError(true);
+    } else{
+      setTimeout(() => {
+        setIsLoading(false)
+        router.push("/dashboard")
+      }, 3000);
+    }
   }
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
+        <div className="py-2">
+            {error && 
+              <ErrorPopup
+                severity={true}
+                message="This user does not have an account. Please register."
+              />
+            }
+        </div>
         <div className="grid gap-2">
           <div className="grid gap-2">
             <Label htmlFor="login-email">
