@@ -13,9 +13,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger,
+    DropdownMenuButtonItem,
   } from "@/components/ui/dropdown-menu"
+
+  import { useRouter } from "next/navigation"
   
   export function ProfileNav() {
+    const router = useRouter();
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -52,10 +56,10 @@ import {
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            Log out
+          <DropdownMenuButtonItem onClick={() => {router.push('/')}}>
+            Log Out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          </DropdownMenuButtonItem>
         </DropdownMenuContent>
       </DropdownMenu>
     )
