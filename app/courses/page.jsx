@@ -1,19 +1,18 @@
-import Image from 'next/image'
 import { CalendarDateRangePicker } from '../components/CalendarDateRangePicker'
-import { Button } from '../components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../components/ui/tabs"
+} from "@/components/ui/tabs"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../components/ui/card"
+} from "@/components/ui/card"
 import { FullNav } from '../components/FullNav'
 
 export default function Dashboard() {
