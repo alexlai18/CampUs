@@ -2,14 +2,18 @@
 
 import React, { useState } from "react"
 
+// ShadCN UI components
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from 'next/navigation'
-import { logUser } from "../mockData"
+
+// Self-made components
 import { ErrorPopup } from "./ErrorPopup"
+// User functions
+import { logUser } from "../mockData"
 
 
 export function LoginForm({ className, ...props }) {
