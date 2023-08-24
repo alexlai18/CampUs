@@ -29,7 +29,7 @@ export function RegisterForm() {
     if (!addUser(email, password)) {
       setError(true);
     } else {
-      router.push("/newuser");
+      router.push(`/newuser/?email=${email}`)
     }
   }
 

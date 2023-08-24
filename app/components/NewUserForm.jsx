@@ -22,10 +22,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 // User functions
-import { addUser } from "../mockData"
+import { addUserDetails, dataStore } from "../mockData"
 
-export function NewUserForm() {
+export function NewUserForm(props) {
   // Note: Will probably have an API that gets all the universities in Australia and have an autocomplete search
+  const { email } = props;
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
   const [grade, setGrade] = useState("");
@@ -34,10 +35,15 @@ export function NewUserForm() {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(fname);
-    console.log(lname);
-    console.log(grade);
-    console.log(uni);
+    const details = {
+      email,
+      fname,
+      lname,
+      grade,
+      uni,
+    }
+    addUserDetails(email, details);
+    console.log(dataStore["userdetails"]);
     router.push("/dashboard");
   }
 

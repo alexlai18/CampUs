@@ -1,6 +1,12 @@
+"use client"
+
+import { useRouter, useSearchParams } from 'next/navigation'
 import { NewUserForm } from '../components/NewUserForm'
 
 export default function NewUser() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const email = searchParams.get("email");
   return (
     <>
       <div className="hidden flex-col md:flex">
@@ -21,7 +27,7 @@ export default function NewUser() {
                 We just have a few questions before you can start
               </p>
             </div>
-            <NewUserForm />
+            <NewUserForm email={email}/>
             <p className="px-8 text-center text-sm text-muted-foreground">
               Don't worry, you can change all of this information later
             </p>

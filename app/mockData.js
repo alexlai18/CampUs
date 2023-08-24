@@ -1,5 +1,6 @@
 export const dataStore = {
-  "users": {}
+  "users": {},
+  "userdetails": {}
 }
 
 export const addUser = (email, password) => {
@@ -17,4 +18,8 @@ export const logUser = (email, password) => {
     return true;
   }
   return false;
+}
+
+export const addUserDetails = (email, details) => {
+  dataStore.userdetails[email] = details;
 }
