@@ -1,3 +1,5 @@
+import { useRouter } from "next/navigation"
+
 import {
     Avatar,
     AvatarFallback,
@@ -15,8 +17,6 @@ import {
     DropdownMenuTrigger,
     DropdownMenuButtonItem,
   } from "@/components/ui/dropdown-menu"
-
-  import { useRouter } from "next/navigation"
   
   export function ProfileNav() {
     const router = useRouter();

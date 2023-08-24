@@ -1,5 +1,8 @@
 "use client"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
+// ShadCN UI Components
 import { Icons } from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -12,9 +15,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useState } from "react"
 import { addUser } from "../mockData"
-import { useRouter } from "next/navigation"
 import { ErrorPopup } from "./ErrorPopup"
 
 export function RegisterForm() {
@@ -28,7 +29,7 @@ export function RegisterForm() {
     if (!addUser(email, password)) {
       setError(true);
     } else {
-      router.push("/dashboard");
+      router.push("/newuser");
     }
   }
 
