@@ -31,8 +31,8 @@ export function LoginForm({ className, ...props }) {
     if(!logUser(email, password)) {
       setTimeout(() => {
         setIsLoading(false);
+        setError(true);
       }, 3000);
-      setError(true);
     } else{
       setTimeout(() => {
         sessionStorage.setItem("email", email);

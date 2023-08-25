@@ -18,14 +18,26 @@ import {
     DropdownMenuButtonItem,
   } from "@/components/ui/dropdown-menu"
 import { getUserDetails } from "../mockData";
+import { useEffect, useState } from "react";
   
   export function ProfileNav() {
     const router = useRouter();
     const email = sessionStorage.getItem("email");
+    const [initials, setInitials] = useState("");
+    const [name, setName] = useState("");
+    const [userDetails, setUserDetails] = useState({})
 
-    const userDetails = getUserDetails(email);
-    const initials = userDetails.fname.slice(0, 1) + userDetails.lname.slice(0, 1)
-    const name = userDetails.fname + " " + userDetails.lname
+    useEffect(() => {
+      const details = getUserDetails(email);
+      if (!details) {
+        router.push("/");
+      } else {
+        setUserDetails(details);
+        setInitials(details.fname.slice(0, 1) + details.lname.slice(0, 1));
+        setName(details.fname + " " + details.lname)
+      }
+    })
+
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

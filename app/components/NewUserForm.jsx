@@ -121,6 +121,7 @@ export function NewUserForm(props) {
                                 setUni(currentValue === uni ? "" : currentValue)
                                 setOpen(false)
                               }}
+                              value={uniN}
                             >
                               {uniN}
                               <CheckIcon
