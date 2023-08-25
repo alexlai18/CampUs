@@ -1,6 +1,14 @@
 export const dataStore = {
-  "users": {},
-  "userdetails": {},
+  "users": {"olivia.martin@email.com": "password123"},
+  "userdetails": {
+    "olivia.martin@email.com": {
+      "email": "olivia.martin@email.com",
+      "fname": "Olivia",
+      "lname": "Martin",
+      "grade": 3,
+      "uni": "University of New South Wales"
+    }
+  },
   "groupmates": {"alaiier18@gmail.com":
     [
       {
@@ -58,6 +66,29 @@ export const dataStore = {
       <br/>
       • Other languages: Python, C, Java
     </>
+  },
+  "notifications": {"alaiier18@gmail.com":
+    [
+      {
+        "sender": "alaiier18@gmail.com",
+        "action": "messaged",
+        "message": "Remember to save your progress!"
+      },
+      {
+        "sender": "olivia.martin@email.com",
+        "action": "reacted",
+      },
+      {
+        "sender": "olivia.martin@email.com",
+        "action": "messaged",
+        "message": "Hurry tf up"
+      },
+      {
+        "sender": "olivia.martin@email.com",
+        "action": "bumped",
+        "message": "Hurry tf up",
+      }
+    ]
   }
 }
 
@@ -105,4 +136,8 @@ export const getAverageRating = (email) => {
     overallScore += mate.ratingGiven;
   })
   return (overallScore / numMates).toFixed(1);
+}
+
+export const getNotifications = (email) => {
+  return dataStore.notifications[email];
 }

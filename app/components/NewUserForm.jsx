@@ -60,7 +60,7 @@ export function NewUserForm(props) {
   const onSubmit = (event) => {
     event.preventDefault();
     sessionStorage.setItem("email", email);
-    const capitalisedUni = uni.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+    const capitalisedUni = uni.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter === " o" ?  letter : letter.toUpperCase());
     const details = {
       email,
       fname,

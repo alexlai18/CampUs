@@ -23,7 +23,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { FullNav } from '../components/FullNav'
-import { getAverageRating, getGroupMates, getUserAbout, getUserDetails } from '../mockData'
+import { getAverageRating, getGroupMates, getNotifications, getUserAbout, getUserDetails } from '../mockData'
 import { useRouter } from 'next/navigation'
 
 export default function Dashboard() {
@@ -32,6 +32,7 @@ export default function Dashboard() {
   const [favGroupMates, setFavGroupMates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rating, setRating] = useState(0);
+  const [notifs, setNotifs] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -46,11 +47,43 @@ export default function Dashboard() {
       const mates = getGroupMates(email);
       setFavGroupMates(mates ? mates : []);
       setRating(getAverageRating(email));
+
+      const ping = getNotifications(email);
+      setNotifs(ping ? ping : [])
       setLoading(false);
     }
   }, []);
 
   const handleEdit = () => {
+  }
+
+  const findNotif = (params, info) => {
+    switch (params.action) {
+      case "messaged":
+        return (
+          <p className="text-sm">
+            {`${info.fname} ${info.lname} ${params.action}: ${params.message}`}
+          </p>
+        )
+      case "reacted":
+        return (
+          <p className="text-sm">
+            {`${info.fname} ${info.lname} ${params.action} to your message`}
+          </p>
+        )
+      case "bumped":
+        return (
+          <p className="text-sm">
+            {`${info.fname} ${info.lname} ${params.action} their message: ${params.message}`}
+          </p>
+        )
+      default:
+        return (
+          <p className="text-sm">
+            {`Notification from ${info.fname} ${info.lname}`}
+          </p>
+        )
+    }
   }
 
   if (loading) {
@@ -187,7 +220,7 @@ export default function Dashboard() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-8">
-                      {favGroupMates.map((mate) => {
+                      {favGroupMates.length > 1 ? favGroupMates.map((mate) => {
                         return(
                           <div className="flex items-center" key={`groupmate-${mate.email}`}>
                             <Avatar className="h-9 w-9">
@@ -203,11 +236,28 @@ export default function Dashboard() {
                             <div className="ml-auto font-medium">{mate.course}</div>
                           </div>
                         )
-                      })}
+                      }) : <div className='text-lg font-medium'>You have not had any past groupmates. Connect through groups!</div>}
                     </div>
                   </CardContent>
                 </Card>
               </div>
+            </TabsContent>
+            <TabsContent value="notifications" className="space-y-4">
+              {notifs.length > 1 ? notifs.map((notif) => {
+                const info = getUserDetails(notif.sender);
+                return(
+                  <div className="flex items-center" key={`notif-${notif.email}`}>
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src="/avatars/01.png" alt="Avatar" />
+                      <AvatarFallback>{info.fname.slice(0, 1) + info.lname.slice(0, 1)}</AvatarFallback>
+                    </Avatar>
+                    <div className="ml-4 space-y-1">
+                      <p className="text-sm font-medium leading-none">{info.name}</p>
+                      {findNotif(notif, info)}
+                    </div>
+                  </div>
+                )
+              }) : <div className='text-lg font-medium'>No notifications</div>}
             </TabsContent>
           </Tabs>
         </div>
