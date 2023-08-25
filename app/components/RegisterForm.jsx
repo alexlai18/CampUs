@@ -45,7 +45,7 @@ export function RegisterForm() {
             {error && 
               <ErrorPopup
                 severity={true}
-                message="This email already has a registrated user. Please log in."
+                message="This email already has a registered user. Please log in."
               />
             }
           </div>

@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { NewUserForm } from '../components/NewUserForm'
 
 export default function NewUser() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const email = searchParams.get("email");
   return (
