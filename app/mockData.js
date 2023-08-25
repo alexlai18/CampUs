@@ -23,3 +23,7 @@ export const logUser = (email, password) => {
 export const addUserDetails = (email, details) => {
   dataStore.userdetails[email] = details;
 }
+
+export const getUserDetails = (email) => {
+  return dataStore.userdetails[email];
+}

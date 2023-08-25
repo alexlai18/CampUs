@@ -8,7 +8,6 @@ import {
 
 export function ErrorPopup(props) {
   const {message, severity, className} = props
-  console.log(severity);
   const variant = severity ? "destructive" : null
 
   return (

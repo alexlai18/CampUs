@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 // Self-made components
 import { ErrorPopup } from "./ErrorPopup"
 // User functions
-import { logUser } from "../mockData"
+import { getUserDetails, logUser } from "../mockData"
 
 
 export function LoginForm({ className, ...props }) {
@@ -26,17 +26,22 @@ export function LoginForm({ className, ...props }) {
   async function onSubmit(event) {
     event.preventDefault();
     // Submit function
-    //submit(email, password);
-    setIsLoading(true)
+    // submit(email, password);
+    setIsLoading(true);
     if(!logUser(email, password)) {
       setTimeout(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       }, 3000);
       setError(true);
     } else{
       setTimeout(() => {
-        setIsLoading(false)
-        router.push("/dashboard")
+        sessionStorage.setItem("email", email);
+        setIsLoading(false);
+        if (!getUserDetails(email)) {
+          router.push(`/newuser/?email=${email}`);
+        } else {
+          router.push("/dashboard");
+        }
       }, 3000);
     }
   }

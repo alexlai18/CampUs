@@ -1,9 +1,10 @@
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 // ShadCN UI components
 import { RocketIcon } from "lucide-react"
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import {
@@ -18,11 +19,25 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 // User functions
 import { addUserDetails, dataStore } from "../mockData"
+import { getUniversities } from "@/api/getUniversities"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export function NewUserForm(props) {
   // Note: Will probably have an API that gets all the universities in Australia and have an autocomplete search
@@ -31,19 +46,29 @@ export function NewUserForm(props) {
   const [lname, setLName] = useState("");
   const [grade, setGrade] = useState("");
   const [uni, setUni] = useState("");
+  const [uniList, setUniList] = useState(["Loading..."])
+  const [open, setOpen] = useState(false)
   const router = useRouter(); 
+
+  useEffect(() => {
+    const getUni = async() => {
+      setUniList(await getUniversities());
+    }
+    getUni();
+  }, [])
 
   const onSubmit = (event) => {
     event.preventDefault();
+    sessionStorage.setItem("email", email);
+    const capitalisedUni = uni.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
     const details = {
       email,
       fname,
       lname,
       grade,
-      uni,
+      uni: capitalisedUni,
     }
     addUserDetails(email, details);
-    console.log(dataStore["userdetails"]);
     router.push("/dashboard");
   }
 
@@ -69,6 +94,49 @@ export function NewUserForm(props) {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="grade">What year are you in?</Label>
+                <Popover open={open} onOpenChange={setOpen} modal={true}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="justify-between"
+                    >
+                      {uni
+                        ? uniList.find((uniN) => uniN.toLowerCase() === uni)
+                        : "Select University"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] h-[300px] p-0" side="right" align="start">
+                    <Command>
+                      <CommandInput placeholder="University" className="h-9" />
+                      <CommandEmpty>No university found.</CommandEmpty>
+                      <ScrollArea className="flex h-[300px] flex-col" type="always">
+                        <CommandGroup>
+                          {uniList.map((uniN) => (
+                            <CommandItem
+                              key={uniN}
+                              onSelect={(currentValue) => {
+                                setUni(currentValue === uni ? "" : currentValue)
+                                setOpen(false)
+                              }}
+                            >
+                              {uniN}
+                              <CheckIcon
+                                className={cn(
+                                  "ml-auto h-4 w-4",
+                                  uni === uniN ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </ScrollArea>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <Label htmlFor="grade">What year are you in?</Label>
                 <Select id="grade" onValueChange={(value) => setGrade(value)}>
                   <SelectTrigger id="framework">
                     <SelectValue placeholder="Select" />
@@ -80,10 +148,6 @@ export function NewUserForm(props) {
                     <SelectItem value="4">4th Year or Above</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="uni">What university do you go to?</Label>
-                <Input id="uni" onChange={(e) => setUni(e.target.value)} required />
               </div>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
