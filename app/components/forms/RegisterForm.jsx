@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { addUser } from "../mockData"
-import { ErrorPopup } from "./ErrorPopup"
+import { addUser } from "@/app/mockData"
+import { ErrorPopup } from "../utils/ErrorPopup"
 
 export function RegisterForm() {
   const [email, setEmail] = useState("");

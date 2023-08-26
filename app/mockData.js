@@ -1,5 +1,19 @@
 export const dataStore = {
   "users": {"olivia.martin@email.com": "password123"},
+  "courses": [
+    {
+      "code": "COMP1531",
+      "perGroup": 2,
+    },
+    {
+      "code": "COMM1180",
+      "perGroup": 4,
+    },
+    {
+      "code": "COMP2521",
+      "perGroup": 1,
+    },
+  ],
   "userdetails": {
     "olivia.martin@email.com": {
       "email": "olivia.martin@email.com",
@@ -140,4 +154,15 @@ export const getAverageRating = (email) => {
 
 export const getNotifications = (email) => {
   return dataStore.notifications[email];
+}
+
+export const getCourses = (prefix) => {
+  const res = [];
+  console.log("lol");
+  dataStore.courses.map((course) => {
+    if ((course.code.toLowerCase()).includes(prefix)) {
+      res.push(course);
+    }
+  })
+  return res;
 }
