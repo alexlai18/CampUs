@@ -1,7 +1,7 @@
 "use client"
 
-import { useRouter, useSearchParams } from 'next/navigation'
-import { NewUserForm } from '../components/NewUserForm'
+import { useSearchParams } from 'next/navigation'
+import { NewUserForm } from '../components/forms/NewUserForm';
 
 export default function NewUser() {
   const searchParams = useSearchParams()

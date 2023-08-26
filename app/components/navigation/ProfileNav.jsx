@@ -17,7 +17,7 @@ import {
     DropdownMenuTrigger,
     DropdownMenuButtonItem,
   } from "@/components/ui/dropdown-menu"
-import { getUserDetails } from "../mockData";
+import { getUserDetails } from "@/app/mockData"
 import { useEffect, useState } from "react";
   
   export function ProfileNav() {

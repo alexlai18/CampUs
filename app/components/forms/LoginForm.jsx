@@ -11,9 +11,9 @@ import { Label } from "@/components/ui/label"
 import { useRouter } from 'next/navigation'
 
 // Self-made components
-import { ErrorPopup } from "./ErrorPopup"
+import { ErrorPopup } from "../utils/ErrorPopup"
 // User functions
-import { getUserDetails, logUser } from "../mockData"
+import { getUserDetails, logUser } from "@/app/mockData"
 
 
 export function LoginForm({ className, ...props }) {
@@ -53,7 +53,7 @@ export function LoginForm({ className, ...props }) {
             {error && 
               <ErrorPopup
                 severity={true}
-                message="This user does not have an account. Please register."
+                message="The email or password was incorrect. Please check again or register!"
               />
             }
         </div>

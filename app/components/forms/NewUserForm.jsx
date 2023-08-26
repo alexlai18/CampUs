@@ -35,13 +35,15 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 // User functions
-import { addUserDetails, dataStore } from "../mockData"
+import { addUserDetails } from "@/app/mockData"
 import { getUniversities } from "@/api/getUniversities"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { ErrorPopup } from "../utils/ErrorPopup"
 
 export function NewUserForm(props) {
   // Note: Will probably have an API that gets all the universities in Australia and have an autocomplete search
   const { email } = props;
+  const [error, setError] = useState(false);
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
   const [grade, setGrade] = useState("");
@@ -59,6 +61,10 @@ export function NewUserForm(props) {
 
   const onSubmit = (event) => {
     event.preventDefault();
+    if (uni === "" || fname === "" || lname === "" || grade === "") {
+      setError(true);
+      return;
+    }
     sessionStorage.setItem("email", email);
     const capitalisedUni = uni.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter === " o" ?  letter : letter.toUpperCase());
     const details = {
@@ -80,10 +86,30 @@ export function NewUserForm(props) {
     >
       <Card>
         <CardHeader className="space-y-1">
+          {error && 
+            <ErrorPopup
+              severity={true}
+              message="You must fill out all the fields!"
+            />
+          }
         </CardHeader>
         <CardContent className="grid gap-4">
           <form onSubmit={onSubmit}>
             <div className="grid gap-2">
+              <div className="grid gap-2">
+                <Label htmlFor="grade">What year are you in?</Label>
+                <Select id="grade" onValueChange={(value) => setGrade(value)} required>
+                  <SelectTrigger id="framework">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    <SelectItem value="1">1st Year</SelectItem>
+                    <SelectItem value="2">2nd Year</SelectItem>
+                    <SelectItem value="3">3rd Year</SelectItem>
+                    <SelectItem value="4">4th Year or Above</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="fname">What is your first name?</Label>
                 <Input id="fname" placeholder="John" onChange={(e) => setFName(e.target.value)} required />
@@ -93,7 +119,7 @@ export function NewUserForm(props) {
                 <Input id="lname" placeholder="Smith" onChange={(e) => setLName(e.target.value)} required />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="grade">What year are you in?</Label>
+                <Label htmlFor="grade">What university do you attend?</Label>
                 <Popover open={open} onOpenChange={setOpen} modal={true}>
                   <PopoverTrigger asChild>
                     <Button
@@ -110,7 +136,7 @@ export function NewUserForm(props) {
                   </PopoverTrigger>
                   <PopoverContent className="w-[200px] h-[300px] p-0" side="right" align="start">
                     <Command>
-                      <CommandInput placeholder="University" className="h-9" />
+                      <CommandInput placeholder="University" className="h-9"/>
                       <CommandEmpty>No university found.</CommandEmpty>
                       <ScrollArea className="flex h-[300px] flex-col" type="always">
                         <CommandGroup>
@@ -137,18 +163,6 @@ export function NewUserForm(props) {
                     </Command>
                   </PopoverContent>
                 </Popover>
-                <Label htmlFor="grade">What year are you in?</Label>
-                <Select id="grade" onValueChange={(value) => setGrade(value)}>
-                  <SelectTrigger id="framework">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="1">1st Year</SelectItem>
-                    <SelectItem value="2">2nd Year</SelectItem>
-                    <SelectItem value="3">3rd Year</SelectItem>
-                    <SelectItem value="4">4th Year or Above</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
