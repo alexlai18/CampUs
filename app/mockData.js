@@ -79,23 +79,7 @@ export const dataStore = {
     ]
   },
   "userabout": {"alaiier18@gmail.com":
-    <>
-      Hi! I'm a Computer Science &#40;Co-op&#41; student @ UNSW with internship experience in assurance and cloud engineering. Currently looking for opportunities in the tech industries as a software engineer. Passionate about creating a difference through technology!
-      <br/>
-      Here are some technologies that I've worked with:
-      <br/>
-      <br/>
-      • Frontend: Javascript, React, React Redux, HTML/CSS, Material UI
-      <br/>
-      <br/>
-      • Backend: Datadog, SQL, NodeJS
-      <br/>
-      <br/>
-      • Tools: Git, Visual Studio, Azure Web Apps, Azure Functions, Oracle Cloud Infrastructure, Jenkins, Jira, Confluence
-      <br/>
-      <br/>
-      • Other languages: Python, C, Java
-    </>
+    "Hi! I'm a Computer Science (Co-op) student @ UNSW with internship experience in assurance and cloud engineering. Currently looking for opportunities in the tech industries as a software engineer. Passionate about creating a difference through technology!\nHere are some technologies that I've worked with:\n\n • Frontend: Javascript, React, React Redux, HTML/CSS, Material UI \n\n • Backend: Datadog, SQL, NodeJS \n\n • Tools: Git, Visual Studio, Azure Web Apps, Azure Functions, Oracle Cloud Infrastructure, Jenkins, Jira, Confluence \n\n • Other languages: Python, C, Java"
   },
   "notifications": {"alaiier18@gmail.com":
     [
