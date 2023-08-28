@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
   Card,
   CardContent,
@@ -11,7 +12,7 @@ import { getUserAbout, setNewAbout } from "@/app/mockData";
 
 export function AboutMeCard(props) {
   const { aboutMe, setAboutMe } = props;
-  const [newInfo, setNewInfo] = useState("");
+  const [newInfo, setNewInfo] = useState(aboutMe);
   const [onEdit, setOnEdit] = useState(false);
 
   const handleEdit = () => {
@@ -36,8 +37,13 @@ export function AboutMeCard(props) {
       <CardContent>
         {
           !onEdit && (
-            <div className="text-l">
-              {aboutMe}
+            <div>
+              {aboutMe.split('\n').map((line, index) => (
+                <React.Fragment key={index}>
+                  {line}
+                  <br />
+                </React.Fragment>
+              ))}
             </div>
           )
         }
