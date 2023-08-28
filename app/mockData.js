@@ -20,7 +20,23 @@ export const dataStore = {
       "fname": "Olivia",
       "lname": "Martin",
       "grade": 3,
-      "uni": "University of New South Wales"
+      "uni": "University of New South Wales",
+      "currentGroups": [
+        {
+          "course": "COMP1531",
+          "name": "Three Wise Monkeys"
+        },
+        {
+          "course": "COMP2521",
+          "name": "Study Buddies"
+        },
+      ],
+      "pastGroups": [
+        {
+          "course": "COMP1511",
+          "name": "Big Man Ting"
+        }
+      ],
     }
   },
   "groupmates": {"alaiier18@gmail.com":
@@ -159,7 +175,7 @@ export const getNotifications = (email) => {
 export const getCourses = (prefix) => {
   const res = [];
   dataStore.courses.map((course) => {
-    if ((course.code.toLowerCase()).includes(prefix)) {
+    if ((course.code.toLowerCase()).includes(prefix.toLowerCase())) {
       res.push(course);
     }
   })
@@ -169,9 +185,47 @@ export const getCourses = (prefix) => {
 export const getUsers = (prefix) => {
   const res = [];
   Object.values(dataStore.userdetails).forEach((value) => {
-    if ((value.fname + value.lname).toLowerCase().includes(prefix) && value.email !== sessionStorage.getItem("email")) {
+    if ((value.fname + value.lname).toLowerCase().includes(prefix.toLowerCase()) && value.email !== sessionStorage.getItem("email")) {
       res.push(value);
     }
   });
+  return res;
+}
+
+export const getCurrentGroups = (email, prefix) => {
+  const res = [];
+  const user = dataStore.userdetails[email];
+  
+  if (!user || !user.currentGroups) {
+    return res;
+  }
+  
+  if (user.currentGroups.length === 0) {
+    return res;
+  }
+  user.currentGroups.map((group) => {
+    if ((group.course.toLowerCase()).includes(prefix.toLowerCase())) {
+      res.push(group);
+    }
+  })
+  return res;
+}
+
+export const getPastGroups = (email, prefix) => {
+  const res = [];
+  const user = dataStore.userdetails[email];
+
+  if (!user || !user.pastGroups)  {
+    return res;
+  }
+
+  if (user.pastGroups.length === 0) {
+    return res;
+  }
+  user.pastGroups.map((group) => {
+    if ((group.course.toLowerCase()).includes(prefix.toLowerCase())) {
+      res.push(group);
+    }
+  })
   return res;
 }
