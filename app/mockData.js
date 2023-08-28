@@ -229,3 +229,8 @@ export const getPastGroups = (email, prefix) => {
   })
   return res;
 }
+
+export const setNewAbout = (email, input) => {
+  dataStore.userabout[email] = input;
+  return true;
+}

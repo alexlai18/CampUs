@@ -19,6 +19,7 @@ import { CurrentLoadCard } from '../components/dashboard-cards/CurrentLoadCard'
 import { DashboardGroupCard } from '../components/dashboard-cards/DashboardGroupCard'
 import { DashboardRatingCard } from '../components/dashboard-cards/DashboardRatingCard'
 import { Loading } from '../components/utils/Loading'
+import { dataStore } from '../mockData'
 
 export default function Dashboard() {
   const [userDetails, setUserDetails] = useState({});
@@ -36,7 +37,7 @@ export default function Dashboard() {
       router.push("/");
     } else {
       setUserDetails(details);
-      const about = getUserAbout(email)
+      const about = getUserAbout(email);
       setAboutMe(about ? about : "");
       const mates = getGroupMates(email);
       setFavGroupMates(mates ? mates : []);
@@ -47,9 +48,6 @@ export default function Dashboard() {
       setLoading(false);
     }
   }, []);
-
-  const handleEdit = () => {
-  }
 
   if (loading) {
     return <Loading />
@@ -77,7 +75,7 @@ export default function Dashboard() {
                 <DashboardRatingCard rating={rating} />
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <AboutMeCard aboutMe={aboutMe} handleEdit={handleEdit} />
+                <AboutMeCard aboutMe={aboutMe} setAboutMe={setAboutMe} />
                 <GroupMateCard favGroupMates={favGroupMates} userDetails={userDetails} />
               </div>
             </TabsContent>

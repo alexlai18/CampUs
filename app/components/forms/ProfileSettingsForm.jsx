@@ -104,7 +104,7 @@ export function ProfileSettingsForm() {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="name" {...field} />
                 </FormControl>
                 <FormDescription>
                   This is your public display name. It can be your real name or a
