@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/card";
 
 import { FullNav } from '../components/navigation/FullNav';
-import { getCourses, getCurrentGroups, getPastGroups } from '../mockData';
+import { getCurrentGroups, getPastGroups } from '../mockData';
 
-export default function CoursesPage() {
+export default function GroupsPage() {
   const [search, setSearch] = useState("");
   const [currentGroups, setCurrentGroups] = useState(getCurrentGroups(sessionStorage.getItem("email"), ""));
   const [pastGroups, setPastGroups] = useState(getPastGroups(sessionStorage.getItem("email"), ""));
@@ -32,8 +32,6 @@ export default function CoursesPage() {
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Your Groups</h2>
-            <div className="flex items-center space-x-2">
-            </div>
           </div>
           <form className="flex" onSubmit={handleSubmit}>
             <Input
