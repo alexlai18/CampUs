@@ -158,11 +158,20 @@ export const getNotifications = (email) => {
 
 export const getCourses = (prefix) => {
   const res = [];
-  console.log("lol");
   dataStore.courses.map((course) => {
     if ((course.code.toLowerCase()).includes(prefix)) {
       res.push(course);
     }
   })
+  return res;
+}
+
+export const getUsers = (prefix) => {
+  const res = [];
+  Object.values(dataStore.userdetails).forEach((value) => {
+    if ((value.fname + value.lname).toLowerCase().includes(prefix) && value.email !== sessionStorage.getItem("email")) {
+      res.push(value);
+    }
+  });
   return res;
 }
