@@ -45,7 +45,7 @@ export function NotifCard(props) {
     <Card className="rounded-full">
       <div className="flex items-center" key={`notif-${notif.email}`}>
         <Avatar className="h-9 w-9 ml-4">
-          <AvatarImage src="/avatars/01.png" alt="Avatar" />
+          <AvatarImage alt="Avatar" />
           <AvatarFallback className="bg-primary text-primary-foreground">{info.fname.slice(0, 1) + info.lname.slice(0, 1)}</AvatarFallback>
         </Avatar>
         <div className="ml-4 mt-2 space-y-1 mb-2 mr-4">

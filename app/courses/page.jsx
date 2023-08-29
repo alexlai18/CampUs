@@ -44,7 +44,7 @@ export default function CoursesPage() {
           </form>
           {courseList.length > 0 ?
             courseList.map((course) => {
-              return (<Card className="col-span-3">
+              return (<Card key={`course-${course}`} className="col-span-3">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-2xl font-bold">
                     {course.code}

@@ -28,7 +28,7 @@ export default function NewUser() {
             </div>
             <NewUserForm email={email}/>
             <p className="px-8 text-center text-sm text-muted-foreground">
-              Don't worry, you can change all of this information later
+              Don&apos;t worry, you can change all of this information later
             </p>
           </div>
         </div>

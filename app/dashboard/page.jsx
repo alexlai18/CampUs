@@ -19,7 +19,6 @@ import { CurrentLoadCard } from '../components/dashboard-cards/CurrentLoadCard'
 import { DashboardGroupCard } from '../components/dashboard-cards/DashboardGroupCard'
 import { DashboardRatingCard } from '../components/dashboard-cards/DashboardRatingCard'
 import { Loading } from '../components/utils/Loading'
-import { dataStore } from '../mockData'
 
 export default function Dashboard() {
   const [userDetails, setUserDetails] = useState({});
@@ -31,9 +30,9 @@ export default function Dashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    const email = sessionStorage.getItem("email")
+    const email = sessionStorage.getItem("email");
     const details = getUserDetails(email);
-    if (!email || !details) {
+    if (email === undefined || details === undefined) {
       router.push("/");
     } else {
       setUserDetails(details);
@@ -47,7 +46,7 @@ export default function Dashboard() {
       setNotifs(ping ? ping : [])
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   if (loading) {
     return <Loading />
@@ -81,7 +80,7 @@ export default function Dashboard() {
             </TabsContent>
             <TabsContent value="notifications" className="space-y-1">
               {notifs.length > 1 ? notifs.map((notif) => {
-                return <NotifCard notif={notif} />
+                return <NotifCard key={`notif-${notif}`} notif={notif} />
               }) : <div className='text-lg font-medium'>No notifications</div>}
             </TabsContent>
           </Tabs>

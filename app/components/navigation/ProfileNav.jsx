@@ -22,13 +22,18 @@ import { useEffect, useState } from "react";
   
   export function ProfileNav() {
     const router = useRouter();
-    const email = sessionStorage.getItem("email");
     const [initials, setInitials] = useState("");
     const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
     const [userDetails, setUserDetails] = useState({})
 
     useEffect(() => {
-      const details = getUserDetails(email);
+      const storedEmail = sessionStorage.getItem("email")
+      setEmail(storedEmail);
+      const details = getUserDetails(storedEmail);
+      console.log(sessionStorage);
+      console.log(email);
+      console.log(details);
       if (!details) {
         router.push("/");
       } else {
@@ -36,14 +41,18 @@ import { useEffect, useState } from "react";
         setInitials(details.fname.slice(0, 1) + details.lname.slice(0, 1));
         setName(details.fname + " " + details.lname)
       }
-    })
+    }, [email, router])
+
+    const handleLogout = () => {
+      router.push('/');
+    }
 
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage src="/avatars/01.png" alt="@shadcn" />
+              <AvatarImage alt="@shadcn" />
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
           </Button>
@@ -77,7 +86,7 @@ import { useEffect, useState } from "react";
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuButtonItem onClick={() => {router.push('/')}}>
+          <DropdownMenuButtonItem onClick={handleLogout}>
             Log Out
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuButtonItem>
