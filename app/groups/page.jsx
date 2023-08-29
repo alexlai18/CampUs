@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,8 +16,13 @@ import { getCurrentGroups, getPastGroups } from '../mockData';
 
 export default function GroupsPage() {
   const [search, setSearch] = useState("");
-  const [currentGroups, setCurrentGroups] = useState(getCurrentGroups(sessionStorage.getItem("email"), ""));
-  const [pastGroups, setPastGroups] = useState(getPastGroups(sessionStorage.getItem("email"), ""));
+  const [currentGroups, setCurrentGroups] = useState([]);
+  const [pastGroups, setPastGroups] = useState([]);
+
+  useEffect(() => {
+    setCurrentGroups(getCurrentGroups(sessionStorage.getItem("email")));
+    setPastGroups(getPastGroups(sessionStorage.getItem("email")));
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -46,7 +51,7 @@ export default function GroupsPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {currentGroups.length > 0 ?
               currentGroups.map((group) => {
-                return (<Card>
+                return (<Card key={`group-${group.name}`}>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-2xl font-bold">
                       {group.name}
@@ -84,7 +89,7 @@ export default function GroupsPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {pastGroups.length > 0 ?
               pastGroups.map((group) => {
-                return (<Card>
+                return (<Card key={`pastgroup-${group.name}`}>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-2xl font-bold">
                       {group.name}

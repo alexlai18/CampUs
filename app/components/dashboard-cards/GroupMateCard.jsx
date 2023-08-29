@@ -20,7 +20,7 @@ export function GroupMateCard(props) {
       <CardHeader>
         <CardTitle>Favourite Groupmates</CardTitle>
         <CardDescription>
-          These are {userDetails.fname}'s top groupmates.
+          These are {userDetails.fname}&apos;s top groupmates.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -29,7 +29,7 @@ export function GroupMateCard(props) {
             return(
               <div className="flex items-center" key={`groupmate-${mate.email}`}>
                 <Avatar className="h-9 w-9">
-                  <AvatarImage src="/avatars/01.png" alt="Avatar" />
+                  <AvatarImage alt="Avatar" />
                   <AvatarFallback>{mate.initials}</AvatarFallback>
                 </Avatar>
                 <div className="ml-4 space-y-1">

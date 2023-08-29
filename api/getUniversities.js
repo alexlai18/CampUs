@@ -1,3 +1,5 @@
+"use server"
+
 export const getUniversities = async () => {
   const uniNames = [];
   // Update the universities json

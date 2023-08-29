@@ -1,19 +1,12 @@
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -51,7 +44,7 @@ export default function ConnectionsPage() {
           </form>
           {userList.length > 0 ?
             userList.map((user) => {
-              return (<Card className="col-span-3">
+              return (<Card key={`connection-${user}`} className="col-span-3">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-2xl font-bold">
                     {user.fname} {user.lname}
