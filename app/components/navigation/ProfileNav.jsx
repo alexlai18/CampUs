@@ -31,9 +31,6 @@ import { useEffect, useState } from "react";
       const storedEmail = sessionStorage.getItem("email")
       setEmail(storedEmail);
       const details = getUserDetails(storedEmail);
-      console.log(sessionStorage);
-      console.log(email);
-      console.log(details);
       if (!details) {
         router.push("/");
       } else {
@@ -73,22 +70,15 @@ import { useEffect, useState } from "react";
           <DropdownMenuGroup>
             <DropdownMenuItem>
               Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuButtonItem onClick={() => router.push('/settings')}>
               Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-            </DropdownMenuItem>
+            </DropdownMenuButtonItem>
             <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuButtonItem onClick={handleLogout}>
             Log Out
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuButtonItem>
         </DropdownMenuContent>
       </DropdownMenu>

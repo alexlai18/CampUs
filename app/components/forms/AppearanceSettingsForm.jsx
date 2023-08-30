@@ -1,7 +1,9 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useTheme } from "next-themes"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -21,24 +23,32 @@ const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark"], {
     required_error: "Please select a theme.",
   }),
-  font: z.enum(["inter", "manrope", "system"], {
-    invalid_type_error: "Select a font",
-    required_error: "Please select a font.",
-  }),
 })
 
 // This can come from your database or API.
-const defaultValues = {
-  theme: "dark",
-}
 
 export function AppearanceSettingsForm() {
+  const { theme, setTheme } = useTheme()
+  const defaultValues = {
+    theme: theme,
+  }
   const form = useForm({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues,
   })
+  const [mounted, setMounted] = useState(false)
+
+  // useEffect only runs on the client, so now we can safely show the UI
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   function onSubmit(data) {
+    setTheme(data.theme);
     toast({
       title: "You submitted the following values:",
       description: (
@@ -123,7 +133,6 @@ export function AppearanceSettingsForm() {
             </FormItem>
           )}
         />
-
         <Button type="submit">Update preferences</Button>
       </form>
     </Form>

@@ -53,7 +53,7 @@ export function NewUserForm(props) {
   const router = useRouter(); 
 
   useEffect(() => {
-    const getUni = async() => {
+    const getUni = async () => {
       setUniList(await getUniversities());
     }
     getUni();
