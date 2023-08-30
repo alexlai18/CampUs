@@ -1,9 +1,9 @@
-import { ProfileSettingsForm } from "@/app/components/forms/ProfileSettingsForm"
+import { AppearanceSettingsForm } from "@/app/components/forms/AppearanceSettingsForm"
 
 export default function SettingsPage() {
   return (
     <div className="hidden flex-col md:flex">
-      <ProfileSettingsForm />
+      <AppearanceSettingsForm />
     </div>
   )
 }

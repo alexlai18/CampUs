@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import { CalendarIcon } from "@radix-ui/react-icons"
-import { addDays, format } from "date-fns"
+import { format } from "date-fns"
 
 // ShadCN UI Components
 import { cn } from "@/lib/utils"
@@ -14,13 +14,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-export function CalendarDateRangePicker({
+export function CalendarDatePicker({
   className,
 }) {
-  const [date, setDate] = useState({
-    from: new Date(2023, 0, 20),
-    to: addDays(new Date(2023, 0, 20), 20),
-  })
+  const [date, setDate] = useState<Date>("");
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -35,16 +32,8 @@ export function CalendarDateRangePicker({
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date?.from ? (
-              date.to ? (
-                <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
-                </>
-              ) : (
-                format(date.from, "LLL dd, y")
-              )
-            ) : (
+            {date ? format(date, "PPP")
+            : (
               <span>Pick a date</span>
             )}
           </Button>
@@ -52,11 +41,9 @@ export function CalendarDateRangePicker({
         <PopoverContent className="w-auto p-0" align="end">
           <Calendar
             initialFocus
-            mode="range"
-            defaultMonth={date?.from}
+            mode="single"
             selected={date}
             onSelect={setDate}
-            numberOfMonths={2}
           />
         </PopoverContent>
       </Popover>
