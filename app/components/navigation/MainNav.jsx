@@ -37,12 +37,6 @@ export function MainNav({
       >
         My Groups
       </Link>
-      <Link
-        href="/settings"
-        className={`text-sm font-medium ${pathname === "/settings" ? "" : "text-muted-foreground"} transition-colors hover:text-primary`}
-      >
-        Settings
-      </Link>
     </nav>
   )
 }

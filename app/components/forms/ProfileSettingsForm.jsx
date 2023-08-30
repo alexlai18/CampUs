@@ -72,9 +72,11 @@ const defaultValues = {
 export function ProfileSettingsForm() {
   const [languages, setLanguages] = useState(["Loading..."]);
 
-  useEffect(async () => {
-    const langList = await getLanguages();
-    setLanguages(langList.length > 0 ? langList : ["Loading..."]);
+  useEffect(() => {
+    const getLang = async () => {
+      setLanguages(await getLanguages());
+    }
+    getLang();
   }, [])
 
   const form = useForm({
