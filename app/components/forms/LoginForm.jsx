@@ -29,20 +29,16 @@ export function LoginForm({ className, ...props }) {
     // submit(email, password);
     setIsLoading(true);
     if(!logUser(email, password)) {
-      setTimeout(() => {
-        setIsLoading(false);
-        setError(true);
-      }, 3000);
+      setIsLoading(false);
+      setError(true);
     } else{
-      setTimeout(() => {
-        sessionStorage.setItem("email", email);
-        setIsLoading(false);
-        if (!getUserDetails(email)) {
-          router.push(`/newuser/?email=${email}`);
-        } else {
-          router.push("/dashboard");
-        }
-      }, 3000);
+      sessionStorage.setItem("email", email);
+      setIsLoading(false);
+      if (!getUserDetails(email)) {
+        router.push(`/newuser/?email=${email}`);
+      } else {
+        router.push("/dashboard");
+      }
     }
   }
 

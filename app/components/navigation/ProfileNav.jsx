@@ -68,9 +68,9 @@ import { useEffect, useState } from "react";
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuButtonItem onClick={() => router.push('/profile')}>
               Profile
-            </DropdownMenuItem>
+            </DropdownMenuButtonItem>
             <DropdownMenuButtonItem onClick={() => router.push('/settings')}>
               Settings
             </DropdownMenuButtonItem>
