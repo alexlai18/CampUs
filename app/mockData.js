@@ -1,5 +1,8 @@
 export const dataStore = {
-  "users": {"olivia.martin@email.com": "password123"},
+  "users": {
+    "olivia.martin@email.com": "password123",
+    "alaiier18@gmail.com": "123",
+  },
   "courses": [
     {
       "code": "COMP1531",

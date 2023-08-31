@@ -9,18 +9,22 @@ import {
 } from "@/components/ui/card";
 
 import { FullNav } from '../components/navigation/FullNav';
-import { getCourses } from '../mockData';
+import { getCourses, getUserAbout } from '../mockData';
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
 import { AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 import { getUserDetails } from '../mockData';
+import { AboutMeCard } from '../components/dashboard-cards/AboutMeCard';
+import { Loading } from '../components/utils/Loading';
 
 export default function ProfilePage() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
   const router = useRouter();
   const [userDetails, setUserDetails] = useState({});
   const [initials, setInitials] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedEmail = sessionStorage.getItem("email")
@@ -29,9 +33,12 @@ export default function ProfilePage() {
     if (!details) {
       router.push("/");
     } else {
+      const about = getUserAbout(storedEmail)
+      setAboutMe(about ? about : "");
       setUserDetails(details);
       setInitials(details.fname.slice(0, 1) + details.lname.slice(0, 1));
       setName(details.fname + " " + details.lname)
+      setLoading(false);
     }
   }, [email, router])
 
@@ -40,24 +47,31 @@ export default function ProfilePage() {
     setCourseList(getCourses(search));
   }
 
+  if (loading) {
+    return <Loading />
+  }
+
   return (
     <>
       <div className="hidden flex-col md:flex">
         <FullNav />
-        <div className="flex space-y-4 p-8 pt-6 justify-center">
-          <Card className=" bg-secondary w-[60%] ml-4">
-            <CardHeader>
-              <Avatar className="overflow-hidden bg-border rounded-full h-[200px] w-[200px]">
-                <AvatarImage alt="profile" src="./assets/profile.jpg" className="w-full h-full"/>
-                <AvatarFallback className="bg-primary text-primary-foreground">{initials}</AvatarFallback>
-              </Avatar>
-            </CardHeader>
-            <CardContent>
-              {name}
-              <br/>
-              Student at {userDetails.uni} - Year {userDetails.grade}
-            </CardContent>
-          </Card>
+        <div className="flex justify-center">
+          <div className="flex flex-col w-[60%] pt-6">
+            <Card className=" bg-secondary w-full">
+              <CardHeader>
+                <Avatar className="overflow-hidden bg-border rounded-full h-[200px] w-[200px]">
+                  <AvatarImage alt="profile" src="./assets/profile.jpg" className="w-full h-full"/>
+                  <AvatarFallback className="bg-primary text-primary-foreground">{initials}</AvatarFallback>
+                </Avatar>
+              </CardHeader>
+              <CardContent>
+                {name}
+                <br/>
+                Student at {userDetails.uni} - Year {userDetails.grade}
+              </CardContent>
+            </Card>
+            <AboutMeCard aboutMe={aboutMe} setAboutMe={setAboutMe} />
+          </div>
         </div>
       </div>
     </>
