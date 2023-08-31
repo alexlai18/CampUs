@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { getUserAbout, setNewAbout } from "@/app/mockData";
+import { setNewAbout } from "@/app/mockData";
 
 export function AboutMeCard(props) {
   const { aboutMe, setAboutMe } = props;
@@ -52,7 +52,10 @@ export function AboutMeCard(props) {
             onEdit && (
               <Textarea
                 placeholder="Write something about yourself"
-                onChange={(e) => {setNewInfo(e.target.value)}}
+                onChange={(e) => {
+                  setNewInfo(e.target.value)
+                  console.log(e.target.value);
+                }}
                 defaultValue={aboutMe}
               />
             )
