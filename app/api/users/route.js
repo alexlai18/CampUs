@@ -17,10 +17,11 @@ export async function POST(request) {
   return NextResponse.json({message: "User Registered"}, {status: 200})
 }
 
+// Get all users in the database
 export async function GET() {
   await connectMongoDB();
-  const user = await User.find();
-  return NextResponse.json({ user });
+  const users = await User.find();
+  return NextResponse.json({ users }), { status: 200 };
 }
 
 export async function DELETE(request) {
