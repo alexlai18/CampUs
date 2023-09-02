@@ -1,14 +1,13 @@
 import mongoose, { Schema } from "mongoose";
-import UserDetail from "./userDetail";
 
 const userSchema = new Schema(
   {
     email: String,
     password: String,
-    details: UserDetail,
+    details: [{type: Schema.ObjectId, ref: 'UserDetail'}],
   },
 )
 
-const User = mongoose.model.User || mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
-export default User
+export default User;

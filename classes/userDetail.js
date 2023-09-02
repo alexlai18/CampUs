@@ -22,6 +22,6 @@ const userDetailSchema = new Schema(
   },
 )
 
-const UserDetail = mongoose.model.UserDetail || mongoose.model("UserDetail", userDetailSchema);
+const UserDetail = mongoose.models.UserDetail || mongoose.model("UserDetail", userDetailSchema);
 
-export default UserDetail
+export default UserDetail;
