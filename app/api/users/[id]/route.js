@@ -69,6 +69,11 @@ export async function GET(request, {params}) {
   const { id } = params;
   await connectMongoDB();
   const user = await User.findOne({_id: id});
+
+  if (!user) {
+    return NextResponse.json({message: "There are no users in the database"}, { status: 404 });
+  }
+
   return NextResponse.json({ user }, { status: 200 });
 }
 

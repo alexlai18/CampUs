@@ -8,6 +8,11 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   const { email, password } = await request.json();
   await connectMongoDB();
+
+  if (User.findOne({email: email})) {
+    return NextResponse.json({message: "The email has already been registered. Please log in."}, {status: 400})
+  }
+
   await User.create(
     {
       email,
@@ -22,5 +27,10 @@ export async function POST(request) {
 export async function GET() {
   await connectMongoDB();
   const users = await User.find();
+
+  if (!users || users.length === 0) {
+    return NextResponse.json({message: "There are no users in the database"}, { status: 404 });
+  }
+
   return NextResponse.json(users, { status: 200 });
 }
