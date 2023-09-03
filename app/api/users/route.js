@@ -18,16 +18,9 @@ export async function POST(request) {
   return NextResponse.json({message: "User Registered"}, {status: 200})
 }
 
-// Get all users in the database
+// Get either all users in database, or specific user
 export async function GET() {
   await connectMongoDB();
   const users = await User.find();
   return NextResponse.json(users, { status: 200 });
-}
-
-export async function DELETE(request) {
-  const { id } = await request.json();
-  await connectMongoDB();
-  await User.findByIdAndDelete(id);
-  return NextResponse.json({message: "User Deleted"}, {status: 200})
 }
