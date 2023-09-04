@@ -6,6 +6,7 @@ const userDetailSchema = new Schema(
     lname: String,
     fullName: String,
     grade: Number,
+    about: String,
     uni: String,
     currentGroups: [
       {
