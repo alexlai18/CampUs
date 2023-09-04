@@ -55,7 +55,7 @@ export async function PUT(request) {
 }
 
 export async function DELETE(request) {
-  const { code } = request.json();
+  const { code } = await request.json();
   await connectMongoDB();
   await Course.findOneAndDelete({code: code});
   return NextResponse.json({message: "Course Deleted"}, {status: 200})

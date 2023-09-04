@@ -36,10 +36,3 @@ export async function GET() {
 
   return NextResponse.json(courses, { status: 200 });
 }
-
-export async function DELETE(request) {
-  const { id } = request.json();
-  await connectMongoDB();
-  await GroupMate.findByIdAndDelete(id);
-  return NextResponse.json({message: "GroupMate Deleted"}, {status: 200})
-}

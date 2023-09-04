@@ -39,3 +39,11 @@ export async function PUT(request, {params}) {
 
   return NextResponse.json({ message: "GroupMate updated" }, { status: 200 });
 }
+
+// Delete specific groupmate
+export async function DELETE(request, {params}) {
+  const { id } = params;
+  await connectMongoDB();
+  await GroupMate.findByIdAndDelete(id);
+  return NextResponse.json({message: "GroupMate Deleted"}, {status: 200})
+}
