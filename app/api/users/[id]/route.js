@@ -71,7 +71,7 @@ export async function GET(request, {params}) {
   const user = await User.findOne({_id: id});
 
   if (!user) {
-    return NextResponse.json({message: "There are no users in the database"}, { status: 404 });
+    return NextResponse.json({message: "This user does not exist in the database"}, { status: 404 });
   }
 
   return NextResponse.json({ user }, { status: 200 });
