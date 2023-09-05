@@ -19,6 +19,7 @@ import { CurrentLoadCard } from '../components/dashboard-cards/CurrentLoadCard'
 import { DashboardGroupCard } from '../components/dashboard-cards/DashboardGroupCard'
 import { DashboardRatingCard } from '../components/dashboard-cards/DashboardRatingCard'
 import { Loading } from '../components/utils/Loading'
+import { useSelector } from 'react-redux'
 
 export default function Dashboard() {
   const [userDetails, setUserDetails] = useState({});
@@ -28,6 +29,8 @@ export default function Dashboard() {
   const [rating, setRating] = useState(0);
   const [notifs, setNotifs] = useState([]);
   const router = useRouter();
+  const userAuth = useSelector((state) => state.authenticationState.value);
+  console.log(userAuth);
 
   useEffect(() => {
     const email = sessionStorage.getItem("email");

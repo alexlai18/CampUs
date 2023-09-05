@@ -14,6 +14,8 @@ import { useRouter } from 'next/navigation'
 import { ErrorPopup } from "../utils/ErrorPopup"
 // User functions
 import { getUserDetails, logUser } from "@/app/mockData"
+import { setAuthenticationState } from "@/app/store/reducers/authenticationState"
+import { useDispatch } from "react-redux"
 
 
 export function LoginForm({ className, ...props }) {
@@ -22,6 +24,7 @@ export function LoginForm({ className, ...props }) {
   const [error, setError] = useState(false);
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -33,6 +36,11 @@ export function LoginForm({ className, ...props }) {
       setError(true);
     } else{
       sessionStorage.setItem("email", email);
+      dispatch(
+        setAuthenticationState({
+          email: email
+        })
+      )
       setIsLoading(false);
       if (!getUserDetails(email)) {
         router.push(`/newuser/?email=${email}`);
