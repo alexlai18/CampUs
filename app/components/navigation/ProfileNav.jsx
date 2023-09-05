@@ -21,6 +21,7 @@ import { getUserDetails } from "@/app/mockData"
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux"
 import { setAuthenticationState } from "@/app/store/reducers/authenticationState";
+import { useSelector } from "react-redux"
   
   export function ProfileNav() {
     const router = useRouter();
@@ -29,13 +30,14 @@ import { setAuthenticationState } from "@/app/store/reducers/authenticationState
     const [email, setEmail] = useState("");
     const [userDetails, setUserDetails] = useState({});
     const dispatch = useDispatch();
+    const userAuth = useSelector((state) => state.authenticationState.value);
 
     useEffect(() => {
-      const storedEmail = sessionStorage.getItem("email")
-      setEmail(storedEmail);
-      const details = getUserDetails(storedEmail);
+      const { email } = userAuth;
+      setEmail(email);
+      const details = getUserDetails(email);
       if (!details) {
-        router.push("/");
+        router.push(`/newuser/?email=${email}`);
       } else {
         setUserDetails(details);
         setInitials(details.fname.slice(0, 1) + details.lname.slice(0, 1));

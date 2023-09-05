@@ -30,13 +30,14 @@ export default function Dashboard() {
   const [notifs, setNotifs] = useState([]);
   const router = useRouter();
   const userAuth = useSelector((state) => state.authenticationState.value);
-  console.log(userAuth);
 
   useEffect(() => {
-    const email = sessionStorage.getItem("email");
+    const email = userAuth.email;
     const details = getUserDetails(email);
-    if (email === undefined || details === undefined) {
+    if (email === undefined) {
       router.push("/");
+    } else if (details === undefined) {
+      router.push(`/newuser/?email=${email}`)
     } else {
       setUserDetails(details);
       const about = getUserAbout(email);

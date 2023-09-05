@@ -28,14 +28,11 @@ export function LoginForm({ className, ...props }) {
 
   async function onSubmit(event) {
     event.preventDefault();
-    // Submit function
-    // submit(email, password);
     setIsLoading(true);
     if(!logUser(email, password)) {
       setIsLoading(false);
       setError(true);
     } else{
-      sessionStorage.setItem("email", email);
       dispatch(
         setAuthenticationState({
           email: email
