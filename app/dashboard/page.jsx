@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/tabs"
 
 import { FullNav } from '../components/navigation/FullNav'
-import { getAverageRating, getGroupMates, getNotifications, getUserAbout, getUserDetails } from '../mockData'
+import { getAverageRating, getGroupMates, getNotifications, getUserAbout } from '../mockData'
 import { useRouter } from 'next/navigation'
 import { NotifCard } from '../components/dashboard-cards/NotifCard'
 import { GroupMateCard } from '../components/dashboard-cards/GroupMateCard'
@@ -30,10 +30,10 @@ export default function Dashboard() {
   const [notifs, setNotifs] = useState([]);
   const router = useRouter();
   const userAuth = useSelector((state) => state.authenticationState.value);
+  const details = useSelector((state) => state.userDetailState.value);
 
   useEffect(() => {
     const email = userAuth.email;
-    const details = getUserDetails(email);
     if (email === undefined) {
       router.push("/");
     } else if (details === undefined) {

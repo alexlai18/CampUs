@@ -17,11 +17,11 @@ import {
     DropdownMenuTrigger,
     DropdownMenuButtonItem,
   } from "@/components/ui/dropdown-menu"
-import { getUserDetails } from "@/app/mockData"
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux"
 import { setAuthenticationState } from "@/app/store/reducers/authenticationState";
 import { useSelector } from "react-redux"
+import { setUserDetailState } from "@/app/store/reducers/userDetailState";
   
 export function ProfileNav() {
   const router = useRouter();
@@ -31,11 +31,11 @@ export function ProfileNav() {
   const [userDetails, setUserDetails] = useState({});
   const dispatch = useDispatch();
   const userAuth = useSelector((state) => state.authenticationState.value);
+  const details = useSelector((state) => state.userDetailState.value);
 
   useEffect(() => {
     const { email } = userAuth;
     setEmail(email);
-    const details = getUserDetails(email);
     if (!details) {
       router.push(`/newuser/?email=${email}`);
     } else {
@@ -47,6 +47,7 @@ export function ProfileNav() {
 
   const handleLogout = () => {
     dispatch(setAuthenticationState({}));
+    dispatch(setUserDetailState({}));
     router.push('/');
   }
 

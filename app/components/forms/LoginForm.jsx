@@ -52,9 +52,7 @@ export function LoginForm({ className, ...props }) {
         router.push(`/newuser/?email=${email}`);
       } else {
         dispatch(
-          setUserDetailState({
-            details: details
-          })
+          setUserDetailState(details)
         );
         router.push("/dashboard");
       }

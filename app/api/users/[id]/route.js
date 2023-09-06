@@ -19,12 +19,13 @@ export async function PUT(request, {params}) {
   const detailId = user.details;
   const newEmail = email || user.email;
   const newPassword = password || user.password;
+  let detailInfo;
 
   await connectMongoDB();
 
   // Checking if they have a UserDetail document, if so, udpate the document. If not, create a new one
   if (detailId) {
-    const detailInfo = await UserDetail.findOne({_id: detailId[0]});
+    detailInfo = await UserDetail.findOne({_id: detailId[0]});
     await UserDetail.findByIdAndUpdate(detailId[0],
       {
         fname: details.fname || detailInfo.fname,
@@ -43,7 +44,7 @@ export async function PUT(request, {params}) {
       }
     );
   } else {
-    const userDetail = await UserDetail.create(
+    detailInfo = await UserDetail.create(
       {
         fname: details.fname,
         lname: details.lname,
@@ -62,7 +63,8 @@ export async function PUT(request, {params}) {
       }
     );
   }
-  return NextResponse.json({ message: "User updated" }, { status: 200 });
+
+  return NextResponse.json(detailInfo, { status: 200 });
 }
 
 // Get specific user from the database

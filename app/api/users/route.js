@@ -7,20 +7,23 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const { email, password } = await request.json();
+
   await connectMongoDB();
 
-  if (User.findOne({email: email})) {
+  const found = await User.findOne({email: email});
+  if (found) {
     return NextResponse.json({message: "The email has already been registered. Please log in."}, {status: 400})
   }
 
-  await User.create(
+  const user = await User.create(
     {
       email,
       password,
       details: await UserDetail.create(),
     }
   );
-  return NextResponse.json({message: "User Registered"}, {status: 200})
+
+  return NextResponse.json(user, {status: 200})
 }
 
 // Get either all users in database, or specific user

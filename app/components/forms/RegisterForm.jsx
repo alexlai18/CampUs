@@ -17,19 +17,34 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { addUser } from "@/app/mockData"
 import { ErrorPopup } from "../utils/ErrorPopup"
+import { createUser } from "@/api/apiClient"
+import { useDispatch } from "react-redux"
+import { setAuthenticationState } from "@/app/store/reducers/authenticationState"
 
 export function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const router = useRouter(); 
+  const dispatch = useDispatch();
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-    if (!addUser(email, password)) {
+    const user = await createUser({
+      email: email,
+      password: password,
+    });
+
+    if (!user) {
       setError(true);
     } else {
-      router.push(`/newuser/?email=${email}`)
+      dispatch(
+        setAuthenticationState({
+          email: user.email,
+          userId: user._id
+        })
+      );
+      router.push(`/newuser/?email=${email}`);
     }
   }
 

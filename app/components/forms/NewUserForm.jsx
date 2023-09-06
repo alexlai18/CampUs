@@ -38,11 +38,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 // User functions
-import { addUserDetails } from "@/app/mockData"
 import { getUniversities } from "@/api/getUniversities"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ErrorPopup } from "../utils/ErrorPopup"
-import { getUserByEmail, updateUser } from "@/api/apiClient"
+import { updateUser } from "@/api/apiClient"
 import { setUserDetailState } from "@/app/store/reducers/userDetailState"
 
 export function NewUserForm(props) {
@@ -86,9 +85,7 @@ export function NewUserForm(props) {
     const res = await updateUser(userAuth.userId, details);
     if (res) {
       dispatch(
-        setUserDetailState({
-          details: details
-        })
+        setUserDetailState(res)
       );
       router.push('/dashboard');
     } else {
