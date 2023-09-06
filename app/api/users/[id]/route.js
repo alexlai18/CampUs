@@ -8,7 +8,6 @@ import UserDetail from "@/classes/userDetail";
 export async function PUT(request, {params}) {
   const { id } = params;
   const { email, password, details } = await request.json();
-
   const user = await User.findOne({_id: id});
 
   // Checking if user exists
@@ -17,7 +16,7 @@ export async function PUT(request, {params}) {
   }
 
   // Getting the id of the UserDetail document
-  const detailId = user.details[0];
+  const detailId = user.details;
   const newEmail = email || user.email;
   const newPassword = password || user.password;
 
@@ -25,8 +24,8 @@ export async function PUT(request, {params}) {
 
   // Checking if they have a UserDetail document, if so, udpate the document. If not, create a new one
   if (detailId) {
-    const detailInfo = await UserDetail.findOne({_id: detailId});
-    await UserDetail.findByIdAndUpdate(detailId,
+    const detailInfo = await UserDetail.findOne({_id: detailId[0]});
+    await UserDetail.findByIdAndUpdate(detailId[0],
       {
         fname: details.fname || detailInfo.fname,
         lname: details.lname || detailInfo.lname,

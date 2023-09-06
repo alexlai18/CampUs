@@ -1,6 +1,9 @@
 "use client"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { setAuthenticationState } from "@/app/store/reducers/authenticationState"
+import { useDispatch } from "react-redux"
+import { useSelector } from 'react-redux';
 
 // ShadCN UI components
 import { RocketIcon } from "lucide-react"
@@ -39,18 +42,22 @@ import { addUserDetails } from "@/app/mockData"
 import { getUniversities } from "@/api/getUniversities"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ErrorPopup } from "../utils/ErrorPopup"
+import { getUserByEmail, updateUser } from "@/api/apiClient"
+import { setUserDetailState } from "@/app/store/reducers/userDetailState"
 
 export function NewUserForm(props) {
-  // Note: Will probably have an API that gets all the universities in Australia and have an autocomplete search
   const { email } = props;
   const [error, setError] = useState(false);
+  const [msg, setMsg] = useState("You must fill out all the fields!")
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
   const [grade, setGrade] = useState("");
   const [uni, setUni] = useState("");
   const [uniList, setUniList] = useState(["Loading..."])
   const [open, setOpen] = useState(false)
-  const router = useRouter(); 
+  const router = useRouter();
+  const userAuth = useSelector((state) => state.authenticationState.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getUni = async () => {
@@ -59,23 +66,35 @@ export function NewUserForm(props) {
     getUni();
   }, [])
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     if (uni === "" || fname === "" || lname === "" || grade === "") {
+      setMsg("You must fill out all the fields!");
       setError(true);
       return;
     }
-    sessionStorage.setItem("email", email);
     const capitalisedUni = uni.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter === " o" ?  letter : letter.toUpperCase());
     const details = {
-      email,
-      fname,
-      lname,
-      grade,
-      uni: capitalisedUni,
+      details: {
+        email,
+        fname,
+        lname,
+        grade,
+        uni: capitalisedUni,
+      }
     }
-    addUserDetails(email, details);
-    router.push("/dashboard");
+    const res = await updateUser(userAuth.userId, details);
+    if (res) {
+      dispatch(
+        setUserDetailState({
+          details: details
+        })
+      );
+      router.push('/dashboard');
+    } else {
+      setMsg("There was an issue saving your info. Try again later");
+      setError(true);
+    }
   }
 
   return (
@@ -89,7 +108,7 @@ export function NewUserForm(props) {
           {error && 
             <ErrorPopup
               severity={true}
-              message="You must fill out all the fields!"
+              message={msg}
             />
           }
         </CardHeader>

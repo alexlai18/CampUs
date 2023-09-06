@@ -5,7 +5,7 @@ value holds all necessary info for authentication
 {
   accessToken,
   email,
-  id,
+  userId,
 }
 */
 

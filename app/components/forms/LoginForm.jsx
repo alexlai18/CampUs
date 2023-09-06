@@ -16,6 +16,7 @@ import { ErrorPopup } from "../utils/ErrorPopup"
 import { setAuthenticationState } from "@/app/store/reducers/authenticationState"
 import { useDispatch } from "react-redux"
 import { logUser, getUserDetails } from "@/api/apiClient"
+import { setUserDetailState } from "@/app/store/reducers/userDetailState"
 
 
 export function LoginForm({ className, ...props }) {
@@ -30,24 +31,31 @@ export function LoginForm({ className, ...props }) {
     event.preventDefault();
     setIsLoading(true);
     const res = await logUser(email, password);
+
     if(res.length === 0) {
       setError(true);
     } else {
       dispatch(
         setAuthenticationState({
-          email: email
+          email: email,
+          userId: res._id
         })
       );
-      if (!res[0].details) {
+      if (!res.details) {
         router.push(`/newuser/?email=${email}`);
         return;
       }
 
-      const details = await getUserDetails(res[0].details[0]);
+      const details = await getUserDetails(res.details[0]);
 
       if (!details) {
         router.push(`/newuser/?email=${email}`);
       } else {
+        dispatch(
+          setUserDetailState({
+            details: details
+          })
+        );
         router.push("/dashboard");
       }
     }

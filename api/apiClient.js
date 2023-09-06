@@ -23,7 +23,7 @@ export const createUser = async (body) => {
       headers: {
         "Content-type": "application/json"
       },
-      body,
+      body: JSON.stringify(body),
       cache: "no-store"
     })
 
@@ -95,14 +95,14 @@ export const getUserDetails = async (id) => {
   }
 }
 
-export const updateUser = async (body) => {
+export const updateUser = async (id, body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/users/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json"
       },
-      body,
+      body: JSON.stringify(body),
       cache: "no-store"
     })
 
