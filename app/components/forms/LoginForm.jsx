@@ -13,9 +13,9 @@ import { useRouter } from 'next/navigation'
 // Self-made components
 import { ErrorPopup } from "../utils/ErrorPopup"
 // User functions
-import { getUserDetails, logUser } from "@/app/mockData"
 import { setAuthenticationState } from "@/app/store/reducers/authenticationState"
 import { useDispatch } from "react-redux"
+import { logUser, getUserDetails } from "@/api/apiClient"
 
 
 export function LoginForm({ className, ...props }) {
@@ -29,22 +29,29 @@ export function LoginForm({ className, ...props }) {
   async function onSubmit(event) {
     event.preventDefault();
     setIsLoading(true);
-    if(!logUser(email, password)) {
-      setIsLoading(false);
+    const res = await logUser(email, password);
+    if(res.length === 0) {
       setError(true);
-    } else{
+    } else {
       dispatch(
         setAuthenticationState({
           email: email
         })
-      )
-      setIsLoading(false);
-      if (!getUserDetails(email)) {
+      );
+      if (!res[0].details) {
+        router.push(`/newuser/?email=${email}`);
+        return;
+      }
+
+      const details = await getUserDetails(res[0].details[0]);
+
+      if (!details) {
         router.push(`/newuser/?email=${email}`);
       } else {
         router.push("/dashboard");
       }
     }
+    setIsLoading(false);
   }
 
   return (

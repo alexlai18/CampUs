@@ -54,7 +54,6 @@ export function AboutMeCard(props) {
                 placeholder="Write something about yourself"
                 onChange={(e) => {
                   setNewInfo(e.target.value)
-                  console.log(e.target.value);
                 }}
                 defaultValue={aboutMe}
               />

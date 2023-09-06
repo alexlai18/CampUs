@@ -69,8 +69,16 @@ export async function PUT(request, {params}) {
 // Get specific user from the database
 export async function GET(request, {params}) {
   const { id } = params;
+  const { email } = request;
+
   await connectMongoDB();
-  const user = await User.findOne({_id: id});
+
+  let user;
+  if (!id) {
+    user = await User.findOne({email: email});
+  } else {
+    user = await User.findOne({_id: id});
+  }
 
   if (!user) {
     return NextResponse.json({message: "This user does not exist in the database"}, { status: 404 });
