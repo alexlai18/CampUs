@@ -12,15 +12,17 @@ import {
 } from "@/components/ui/card";
 
 import { FullNav } from '../components/navigation/FullNav';
-import { getUsers } from '../mockData';
+import { getConnections } from '@/api/apiClient';
+import { useSelector } from 'react-redux';
 
 export default function ConnectionsPage() {
   const [search, setSearch] = useState("");
   const [userList, setUserList] = useState([]);
+  const userAuth = useSelector((state) => state.authenticationState.value);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setUserList(getUsers(search));
+    setUserList(await getConnections(search, userAuth.email));
   }
 
   return (

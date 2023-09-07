@@ -20,6 +20,7 @@ export async function POST(request) {
       email,
       password,
       details: await UserDetail.create(),
+      friends: []
     }
   );
 

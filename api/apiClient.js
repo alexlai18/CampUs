@@ -131,3 +131,40 @@ export const getCourses = async (body) => {
     return res.json();
   } catch (error) {}
 }
+
+export const getConnections = async (search, email) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/friends?prefix=${search}&email=${email}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const addConnections = async (body) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/friends`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body,
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}

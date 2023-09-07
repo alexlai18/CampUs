@@ -36,7 +36,7 @@ export function ProfileNav() {
   useEffect(() => {
     const { email } = userAuth;
     setEmail(email);
-    if (!details || details.length === 0) {
+    if (!details || Object.keys(details).length === 0) {
       router.push(`/newuser/?email=${email}`);
     } else {
       setUserDetails(details);
