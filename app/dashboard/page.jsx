@@ -40,8 +40,7 @@ export default function Dashboard() {
       router.push(`/newuser/?email=${email}`)
     } else {
       setUserDetails(details);
-      const about = getUserAbout(email);
-      setAboutMe(about ? about : "");
+      setAboutMe(details.about ? details.about : "");
       const mates = getGroupMates(email);
       setFavGroupMates(mates ? mates : []);
       setRating(getAverageRating(email));

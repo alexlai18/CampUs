@@ -8,23 +8,32 @@ import {
 import { Button } from '@/components/ui/button';
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { setNewAbout } from "@/app/mockData";
+import { useSelector } from 'react-redux'
+import { updateUser } from "@/api/apiClient";
+import { useDispatch } from "react-redux";
+import { setUserDetailState } from "@/app/store/reducers/userDetailState";
 
 export function AboutMeCard(props) {
   const { aboutMe, setAboutMe } = props;
   const [newInfo, setNewInfo] = useState(aboutMe);
   const [onEdit, setOnEdit] = useState(false);
+  const userAuth = useSelector((state) => state.authenticationState.value);
+  const dispatch = useDispatch();
 
   const handleEdit = () => {
     setOnEdit(!onEdit);
-  }
+  };
 
   const handleSubmit = () => {
-    if (setNewAbout(sessionStorage.getItem("email"), newInfo)) {
+    const res = updateUser(userAuth.userId, {details: {about: newInfo}});
+    if (res) {
+      dispatch(
+        setUserDetailState(res)
+      );
       setAboutMe(newInfo);
       setOnEdit(false);
     }
-  }
+  };
 
   return (
     <Card className="col-span-4">

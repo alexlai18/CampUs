@@ -59,7 +59,7 @@ export async function PUT(request, {params}) {
       {
         email: newEmail,
         password: newPassword,
-        details: userDetail
+        details: detailInfo
       }
     );
   }

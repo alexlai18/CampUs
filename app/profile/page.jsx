@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { getUserDetails } from '../mockData';
 import { AboutMeCard } from '../components/dashboard-cards/AboutMeCard';
 import { Loading } from '../components/utils/Loading';
+import { useSelector } from 'react-redux';
 
 export default function ProfilePage() {
   const [email, setEmail] = useState("");
@@ -25,15 +26,16 @@ export default function ProfilePage() {
   const [userDetails, setUserDetails] = useState({});
   const [initials, setInitials] = useState("");
   const [loading, setLoading] = useState(true);
+  const details = useSelector((state) => state.userDetailState.value);
+  const userAuth = useSelector((state) => state.authenticationState.value);
 
   useEffect(() => {
-    const storedEmail = sessionStorage.getItem("email")
+    const storedEmail = userAuth.email;
     setEmail(storedEmail);
-    const details = getUserDetails(storedEmail);
     if (!details) {
       router.push("/");
     } else {
-      const about = getUserAbout(storedEmail)
+      const about = details.about;
       setAboutMe(about ? about : "");
       setUserDetails(details);
       setInitials(details.fname.slice(0, 1) + details.lname.slice(0, 1));
