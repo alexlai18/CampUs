@@ -113,3 +113,21 @@ export const updateUser = async (id, body) => {
     return res.json();
   } catch (error) {}
 }
+
+export const getCourses = async (body) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/course?prefix=${body}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}

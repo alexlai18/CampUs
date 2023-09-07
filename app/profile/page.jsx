@@ -44,11 +44,6 @@ export default function ProfilePage() {
     }
   }, [email, router])
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setCourseList(getCourses(search));
-  }
-
   if (loading) {
     return <Loading />
   }
