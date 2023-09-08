@@ -22,17 +22,24 @@ export async function GET(request) {
   }
 
   const res = [];
-  friends.map(async (friend) => {
-    if ((friend.toLowerCase()).includes(prefix.toLowerCase())) {
-      // Get user details
-      const friendUser = await User.findOne({email: friend});
-      const detailId = friendUser.details[0];
-      const details = await UserDetail.findById(detailId);
-      res.push(details);
-    }
-  });
-
-  return NextResponse.json({ res }, { status: 200 });
+  async function getFriends() {
+    await Promise.all(
+      friends.map(async (friend) => {
+        if ((friend.toLowerCase()).includes(prefix.toLowerCase())) {
+          // Get user details
+          const friendUser = await User.findOne({email: friend});
+          const detailId = friendUser.details[0];
+          const details = await UserDetail.findById(detailId);
+          if (details) {
+            res.push(details);
+          }
+        }
+        }
+      )
+    );
+  }
+  await getFriends();
+  return NextResponse.json(res, { status: 200 });
 }
 
 // THE ACCOUNT THAT IS LOGGED IN SHOULD USE THEIR ID (userId in store)
