@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { FullNav } from '../components/navigation/FullNav';
+import { FullNav } from '../../components/navigation/FullNav';
 import { getCourses } from '@/api/apiClient';
 
 export default function CoursesPage() {

@@ -9,16 +9,16 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 
-import { FullNav } from '../components/navigation/FullNav'
+import { FullNav } from '../../components/navigation/FullNav'
 import { getAverageRating, getGroupMates, getNotifications } from '../mockData'
 import { useRouter } from 'next/navigation'
-import { NotifCard } from '../components/dashboard-cards/NotifCard'
-import { GroupMateCard } from '../components/dashboard-cards/GroupMateCard'
-import { AboutMeCard } from '../components/dashboard-cards/AboutMeCard'
-import { CurrentLoadCard } from '../components/dashboard-cards/CurrentLoadCard'
-import { DashboardGroupCard } from '../components/dashboard-cards/DashboardGroupCard'
-import { DashboardRatingCard } from '../components/dashboard-cards/DashboardRatingCard'
-import { Loading } from '../components/utils/Loading'
+import { NotifCard } from '../../components/dashboard-cards/NotifCard'
+import { GroupMateCard } from '../../components/dashboard-cards/GroupMateCard'
+import { AboutMeCard } from '../../components/dashboard-cards/AboutMeCard'
+import { CurrentLoadCard } from '../../components/dashboard-cards/CurrentLoadCard'
+import { DashboardGroupCard } from '../../components/dashboard-cards/DashboardGroupCard'
+import { DashboardRatingCard } from '../../components/dashboard-cards/DashboardRatingCard'
+import { Loading } from '../../components/utils/Loading'
 import { useSelector } from 'react-redux'
 
 export default function Dashboard() {

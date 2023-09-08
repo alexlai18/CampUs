@@ -8,12 +8,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { FullNav } from '../components/navigation/FullNav';
+import { FullNav } from '../../components/navigation/FullNav';
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
 import { AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
-import { AboutMeCard } from '../components/dashboard-cards/AboutMeCard';
-import { Loading } from '../components/utils/Loading';
+import { AboutMeCard } from '../../components/dashboard-cards/AboutMeCard';
+import { Loading } from '../../components/utils/Loading';
 import { useSelector } from 'react-redux';
 
 export default function ProfilePage() {

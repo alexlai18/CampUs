@@ -1,4 +1,4 @@
-import { AppearanceSettingsForm } from "@/app/components/forms/AppearanceSettingsForm"
+import { AppearanceSettingsForm } from "@/components/forms/AppearanceSettingsForm"
 
 export default function SettingsPage() {
   return (

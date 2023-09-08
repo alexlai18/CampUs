@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { FullNav } from '../components/navigation/FullNav';
+import { FullNav } from '../../components/navigation/FullNav';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, getUserDetails } from '@/api/apiClient';
 import { setUserDetailState } from '../store/reducers/userDetailState';
@@ -24,20 +24,23 @@ export default function GroupsPage() {
   const userAuth = useSelector((state) => state.authenticationState.value);
   const dispatch = useDispatch();
 
-  useEffect(async () => {
-    const user = await getUser("email", userAuth.email);
-    if (user && user.details) {
-      const detailId = user.details[0];
-      const details = await getUserDetails(detailId);
-      setCurrentGroups(details.currentGroups);
-      setPastGroups(details.pastGroups);
-      dispatch(
-        setUserDetailState(details)
-      );
-    } else {
-      setCurrentGroups([]);
-      setPastGroups([]);
+  useEffect(() => {
+    async function grouping() {
+      const user = await getUser("email", userAuth.email);
+      if (user && user.details) {
+        const detailId = user.details[0];
+        const details = await getUserDetails(detailId);
+        setCurrentGroups(details.currentGroups);
+        setPastGroups(details.pastGroups);
+        dispatch(
+          setUserDetailState(details)
+        );
+      } else {
+        setCurrentGroups([]);
+        setPastGroups([]);
+      }
     }
+    grouping();
   }, [])
 
   const handleSubmit = (event) => {

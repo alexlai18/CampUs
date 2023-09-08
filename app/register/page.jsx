@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { RegisterForm } from '../components/forms/RegisterForm'
+import { RegisterForm } from '../../components/forms/RegisterForm'
 
 export default function Register() {
   return (

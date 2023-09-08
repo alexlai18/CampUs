@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { FullNav } from '../components/navigation/FullNav';
+import { FullNav } from '../../components/navigation/FullNav';
 import { getConnections } from '@/api/apiClient';
 import { useSelector } from 'react-redux';
 
