@@ -18,14 +18,19 @@ export function AboutMeCard(props) {
   const [newInfo, setNewInfo] = useState(aboutMe);
   const [onEdit, setOnEdit] = useState(false);
   const userAuth = useSelector((state) => state.authenticationState.value);
+  const userDetails = useSelector((state) => state.userDetailState.value);
   const dispatch = useDispatch();
 
   const handleEdit = () => {
     setOnEdit(!onEdit);
   };
 
-  const handleSubmit = () => {
-    const res = updateUser(userAuth.userId, {details: {about: newInfo}});
+  const handleSubmit = async () => {
+    const res = await updateUser(userAuth.userId, {details: {
+      ...userDetails,
+      about: newInfo
+    }});
+
     if (res) {
       dispatch(
         setUserDetailState(res)
