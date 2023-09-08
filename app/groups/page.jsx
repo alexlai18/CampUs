@@ -12,22 +12,61 @@ import {
 } from "@/components/ui/card";
 
 import { FullNav } from '../components/navigation/FullNav';
-import { getCurrentGroups, getPastGroups } from '../mockData';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser, getUserDetails } from '@/api/apiClient';
+import { setUserDetailState } from '../store/reducers/userDetailState';
 
 export default function GroupsPage() {
   const [search, setSearch] = useState("");
   const [currentGroups, setCurrentGroups] = useState([]);
   const [pastGroups, setPastGroups] = useState([]);
+  const userDetails = useSelector((state) => state.userDetailState.value);
+  const userAuth = useSelector((state) => state.authenticationState.value);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    setCurrentGroups(getCurrentGroups(sessionStorage.getItem("email")));
-    setPastGroups(getPastGroups(sessionStorage.getItem("email")));
+  useEffect(async () => {
+    const user = await getUser("email", userAuth.email);
+    if (user && user.details) {
+      const detailId = user.details[0];
+      const details = await getUserDetails(detailId);
+      setCurrentGroups(details.currentGroups);
+      setPastGroups(details.pastGroups);
+      dispatch(
+        setUserDetailState(details)
+      );
+    } else {
+      setCurrentGroups([]);
+      setPastGroups([]);
+    }
   }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setCurrentGroups(sessionStorage.getItem("email"), search);
-    setPastGroups(sessionStorage.getItem("email"), search);
+
+    const currGroup = userDetails.currentGroups;
+    const pastG = userDetails.pastGroups;
+
+    if (currGroup) {
+      const currRes = []
+      currGroup.map((g) => {
+        if ((g.course.toLowerCase()).includes(prefix.toLowerCase()) ||
+          (g.name.toLowerCase()).includes(prefix.toLowerCase())) {
+          currRes.push(g);
+        }
+      });
+      setCurrentGroups(currRes);
+    }
+
+    if (pastG) {
+      const pastRes = []
+      pastG.map((g) => {
+        if ((g.course.toLowerCase()).includes(search.toLowerCase()) ||
+          (g.name.toLowerCase()).includes(search.toLowerCase())) {
+          pastRes.push(g);
+        }
+      });
+      setPastGroups(pastRes);
+    }
   }
 
   return (
@@ -49,7 +88,7 @@ export default function GroupsPage() {
           </form>
           <h3 className="text-3xl font-bold tracking-tight">Current Groups</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {currentGroups.length > 0 ?
+            {currentGroups && currentGroups.length > 0 ?
               currentGroups.map((group) => {
                 return (<Card key={`group-${group.name}`}>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -87,7 +126,7 @@ export default function GroupsPage() {
           </div>
           <h3 className="text-3xl font-bold tracking-tight">Past Groups</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {pastGroups.length > 0 ?
+            {pastGroups && pastGroups.length > 0 ?
               pastGroups.map((group) => {
                 return (<Card key={`pastgroup-${group.name}`}>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

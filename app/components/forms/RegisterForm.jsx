@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { addUser } from "@/app/mockData"
 import { ErrorPopup } from "../utils/ErrorPopup"
 import { createUser } from "@/api/apiClient"
 import { useDispatch } from "react-redux"

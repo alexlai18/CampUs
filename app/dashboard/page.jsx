@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/tabs"
 
 import { FullNav } from '../components/navigation/FullNav'
-import { getAverageRating, getGroupMates, getNotifications, getUserAbout } from '../mockData'
+import { getAverageRating, getGroupMates, getNotifications } from '../mockData'
 import { useRouter } from 'next/navigation'
 import { NotifCard } from '../components/dashboard-cards/NotifCard'
 import { GroupMateCard } from '../components/dashboard-cards/GroupMateCard'

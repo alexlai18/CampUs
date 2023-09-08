@@ -1,3 +1,4 @@
+// User methods
 export const getUsers = async () => {
   try {
     const res = await fetch("http://localhost:3000/api/users", {
@@ -75,6 +76,8 @@ export const logUser = async (email, password) => {
   }
 }
 
+
+// User Detail methods
 export const getUserDetails = async (id) => {
   try {
     const res = await fetch(`http://localhost:3000/api/details?id=${id}`, {
@@ -132,6 +135,7 @@ export const getCourses = async (body) => {
   } catch (error) {}
 }
 
+// Connections methods
 export const getConnections = async (search, email) => {
   try {
     const res = await fetch(`http://localhost:3000/api/friends?prefix=${search}&email=${email}`, {

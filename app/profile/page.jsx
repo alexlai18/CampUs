@@ -9,11 +9,9 @@ import {
 } from "@/components/ui/card";
 
 import { FullNav } from '../components/navigation/FullNav';
-import { getCourses, getUserAbout } from '../mockData';
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
 import { AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
-import { getUserDetails } from '../mockData';
 import { AboutMeCard } from '../components/dashboard-cards/AboutMeCard';
 import { Loading } from '../components/utils/Loading';
 import { useSelector } from 'react-redux';
