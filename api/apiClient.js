@@ -172,3 +172,81 @@ export const addConnections = async (body) => {
     return res.json();
   } catch (error) {}
 }
+
+// Group operations
+export const createGroup = async (body) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/group`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body,
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const getGroup = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/group/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const deleteGroup = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/group`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: {
+        id,
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const updateGroup = async (id, body) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/group/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body,
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}

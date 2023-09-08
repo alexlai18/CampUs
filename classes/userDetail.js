@@ -8,18 +8,8 @@ const userDetailSchema = new Schema(
     grade: Number,
     about: String,
     uni: String,
-    currentGroups: [
-      {
-        course: String,
-        name: String
-      }
-    ],
-    pastGroups: [
-      {
-        course: String,
-        name: String
-      }
-    ]
+    currentGroups: [{type: Schema.ObjectId, ref: 'Group'}],
+    pastGroups: [{type: Schema.ObjectId, ref: 'Group'}]
   },
 )
 
