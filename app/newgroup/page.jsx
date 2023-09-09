@@ -21,7 +21,7 @@ export default function NewGroup() {
           </div>
           <NewGroupForm />
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Don't worry, you can change these answers later in the settings.
+            Don&apos;t worry, you can change these answers later in the settings.
           </p>
         </div>
       </div>
