@@ -29,8 +29,9 @@ export async function GET(request) {
           // Get user details
           const friendUser = await User.findOne({email: friend});
           const detailId = friendUser.details[0];
-          const details = await UserDetail.findById(detailId);
+          const details = await UserDetail.findById(detailId).lean();
           if (details) {
+            details.email = friend;
             res.push(details);
           }
         }

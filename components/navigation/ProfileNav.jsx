@@ -81,7 +81,7 @@ export function ProfileNav() {
           <DropdownMenuButtonItem onClick={() => router.push('/settings')}>
             Settings
           </DropdownMenuButtonItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push('/newgroup')}>Create New Group</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuButtonItem onClick={handleLogout}>
