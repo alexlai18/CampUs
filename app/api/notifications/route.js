@@ -20,6 +20,7 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+  await connectMongoDB();
   const search = new URL(request.url).searchParams;
   const receiver = search.get("receiver");
 
@@ -39,6 +40,7 @@ export async function GET(request) {
 
 export async function DELETE(request) {
   const { receiver, notifId } = await request.json();
+  await connectMongoDB();
 
   // Either user was deleted or they wanted to clear/delete all their notifs
   if (receiver) {
