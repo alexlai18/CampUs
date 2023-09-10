@@ -28,13 +28,25 @@ export async function POST(request) {
 }
 
 // Get either all users in database, or specific user
-export async function GET() {
+export async function GET(request) {
+  const search = new URL(request.url).searchParams;
+  const email = search.get("email");
   await connectMongoDB();
-  const users = await User.find();
 
-  if (!users || users.length === 0) {
-    return NextResponse.json({message: "There are no users in the database"}, { status: 404 });
+  if (email) {
+    const user = await User.findOne({email: email});
+    if (!user || user.length === 0) {
+      return NextResponse.json({message: "This user does not exist in the database"}, { status: 404 });
+    }
+  
+    return NextResponse.json(user, { status: 200 });
+  } else {
+    const users = await User.find();
+
+    if (!users || users.length === 0) {
+      return NextResponse.json({message: "There are no users in the database"}, { status: 404 });
+    }
+  
+    return NextResponse.json(users, { status: 200 });
   }
-
-  return NextResponse.json(users, { status: 200 });
 }

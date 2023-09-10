@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { Icons } from '@/components/ui/icons'
 import {
   Tabs,
   TabsContent,
@@ -20,6 +19,7 @@ import { DashboardGroupCard } from '../../components/dashboard-cards/DashboardGr
 import { DashboardRatingCard } from '../../components/dashboard-cards/DashboardRatingCard'
 import { Loading } from '../../components/utils/Loading'
 import { useSelector } from 'react-redux'
+import { getNotifs } from '@/api/apiClient'
 
 export default function Dashboard() {
   const [userDetails, setUserDetails] = useState({});
@@ -41,12 +41,16 @@ export default function Dashboard() {
     } else {
       setUserDetails(details);
       setAboutMe(details.about ? details.about : "");
+      const notifs = async () => {
+        const ping = await getNotifs(email);
+        setNotifs(ping ? ping : [])
+      }
+      notifs();
+
+      // This is all fake
       const mates = getGroupMates(email);
       setFavGroupMates(mates ? mates : []);
       setRating(getAverageRating(email));
-
-      const ping = getNotifications(email);
-      setNotifs(ping ? ping : [])
       setLoading(false);
     }
   }, [router]);

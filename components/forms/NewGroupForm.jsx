@@ -11,6 +11,7 @@ import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { Icons } from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
 import {
   Card,
   CardContent,
@@ -45,6 +46,7 @@ import { setUserDetailState } from "@/app/store/reducers/userDetailState"
 export function NewGroupForm() {
   const [error, setError] = useState(false);
   const [msg, setMsg] = useState("You must fill out all the fields!");
+  const [name, setName] = useState("");
   const [course, setCourse] = useState("");
   const [target, setTarget] = useState("");
   const [openTarget, setOpenTarget] = useState(false);
@@ -77,13 +79,14 @@ export function NewGroupForm() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    if (target === "" || course === "") {
+    if (target === "" || course === "" || name === "") {
       setMsg("You must fill out all the fields!");
       setSeverity(true);
       setError(true);
       return;
     }
     const details = {
+      name: name,
       courseCode: course.toUpperCase(),
       members: users,
       target: target.toUpperCase(),
@@ -244,6 +247,17 @@ export function NewGroupForm() {
                     </Command>
                   </PopoverContent>
                 </Popover>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="login-email">
+                  Group Name
+                </Label>
+                <Input
+                  id="group-name"
+                  placeholder="Group Name"
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
               </div>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">

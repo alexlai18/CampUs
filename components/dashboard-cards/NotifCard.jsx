@@ -1,6 +1,5 @@
 
-import { getUserDetails } from "@/app/mockData";
-
+import { getUserDetails, getUser } from "@/api/apiClient";
 import {
   Avatar,
   AvatarFallback,
@@ -8,10 +7,28 @@ import {
 } from "@/components/ui/avatar"
 
 import { Card } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { Icons } from "@/components/ui/icons";
+
 
 export function NotifCard(props) {
   const { notif } = props;
-  const info = getUserDetails(notif.sender);
+  const [info, setInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    setIsLoading(true);
+    async function getInfo() {
+      const user = await getUser("email", notif.sender);
+      if (user && user.details) {
+        const detailId = user.details[0];
+        const details = await getUserDetails(detailId);
+        setInfo(details)
+        setIsLoading(false);
+      } 
+    }
+    getInfo();
+  }, [])
+
   const findNotif = (params, info) => {
     switch (params.action) {
       case "messaged":
@@ -41,9 +58,17 @@ export function NotifCard(props) {
     }
   }
 
+  if (isLoading) {
+    return (
+      <Card className="rounded-full">
+        <Icons.spinner className="mr-2 h-8 w-8 animate-spin text-primary" />
+      </Card>
+    )
+  }
+
   return (
     <Card className="rounded-full">
-      <div className="flex items-center" key={`notif-${notif.email}`}>
+      <div className="flex items-center" key={`notif-${notif.sender}`}>
         <Avatar className="h-9 w-9 ml-4">
           <AvatarImage alt="Avatar" />
           <AvatarFallback className="bg-primary text-primary-foreground">{info.fname.slice(0, 1) + info.lname.slice(0, 1)}</AvatarFallback>

@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const groupSchema = new Schema(
   {
+    name: String,
     courseCode: String,
     members: [{type: Schema.ObjectId, ref: 'User'}],
     target: {

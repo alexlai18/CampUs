@@ -8,7 +8,6 @@ export async function POST(request) {
   const { receiver, sender, action, message } = await request.json();
   await connectMongoDB();
 
-
   await Notifications.create(
     {
       receiver,
@@ -21,17 +20,18 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
-  const { receiver } = await request.json();
-  const user = await User.find({email: receiver})
-  if (!user) {
-    return NextResponse.json({message: "This user does not exist"}, {status: 404});
-  }
+  const search = new URL(request.url).searchParams;
+  const receiver = search.get("receiver");
 
   // Collect all notifications in database
   if (!receiver) {
     const notifs = await Notifications.find();
     return NextResponse.json(notifs, {status: 200});
   } else {
+    const user = await User.find({email: receiver})
+    if (!user) {
+      return NextResponse.json({message: "This user does not exist"}, {status: 404});
+    }
     const notifs = await Notifications.find({receiver: receiver});
     return NextResponse.json(notifs, {status: 200});
   }

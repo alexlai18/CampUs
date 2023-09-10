@@ -6,7 +6,7 @@ import User from "@/classes/user";
 
 // Creating a new group in the MongoDB database
 export async function POST(request) {
-  const { courseCode, members, target } = await request.json();
+  const { name, courseCode, members, target } = await request.json();
   await connectMongoDB();
   const course = await Course.findOne({code: courseCode});
 
@@ -27,6 +27,7 @@ export async function POST(request) {
   await getMembers();
   await Group.create(
     {
+      name,
       courseCode,
       members: memberList,
       target

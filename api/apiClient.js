@@ -238,7 +238,45 @@ export const updateGroup = async (id, body) => {
       headers: {
         "Content-type": "application/json"
       },
-      body,
+      body: JSON.stringify(body),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+// Notifications Operations
+export const createNotif = async (body) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/notifications`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(body),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const getNotifs = async (email) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/notifications?receiver=${email}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
       cache: "no-store"
     })
 
