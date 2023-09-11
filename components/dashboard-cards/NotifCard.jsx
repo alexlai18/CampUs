@@ -9,24 +9,39 @@ import {
 import { Card } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { Icons } from "@/components/ui/icons";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addUserNotif } from "@/app/store/reducers/userNotifState";
+import { setUserNotifState } from "@/app/store/reducers/userNotifState";
 
 
 export function NotifCard(props) {
   const { notif } = props;
   const [info, setInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const userNotifs = useSelector((state) => state.userNotifState.value);
+  const dispatch = useDispatch();
+  const reduxIdx = userNotifs.findIndex(item => item.key === notif._id);
+
+
   useEffect(() => {
-    setIsLoading(true);
-    async function getInfo() {
-      const user = await getUser("email", notif.sender);
-      if (user && user.details) {
-        const detailId = user.details[0];
-        const details = await getUserDetails(detailId);
-        setInfo(details)
-        setIsLoading(false);
-      } 
+    if (reduxIdx === -1) {
+      setIsLoading(true);
+      async function getInfo() {
+        const user = await getUser("email", notif.sender);
+        if (user && user.details) {
+          const detailId = user.details[0];
+          const details = await getUserDetails(detailId);
+          setInfo(details);
+          dispatch(addUserNotif({key: notif._id, value: details}));
+          setIsLoading(false);
+        } 
+      }
+      getInfo();
+    } else {
+      setInfo(userNotifs[reduxIdx].value);
+      setIsLoading(false);
     }
-    getInfo();
   }, [])
 
   const findNotif = (params, info) => {
@@ -68,7 +83,7 @@ export function NotifCard(props) {
 
   return (
     <Card className="rounded-full">
-      <div className="flex items-center" key={`notif-${notif.sender}`}>
+      <div className="flex items-center" key={`notif-${notif._id}`}>
         <Avatar className="h-9 w-9 ml-4">
           <AvatarImage alt="Avatar" />
           <AvatarFallback className="bg-primary text-primary-foreground">{info.fname.slice(0, 1) + info.lname.slice(0, 1)}</AvatarFallback>

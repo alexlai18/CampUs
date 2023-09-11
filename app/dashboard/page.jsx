@@ -87,7 +87,7 @@ export default function Dashboard() {
             </TabsContent>
             <TabsContent value="notifications" className="space-y-1">
               {notifs.length > 1 ? notifs.map((notif) => {
-                return <NotifCard key={`notif-${notif}`} notif={notif} />
+                return <NotifCard key={`notif-${notif._id}`} notif={notif} />
               }) : <div className='text-lg font-medium'>No notifications</div>}
             </TabsContent>
           </Tabs>

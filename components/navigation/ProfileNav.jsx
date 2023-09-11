@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux"
 import { setAuthenticationState } from "@/app/store/reducers/authenticationState";
 import { useSelector } from "react-redux"
 import { setUserDetailState } from "@/app/store/reducers/userDetailState";
+import { setUserNotifState } from "@/app/store/reducers/userNotifState";
   
 export function ProfileNav() {
   const router = useRouter();
@@ -48,6 +49,7 @@ export function ProfileNav() {
   const handleLogout = () => {
     dispatch(setAuthenticationState({}));
     dispatch(setUserDetailState({}));
+    dispatch(setUserNotifState([]));
     router.push('/');
   }
 
