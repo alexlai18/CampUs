@@ -40,8 +40,7 @@ import { Label } from "@/components/ui/label"
 // User functions
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ErrorPopup } from "../utils/ErrorPopup"
-import { createGroup, getConnections, getCourses, updateUser } from "@/api/apiClient"
-import { setUserDetailState } from "@/app/store/reducers/userDetailState"
+import { createGroup, getConnections, getCourses, getUser, getUserDetails, updateUser } from "@/api/apiClient"
 
 export function NewGroupForm() {
   const [error, setError] = useState(false);
@@ -92,7 +91,25 @@ export function NewGroupForm() {
       target: target.toUpperCase(),
     }
     setIsLoading(true);
-    const res = await createGroup(details)
+
+    // Create the group itself
+    const res = await createGroup(details);
+
+    // Add groupId to currentGroup of users
+    async function addGroup() {
+      await Promise.all (
+        users.map(async (email) => {
+          const user = await getUser("email", email);
+          const id = user.details[0];
+          const details = await getUserDetails(id);
+          const groupList = details ? details.currentGroups: [];
+          groupList.push(res._id);
+          await updateUser(user._id, {details: {currentGroups: groupList}});
+        })
+      )
+    }
+    addGroup();
+
     if (res) {
       setMsg("Successfully Created Group!");
       setSeverity(false);
@@ -126,9 +143,9 @@ export function NewGroupForm() {
         <CardContent className="grid gap-4">
           <form onSubmit={onSubmit}>
             <div className="grid gap-2">
-              <div className="grid gap-2">
+              <div className="grid gap-2" key="choose-course">
                 <Label htmlFor="course">What course is this group for?</Label>
-                <Popover open={openCourse} onOpenChange={setOpenCourse} modal={true}>
+                <Popover open={openCourse} onOpenChange={setOpenCourse} modal={true} key="course">
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
@@ -172,7 +189,7 @@ export function NewGroupForm() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="grid gap-2">
+              <div className="grid gap-2" key="add-members">
                 <Label htmlFor="members">Add members</Label>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -206,9 +223,9 @@ export function NewGroupForm() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <div className="grid gap-2">
+              <div className="grid gap-2" key="choose-goal">
                 <Label htmlFor="course">What is your goal!</Label>
-                <Popover open={openTarget} onOpenChange={setOpenTarget} modal={true}>
+                <Popover open={openTarget} onOpenChange={setOpenTarget} modal={true} key="target">
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
@@ -248,12 +265,13 @@ export function NewGroupForm() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="login-email">
+              <div className="grid gap-2" key="add-group-name">
+                <Label htmlFor="group-name">
                   Group Name
                 </Label>
                 <Input
                   id="group-name"
+                  key="group-name"
                   placeholder="Group Name"
                   onChange={(e) => setName(e.target.value)}
                   required

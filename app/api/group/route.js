@@ -25,7 +25,7 @@ export async function POST(request) {
     );
   };
   await getMembers();
-  await Group.create(
+  const group = await Group.create(
     {
       name,
       courseCode,
@@ -33,7 +33,7 @@ export async function POST(request) {
       target
     }
   );
-  return NextResponse.json({message: "Course Added"}, {status: 200})
+  return NextResponse.json(group, {status: 200})
 }
 
 // Get group from the database
@@ -41,7 +41,7 @@ export async function GET(request) {
   const search = new URL(request.url).searchParams;
   await connectMongoDB();
   const id = search.get("id");
-  const res = Group.findById(id);
+  const res = await Group.findById(id);
 
   return NextResponse.json(res, { status: 200 });
 }

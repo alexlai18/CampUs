@@ -194,7 +194,7 @@ export const createGroup = async (body) => {
 
 export const getGroup = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/group/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/group?id=${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"

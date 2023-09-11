@@ -9,13 +9,8 @@ import { PersistGate } from "redux-persist/es/integration/react";
 import persistStore from "redux-persist/es/persistStore";
 import { useEffect } from 'react';
 import { PrivateRoute } from '../components/PrivateRoute';
-import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] })
-
-export const metadata = {
-  title: 'CampUs',
-}
 
 export default function RootLayout({children}) {
   const persistor = persistStore(store, { manualPersist: true });
