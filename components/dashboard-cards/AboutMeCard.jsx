@@ -8,23 +8,37 @@ import {
 import { Button } from '@/components/ui/button';
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import { setNewAbout } from "@/app/mockData";
+import { useSelector } from 'react-redux'
+import { updateUser } from "@/api/apiClient";
+import { useDispatch } from "react-redux";
+import { setUserDetailState } from "@/app/store/reducers/userDetailState";
 
 export function AboutMeCard(props) {
   const { aboutMe, setAboutMe } = props;
   const [newInfo, setNewInfo] = useState(aboutMe);
   const [onEdit, setOnEdit] = useState(false);
+  const userAuth = useSelector((state) => state.authenticationState.value);
+  const userDetails = useSelector((state) => state.userDetailState.value);
+  const dispatch = useDispatch();
 
   const handleEdit = () => {
     setOnEdit(!onEdit);
-  }
+  };
 
-  const handleSubmit = () => {
-    if (setNewAbout(sessionStorage.getItem("email"), newInfo)) {
+  const handleSubmit = async () => {
+    const res = await updateUser(userAuth.userId, {details: {
+      ...userDetails,
+      about: newInfo
+    }});
+
+    if (res) {
+      dispatch(
+        setUserDetailState(res)
+      );
       setAboutMe(newInfo);
       setOnEdit(false);
     }
-  }
+  };
 
   return (
     <Card className="col-span-4">
@@ -54,7 +68,6 @@ export function AboutMeCard(props) {
                 placeholder="Write something about yourself"
                 onChange={(e) => {
                   setNewInfo(e.target.value)
-                  console.log(e.target.value);
                 }}
                 defaultValue={aboutMe}
               />

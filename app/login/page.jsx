@@ -1,8 +1,22 @@
+"use client"
+
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { LoginForm } from '../components/forms/LoginForm'
+import { LoginForm } from '../../components/forms/LoginForm'
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+  const userAuth = useSelector((state) => state.authenticationState.value);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (userAuth.email !== undefined) {
+      router.push('/dashboard');
+    }
+  }, []);
+
   return (
     <>
       <div className="hidden flex-col md:flex">

@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from 'react'
-import { Icons } from '@/components/ui/icons'
 import {
   Tabs,
   TabsContent,
@@ -9,16 +8,18 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 
-import { FullNav } from '../components/navigation/FullNav'
-import { getAverageRating, getGroupMates, getNotifications, getUserAbout, getUserDetails } from '../mockData'
+import { FullNav } from '../../components/navigation/FullNav'
+import { getAverageRating, getGroupMates, getNotifications } from '../mockData'
 import { useRouter } from 'next/navigation'
-import { NotifCard } from '../components/dashboard-cards/NotifCard'
-import { GroupMateCard } from '../components/dashboard-cards/GroupMateCard'
-import { AboutMeCard } from '../components/dashboard-cards/AboutMeCard'
-import { CurrentLoadCard } from '../components/dashboard-cards/CurrentLoadCard'
-import { DashboardGroupCard } from '../components/dashboard-cards/DashboardGroupCard'
-import { DashboardRatingCard } from '../components/dashboard-cards/DashboardRatingCard'
-import { Loading } from '../components/utils/Loading'
+import { NotifCard } from '../../components/dashboard-cards/NotifCard'
+import { GroupMateCard } from '../../components/dashboard-cards/GroupMateCard'
+import { AboutMeCard } from '../../components/dashboard-cards/AboutMeCard'
+import { CurrentLoadCard } from '../../components/dashboard-cards/CurrentLoadCard'
+import { DashboardGroupCard } from '../../components/dashboard-cards/DashboardGroupCard'
+import { DashboardRatingCard } from '../../components/dashboard-cards/DashboardRatingCard'
+import { Loading } from '../../components/utils/Loading'
+import { useSelector } from 'react-redux'
+import { getNotifs } from '@/api/apiClient'
 
 export default function Dashboard() {
   const [userDetails, setUserDetails] = useState({});
@@ -28,22 +29,28 @@ export default function Dashboard() {
   const [rating, setRating] = useState(0);
   const [notifs, setNotifs] = useState([]);
   const router = useRouter();
+  const userAuth = useSelector((state) => state.authenticationState.value);
+  const details = useSelector((state) => state.userDetailState.value);
 
   useEffect(() => {
-    const email = sessionStorage.getItem("email");
-    const details = getUserDetails(email);
-    if (email === undefined || details === undefined) {
+    const email = userAuth.email;
+    if (email === undefined) {
       router.push("/");
+    } else if (details === undefined) {
+      router.push(`/newuser/?email=${email}`)
     } else {
       setUserDetails(details);
-      const about = getUserAbout(email);
-      setAboutMe(about ? about : "");
+      setAboutMe(details.about ? details.about : "");
+      const notifs = async () => {
+        const ping = await getNotifs(email);
+        setNotifs(ping ? ping : [])
+      }
+      notifs();
+
+      // This is all fake
       const mates = getGroupMates(email);
       setFavGroupMates(mates ? mates : []);
       setRating(getAverageRating(email));
-
-      const ping = getNotifications(email);
-      setNotifs(ping ? ping : [])
       setLoading(false);
     }
   }, [router]);
@@ -80,7 +87,7 @@ export default function Dashboard() {
             </TabsContent>
             <TabsContent value="notifications" className="space-y-1">
               {notifs.length > 1 ? notifs.map((notif) => {
-                return <NotifCard key={`notif-${notif}`} notif={notif} />
+                return <NotifCard key={`notif-${notif._id}`} notif={notif} />
               }) : <div className='text-lg font-medium'>No notifications</div>}
             </TabsContent>
           </Tabs>

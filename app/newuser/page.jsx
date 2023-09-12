@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams } from 'next/navigation'
-import { NewUserForm } from '../components/forms/NewUserForm';
+import { NewUserForm } from '../../components/forms/NewUserForm';
 
 export default function NewUser() {
   const searchParams = useSearchParams()

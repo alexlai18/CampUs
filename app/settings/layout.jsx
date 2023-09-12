@@ -1,8 +1,8 @@
 import Image from "next/image"
-import { FullNav } from "../components/navigation/FullNav"
+import { FullNav } from "../../components/navigation/FullNav"
 
 import { Separator } from "@/components/ui/separator"
-import { SidebarNav } from "../components/navigation/SettingsNav"
+import { SidebarNav } from "../../components/navigation/SettingsNav"
 
 const sidebarNavItems = [
   {

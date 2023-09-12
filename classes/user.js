@@ -5,6 +5,7 @@ const userSchema = new Schema(
     email: String,
     password: String,
     details: [{type: Schema.ObjectId, ref: 'UserDetail'}],
+    friends: [{type: String}]
   },
 )
 

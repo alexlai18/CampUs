@@ -13,7 +13,10 @@ import { useRouter } from 'next/navigation'
 // Self-made components
 import { ErrorPopup } from "../utils/ErrorPopup"
 // User functions
-import { getUserDetails, logUser } from "@/app/mockData"
+import { setAuthenticationState } from "@/app/store/reducers/authenticationState"
+import { useDispatch } from "react-redux"
+import { logUser, getUserDetails } from "@/api/apiClient"
+import { setUserDetailState } from "@/app/store/reducers/userDetailState"
 
 
 export function LoginForm({ className, ...props }) {
@@ -22,24 +25,39 @@ export function LoginForm({ className, ...props }) {
   const [error, setError] = useState(false);
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
 
   async function onSubmit(event) {
     event.preventDefault();
-    // Submit function
-    // submit(email, password);
     setIsLoading(true);
-    if(!logUser(email, password)) {
-      setIsLoading(false);
+    const res = await logUser(email, password);
+
+    if(res.length === 0) {
       setError(true);
-    } else{
-      sessionStorage.setItem("email", email);
-      setIsLoading(false);
-      if (!getUserDetails(email)) {
+    } else {
+      dispatch(
+        setAuthenticationState({
+          email: email,
+          userId: res._id
+        })
+      );
+      if (!res.details) {
+        router.push(`/newuser/?email=${email}`);
+        return;
+      }
+
+      const details = await getUserDetails(res.details[0]);
+
+      if (!details) {
         router.push(`/newuser/?email=${email}`);
       } else {
+        dispatch(
+          setUserDetailState(details)
+        );
         router.push("/dashboard");
       }
     }
+    setIsLoading(false);
   }
 
   return (

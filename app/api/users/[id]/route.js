@@ -8,7 +8,6 @@ import UserDetail from "@/classes/userDetail";
 export async function PUT(request, {params}) {
   const { id } = params;
   const { email, password, details } = await request.json();
-
   const user = await User.findOne({_id: id});
 
   // Checking if user exists
@@ -17,20 +16,22 @@ export async function PUT(request, {params}) {
   }
 
   // Getting the id of the UserDetail document
-  const detailId = user.details[0];
+  const detailId = user.details;
   const newEmail = email || user.email;
   const newPassword = password || user.password;
+  let detailInfo;
 
   await connectMongoDB();
 
   // Checking if they have a UserDetail document, if so, udpate the document. If not, create a new one
   if (detailId) {
-    const detailInfo = await UserDetail.findOne({_id: detailId});
-    await UserDetail.findByIdAndUpdate(detailId,
+    detailInfo = await UserDetail.findOne({_id: detailId[0]});
+    await UserDetail.findByIdAndUpdate(detailId[0],
       {
         fname: details.fname || detailInfo.fname,
         lname: details.lname || detailInfo.lname,
         grade: details.grade || detailInfo.grade,
+        about: details.about || detailInfo.about,
         uni: details.uni || detailInfo.uni,
         currentGroups: details.currentGroups || detailInfo.currentGroups,
         pastGroups: details.pastGroups || detailInfo.pastGroups,
@@ -43,11 +44,12 @@ export async function PUT(request, {params}) {
       }
     );
   } else {
-    const userDetail = await UserDetail.create(
+    detailInfo = await UserDetail.create(
       {
         fname: details.fname,
         lname: details.lname,
         grade: details.grade,
+        about: details.about,
         uni: details.uni,
         currentGroups: details.currentGroups,
         pastGroups: details.pastGroups,
@@ -57,18 +59,27 @@ export async function PUT(request, {params}) {
       {
         email: newEmail,
         password: newPassword,
-        details: userDetail
+        details: detailInfo
       }
     );
   }
-  return NextResponse.json({ message: "User updated" }, { status: 200 });
+
+  return NextResponse.json(detailInfo, { status: 200 });
 }
 
 // Get specific user from the database
 export async function GET(request, {params}) {
   const { id } = params;
+  const { email } = request;
+
   await connectMongoDB();
-  const user = await User.findOne({_id: id});
+
+  let user;
+  if (!id) {
+    user = await User.findOne({email: email});
+  } else {
+    user = await User.findOne({_id: id});
+  }
 
   if (!user) {
     return NextResponse.json({message: "This user does not exist in the database"}, { status: 404 });

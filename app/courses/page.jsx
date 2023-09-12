@@ -11,16 +11,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { FullNav } from '../components/navigation/FullNav';
-import { getCourses } from '../mockData';
+import { FullNav } from '../../components/navigation/FullNav';
+import { getCourses } from '@/api/apiClient';
 
 export default function CoursesPage() {
   const [search, setSearch] = useState("");
   const [courseList, setCourseList] = useState([]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setCourseList(getCourses(search));
+    setCourseList(await getCourses(search));
   }
 
   return (
@@ -44,7 +44,7 @@ export default function CoursesPage() {
           </form>
           {courseList.length > 0 ?
             courseList.map((course) => {
-              return (<Card key={`course-${course}`} className="col-span-3">
+              return (<Card key={`course-${course.code}`} className="col-span-3">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-2xl font-bold">
                     {course.code}

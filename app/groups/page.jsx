@@ -10,24 +10,83 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Icons } from '@/components/ui/icons';
 
-import { FullNav } from '../components/navigation/FullNav';
-import { getCurrentGroups, getPastGroups } from '../mockData';
+import { FullNav } from '../../components/navigation/FullNav';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGroup, getUser, getUserDetails } from '@/api/apiClient';
+import { setUserDetailState } from '../store/reducers/userDetailState';
 
 export default function GroupsPage() {
   const [search, setSearch] = useState("");
   const [currentGroups, setCurrentGroups] = useState([]);
   const [pastGroups, setPastGroups] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const userDetails = useSelector((state) => state.userDetailState.value);
+  const userAuth = useSelector((state) => state.authenticationState.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setCurrentGroups(getCurrentGroups(sessionStorage.getItem("email")));
-    setPastGroups(getPastGroups(sessionStorage.getItem("email")));
+    setIsLoading(true);
+    async function grouping() {
+      const user = await getUser("email", userAuth.email);
+      if (user && user.details) {
+        const detailId = user.details[0];
+        const details = await getUserDetails(detailId);
+        const currList = []
+        const pastList = []
+        await Promise.all(
+          details.currentGroups.map(async (g) => {
+            currList.push(await getGroup(g));
+          })
+        )
+        await Promise.all(
+          details.pastGroups.map(async (g) => {
+            pastList.push(await getGroup(g));
+          })
+        )
+        setIsLoading(false);
+        setCurrentGroups(currList);
+        setPastGroups(pastList);
+        dispatch(
+          setUserDetailState(details)
+        );
+      } else {
+        setIsLoading(false);
+        setCurrentGroups([]);
+        setPastGroups([]);
+      }
+    }
+    grouping();
   }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setCurrentGroups(sessionStorage.getItem("email"), search);
-    setPastGroups(sessionStorage.getItem("email"), search);
+
+    const currGroup = userDetails.currentGroups;
+    const pastG = userDetails.pastGroups;
+
+    if (currGroup) {
+      const currRes = []
+      currGroup.map((g) => {
+        if ((g.course.toLowerCase()).includes(prefix.toLowerCase()) ||
+          (g.name.toLowerCase()).includes(prefix.toLowerCase())) {
+          currRes.push(g);
+        }
+      });
+      setCurrentGroups(currRes);
+    }
+
+    if (pastG) {
+      const pastRes = []
+      pastG.map((g) => {
+        if ((g.course.toLowerCase()).includes(search.toLowerCase()) ||
+          (g.name.toLowerCase()).includes(search.toLowerCase())) {
+          pastRes.push(g);
+        }
+      });
+      setPastGroups(pastRes);
+    }
   }
 
   return (
@@ -49,7 +108,7 @@ export default function GroupsPage() {
           </form>
           <h3 className="text-3xl font-bold tracking-tight">Current Groups</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {currentGroups.length > 0 ?
+            {!isLoading && currentGroups && currentGroups.length > 0 ?
               currentGroups.map((group) => {
                 return (<Card key={`group-${group.name}`}>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -74,20 +133,23 @@ export default function GroupsPage() {
                   <CardContent>
                     <div className="text-sm font-medium">
                       {/* We will get this information from how many courses they have joined */}
-                      This group is for the course {group.course}
+                      This group is for the course {group.courseCode}
                     </div>
                   </CardContent>
                 </Card>)
               })
               :
               <div className="text-muted-foreground text-center">
-                Join groups by joining course chats!
+                {isLoading ?
+                  <Icons.spinner className="mr-2 h-20 w-20 animate-spin text-primary" /> :
+                  "Join groups by joining course chats!"
+                }
               </div>
             }
           </div>
           <h3 className="text-3xl font-bold tracking-tight">Past Groups</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {pastGroups.length > 0 ?
+            {!isLoading && pastGroups && pastGroups.length > 0 ?
               pastGroups.map((group) => {
                 return (<Card key={`pastgroup-${group.name}`}>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -119,7 +181,10 @@ export default function GroupsPage() {
               })
               :
               <div className="text-muted-foreground text-center">
-                You have no past groups!
+                {isLoading ?
+                  <Icons.spinner className="mr-2 h-20 w-20 animate-spin text-primary" /> :
+                  "You have no past groups!"
+                }
               </div>
             }
           </div>
