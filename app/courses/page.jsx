@@ -47,7 +47,7 @@ export default function CoursesPage() {
           {courseList.length > 0 ?
             courseList.map((course) => {
               return (
-                <button className="w-full" onClick={() => {router.push(`/courses/${course.code}`)}}>
+                <button key={`btn-${course.code}`} className="w-full" onClick={() => {router.push(`/courses/${course.code}`)}}>
                   <Card key={`course-${course.code}`} className="col-span-3">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-2xl font-bold">

@@ -49,7 +49,7 @@ export default function ConnectionsPage() {
           {userList.length > 0 ?
             userList.map((user) => {
               return (
-                <button className="w-full" onClick={() => {router.push(`/profile?email=${user.email}`)}}>
+                <button className="w-full" key={`btn-${user.email}`} onClick={() => {router.push(`/profile?email=${user.email}`)}}>
                   <Card key={`connection-${user}`} className="col-span-3">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-2xl font-bold">
