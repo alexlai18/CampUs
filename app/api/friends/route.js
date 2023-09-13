@@ -58,27 +58,25 @@ export async function PUT(request) {
     return NextResponse.json({message: "The user you're trying to add does not exist."}, {status: 400})
   }
 
-  if (!receiver.friends)  {
-    await User.updateOne({email: email},
-      {
-        friends: [sender.email]
-      }
-    )
-    return NextResponse.json({message: "Friend Added"}, {status: 200});
-  }
-
   if (sender.friends.includes(receiver.email)) {
     return NextResponse.json({message: "You're already friends with this user"}, {status: 400})
   }
 
-  const updatedList = sender.friends;
+  const updatedList = sender.friends ? sender.friends : [];
   updatedList.push(receiver.email);
 
   await User.findByIdAndUpdate(id,
     {
       friends: updatedList
     }
-  )
+  );
+
+  const receiverList = receiver.friends ? receiver.friends : [];
+  receiverList.push(sender.email);
+  await User.findOneAndUpdate({email : email}, {
+    friends: receiverList
+  })
+
   return NextResponse.json({message: "Friend Added"}, {status: 200});
 }
 
@@ -105,6 +103,13 @@ export async function DELETE(request) {
   await User.findByIdAndUpdate(id,
     {
       friends: updatedList
+    }
+  )
+
+  const receiverList = receiver.friends.remove(sender.email);
+  await User.findOneAndUpdate({email: email},
+    {
+      friends: receiverList
     }
   )
   return NextResponse.json({message: "Friend Removed"}, {status: 200})

@@ -1,7 +1,20 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import {
   Card,
   CardContent,
@@ -114,12 +127,32 @@ export default function ProfilePage() {
                     )}
                     Add Friend
                   </Button>}
-                  {searcherEmail !== email && friends && <Button onClick={() => handleRemoveFriend()}>
-                    {isLoading && (
-                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Remove Friend
-                  </Button>}
+                  {searcherEmail !== email && friends &&
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button>
+                          Remove Friend
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action will remove {name} from your friends list.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => handleRemoveFriend()}>
+                            {isLoading && (
+                              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  }
                 </div>
               </CardContent>
             </Card>
