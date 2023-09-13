@@ -229,6 +229,24 @@ export const getGroup = async (id) => {
   } catch (error) {}
 }
 
+export const getCourseGroups = async (course, search) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/group?course=${course}&prefix=${search}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
 export const deleteGroup = async (id) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group`, {
