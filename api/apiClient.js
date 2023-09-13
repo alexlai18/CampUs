@@ -161,7 +161,26 @@ export const addConnections = async (body) => {
       headers: {
         "Content-type": "application/json"
       },
-      body,
+      body: JSON.stringify(body),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const removeConnection = async (body) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/friends`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(body),
       cache: "no-store"
     })
 

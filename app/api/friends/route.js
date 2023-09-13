@@ -67,14 +67,14 @@ export async function PUT(request) {
     return NextResponse.json({message: "Friend Added"}, {status: 200});
   }
 
-  if (receiver.friends.includes(sender.email)) {
+  if (sender.friends.includes(receiver.email)) {
     return NextResponse.json({message: "You're already friends with this user"}, {status: 400})
   }
 
-  const updatedList = receiver.friends;
-  updatedList.push(sender.email);
+  const updatedList = sender.friends;
+  updatedList.push(receiver.email);
 
-  await User.findOneAndUpdate({email: email},
+  await User.findByIdAndUpdate(id,
     {
       friends: updatedList
     }
@@ -83,24 +83,26 @@ export async function PUT(request) {
 }
 
 // Delete friend from a user
+// id is the user that you're logged into
+// email is the person you want to unfriend
 export async function DELETE(request) {
   const { id, email } = await request.json();
   await connectMongoDB();
 
-  const sender = User.findById(id);
-  const receiver = User.find({email: email})
+  const sender = await User.findById(id);
+  const receiver = await User.findOne({email: email});
 
   if (!receiver) {
     return NextResponse.json({message: "The user you're trying to remove does not exist."}, {status: 400})
   }
 
-  if (!receiver.friends.includes(email)) {
+  if (!sender.friends.includes(email)) {
     return NextResponse.json({message: "You're not friends with this user"}, {status: 400})
   }
 
-  const updatedList = receiver.friends.remove(sender.email);
+  const updatedList = sender.friends.remove(receiver.email);
 
-  await User.findOneAndUpdate({email: email},
+  await User.findByIdAndUpdate(id,
     {
       friends: updatedList
     }

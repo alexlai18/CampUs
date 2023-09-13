@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 import { setUserDetailState } from "@/app/store/reducers/userDetailState";
 
 export function AboutMeCard(props) {
-  const { aboutMe, setAboutMe } = props;
+  const { aboutMe, setAboutMe, isUser } = props;
   const [newInfo, setNewInfo] = useState(aboutMe);
   const [onEdit, setOnEdit] = useState(false);
   const userAuth = useSelector((state) => state.authenticationState.value);
@@ -44,8 +44,8 @@ export function AboutMeCard(props) {
     <Card className="col-span-4">
       <CardHeader>
         <div className="flex items-center justify-between space-y-2">
-          <CardTitle>About You</CardTitle>
-          <Button onClick={handleEdit}>Edit</Button>
+          <CardTitle>About Me</CardTitle>
+          {isUser && <Button onClick={handleEdit}>Edit</Button>}
         </div>
       </CardHeader>
       <CardContent>
