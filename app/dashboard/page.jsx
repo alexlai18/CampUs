@@ -31,10 +31,8 @@ export default function Dashboard() {
   const router = useRouter();
   const userAuth = useSelector((state) => state.authenticationState.value);
   const details = useSelector((state) => state.userDetailState.value);
-  console.log(details.about);
 
   useEffect(() => {
-    console.log("hi");
     const email = userAuth.email;
     if (email === undefined) {
       router.push("/");

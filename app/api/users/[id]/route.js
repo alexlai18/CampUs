@@ -8,7 +8,6 @@ import UserDetail from "@/classes/userDetail";
 export async function PUT(request, {params}) {
   const { id } = params;
   const { email, password, details } = await request.json();
-  console.log(details);
   const user = await User.findOne({_id: id});
 
   // Checking if user exists
@@ -26,7 +25,6 @@ export async function PUT(request, {params}) {
   // Checking if they have a UserDetail document, if so, udpate the document. If not, create a new one
   if (detailId) {
     const detailInfo = await UserDetail.findOne({_id: detailId[0]});
-    console.log(details.about || detailInfo.about);
     await UserDetail.findByIdAndUpdate(detailId[0],
       {
         fname: details.fname || detailInfo.fname,
@@ -45,7 +43,6 @@ export async function PUT(request, {params}) {
         password: newPassword,
       }
     );
-    console.log(res);
     return NextResponse.json(res, { status: 200 });
   } else {
     const detailInfo = await UserDetail.create(
