@@ -40,10 +40,20 @@ export async function POST(request) {
 export async function GET(request) {
   const search = new URL(request.url).searchParams;
   await connectMongoDB();
-  const id = search.get("id");
-  const res = await Group.findById(id);
+  const course = search.get("course");
+  const filter = search.get("prefix");
+  if (course) {
+    const groups = await Group.find({courseCode: course});
+    const res = [];
+    groups.map((g) => {
+      if ((g.name.toLowerCase()).includes(filter.toLowerCase())) {
+        res.push(g);
+      }
+    });
+    return NextResponse.json(res, { status: 200 });
+  }
 
-  return NextResponse.json(res, { status: 200 });
+  return NextResponse.json({message: "Invalid Request"}, { status: 400 });
 }
 
 // Get either courses in the database

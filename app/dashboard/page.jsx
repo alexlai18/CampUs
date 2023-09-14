@@ -81,7 +81,7 @@ export default function Dashboard() {
                 <DashboardRatingCard rating={rating} />
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <AboutMeCard aboutMe={aboutMe} setAboutMe={setAboutMe} />
+                <AboutMeCard aboutMe={aboutMe} setAboutMe={setAboutMe} isUser={true} />
                 <GroupMateCard favGroupMates={favGroupMates} userDetails={userDetails} />
               </div>
             </TabsContent>

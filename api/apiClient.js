@@ -161,7 +161,26 @@ export const addConnections = async (body) => {
       headers: {
         "Content-type": "application/json"
       },
-      body,
+      body: JSON.stringify(body),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const removeConnection = async (body) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/friends`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(body),
       cache: "no-store"
     })
 
@@ -195,6 +214,24 @@ export const createGroup = async (body) => {
 export const getGroup = async (id) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group?id=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const getCourseGroups = async (course, search) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/group?course=${course}&prefix=${search}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"

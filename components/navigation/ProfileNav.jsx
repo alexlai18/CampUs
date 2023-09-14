@@ -77,7 +77,7 @@ export function ProfileNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuButtonItem onClick={() => router.push('/profile')}>
+          <DropdownMenuButtonItem onClick={() => router.push(`/profile?email=${email}`)}>
             Profile
           </DropdownMenuButtonItem>
           <DropdownMenuButtonItem onClick={() => router.push('/settings')}>
