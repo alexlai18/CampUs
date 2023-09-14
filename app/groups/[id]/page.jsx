@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/card";
 
 import { FullNav } from "@/components/navigation/FullNav";
-import { getGroup, getUserById, getUserDetails } from '@/api/apiClient';
+import { addGroupMember, getGroup, getUserById, getUserDetails, removeGroupMember } from '@/api/apiClient';
 import { Separator } from '@/components/ui/separator';
 import { Loading } from '@/components/utils/Loading';
 import { Button } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
+import { useRouter } from "next/navigation";
 
 export default function CoursesPage({ params }) {
   const { id } = params;
@@ -21,6 +22,8 @@ export default function CoursesPage({ params }) {
   const [users, setUsers] = useState([]);
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMember, setIsMember] = useState(false);
+  const router = useRouter();
   const userAuth = useSelector((state) => state.authenticationState.value);
   const targetMap = {
     "PS": "Pass",
@@ -41,16 +44,30 @@ export default function CoursesPage({ params }) {
         get.members.map(async (m) => {
           const user = await getUserById(m);
           use.push(user);
-          const details = user.details[0];
-          res.push(await getUserDetails(details));
+          const details = await getUserDetails(user.details[0]);
+          details.email = user.email;
+          res.push(details);
         })
       )
       setUserList(res);
       setUsers(use);
+      setIsMember(use.some(function (el) { return el._id == userAuth.userId; }))
       setLoading(false);
     }
     load();
-  }, []);
+  }, [isMember]);
+
+  const leaveGroup = () => {
+    // Do something
+    removeGroupMember(id, userAuth.userId);
+    setIsMember(false);
+  }
+
+  const joinGroup = () => {
+    // Do something
+    addGroupMember(id, userAuth.userId);
+    setIsMember(true);
+  }
 
   if (loading) {
     return <Loading />;
@@ -71,11 +88,10 @@ export default function CoursesPage({ params }) {
           <Separator className="" />
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Here are the group members:</h2>
-            {users.some(function (el) { return el._id == userAuth.userId; }) ? <Button>Leave Group</Button> : <Button>Join Group</Button>}
+            {isMember ? <Button onClick={leaveGroup}>Leave Group</Button> : <Button onClick={joinGroup}>Join Group</Button>}
           </div>
           {userList.length > 0 ?
             userList.map((user) => {
-              console.log(user);
               return (
                 <button className="w-full" key={`btn-${user._id}`} onClick={() => {router.push(`/profile?email=${user.email}`)}}>
                   <Card key={`connection-${user}`} className="col-span-3">

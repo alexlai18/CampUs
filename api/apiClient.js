@@ -342,3 +342,45 @@ export const getNotifs = async (email) => {
     return res.json();
   } catch (error) {}
 }
+
+export const removeGroupMember = async (groupId, userId) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/group/${groupId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        "userId": userId
+      }),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const addGroupMember = async (groupId, userId) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/group/${groupId}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        "userId": userId
+      }),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
