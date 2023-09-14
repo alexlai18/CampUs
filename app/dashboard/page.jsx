@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/tabs"
 
 import { FullNav } from '../../components/navigation/FullNav'
-import { getAverageRating, getGroupMates, getNotifications } from '../mockData'
+import { getAverageRating, getGroupMates } from '../mockData'
 import { useRouter } from 'next/navigation'
 import { NotifCard } from '../../components/dashboard-cards/NotifCard'
 import { GroupMateCard } from '../../components/dashboard-cards/GroupMateCard'
@@ -31,8 +31,10 @@ export default function Dashboard() {
   const router = useRouter();
   const userAuth = useSelector((state) => state.authenticationState.value);
   const details = useSelector((state) => state.userDetailState.value);
+  console.log(details.about);
 
   useEffect(() => {
+    console.log("hi");
     const email = userAuth.email;
     if (email === undefined) {
       router.push("/");
@@ -53,7 +55,7 @@ export default function Dashboard() {
       setRating(getAverageRating(email));
       setLoading(false);
     }
-  }, [router]);
+  }, [router, details]);
 
   if (loading) {
     return <Loading />

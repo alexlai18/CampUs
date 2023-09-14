@@ -8,6 +8,7 @@ import UserDetail from "@/classes/userDetail";
 export async function PUT(request, {params}) {
   const { id } = params;
   const { email, password, details } = await request.json();
+  console.log(details);
   const user = await User.findOne({_id: id});
 
   // Checking if user exists
@@ -19,13 +20,13 @@ export async function PUT(request, {params}) {
   const detailId = user.details;
   const newEmail = email || user.email;
   const newPassword = password || user.password;
-  let detailInfo;
 
   await connectMongoDB();
 
   // Checking if they have a UserDetail document, if so, udpate the document. If not, create a new one
   if (detailId) {
-    detailInfo = await UserDetail.findOne({_id: detailId[0]});
+    const detailInfo = await UserDetail.findOne({_id: detailId[0]});
+    console.log(details.about || detailInfo.about);
     await UserDetail.findByIdAndUpdate(detailId[0],
       {
         fname: details.fname || detailInfo.fname,
@@ -37,14 +38,17 @@ export async function PUT(request, {params}) {
         pastGroups: details.pastGroups || detailInfo.pastGroups,
      }
     )
+    const res = await UserDetail.findById(detailId[0]);
     await User.findByIdAndUpdate(id,
       {
         email: newEmail,
         password: newPassword,
       }
     );
+    console.log(res);
+    return NextResponse.json(res, { status: 200 });
   } else {
-    detailInfo = await UserDetail.create(
+    const detailInfo = await UserDetail.create(
       {
         fname: details.fname,
         lname: details.lname,
@@ -62,9 +66,8 @@ export async function PUT(request, {params}) {
         details: detailInfo
       }
     );
+    return NextResponse.json(detailInfo, { status: 200 });
   }
-
-  return NextResponse.json(detailInfo, { status: 200 });
 }
 
 // Get specific user from the database
