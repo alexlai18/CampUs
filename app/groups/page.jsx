@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,6 +26,7 @@ export default function GroupsPage() {
   const userDetails = useSelector((state) => state.userDetailState.value);
   const userAuth = useSelector((state) => state.authenticationState.value);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     setIsLoading(true);
@@ -110,33 +112,37 @@ export default function GroupsPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {!isLoading && currentGroups && currentGroups.length > 0 ?
               currentGroups.map((group) => {
-                return (<Card key={`group-${group.name}`}>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-2xl font-bold">
-                      {group.name}
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-sm font-medium">
-                      {/* We will get this information from how many courses they have joined */}
-                      This group is for the course {group.courseCode}
-                    </div>
-                  </CardContent>
-                </Card>)
+                return (
+                  <button onClick={() => router.push(`/groups/${group._id}`)}>
+                    <Card key={`group-${group.name}`}>
+                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-2xl font-bold">
+                          {group.name}
+                        </CardTitle>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          className="h-4 w-4 text-muted-foreground"
+                        >
+                          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                          <circle cx="9" cy="7" r="4" />
+                          <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-row items-center justify-between text-sm font-medium">
+                          {/* We will get this information from how many courses they have joined */}
+                          This group is for the course {group.courseCode}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </button>
+                )
               })
               :
               <div className="text-muted-foreground text-center">
