@@ -9,22 +9,24 @@ import {
 } from "@/components/ui/card";
 
 import { FullNav } from "@/components/navigation/FullNav";
-import { addGroupMember, getGroup, getUserById, getUserDetails, removeGroupMember } from '@/api/apiClient';
+import { addGroupMember, getGroup, getUserById, getUserDetails, removeGroupMember, updateUser } from '@/api/apiClient';
 import { Separator } from '@/components/ui/separator';
 import { Loading } from '@/components/utils/Loading';
 import { Button } from '@/components/ui/button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/navigation";
+import { setUserDetailState } from '@/app/store/reducers/userDetailState';
 
 export default function CoursesPage({ params }) {
   const { id } = params;
   const [info, setInfo] = useState({});
-  const [users, setUsers] = useState([]);
+  const dispatch = useDispatch();
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMember, setIsMember] = useState(false);
   const router = useRouter();
   const userAuth = useSelector((state) => state.authenticationState.value);
+  const userDetail = useSelector((state) => state.userDetailState.value);
   const targetMap = {
     "PS": "Pass",
     "CR": "Credit",
@@ -50,7 +52,6 @@ export default function CoursesPage({ params }) {
         })
       )
       setUserList(res);
-      setUsers(use);
       setIsMember(use.some(function (el) { return el._id == userAuth.userId; }))
       setLoading(false);
     }
@@ -60,12 +61,40 @@ export default function CoursesPage({ params }) {
   const leaveGroup = () => {
     // Do something
     removeGroupMember(id, userAuth.userId);
+    const newDetails = userDetail.currentGroups.filter(function (i) {
+      return i !== id;
+    });
+
+    updateUser(userAuth.userId, {details: {
+      ...userDetail,
+      currentGroups: newDetails
+    }})
+
+    dispatch(
+      setUserDetailState({
+      ...userDetail,
+      currentGroups: newDetails
+      })
+    );
     setIsMember(false);
   }
 
   const joinGroup = () => {
     // Do something
     addGroupMember(id, userAuth.userId);
+    const newCurrG = Object.assign([], userDetail.currentGroups);
+    newCurrG.push(id);
+    updateUser(userAuth.userId, {details: {
+      ...userDetail,
+      currentGroups: newCurrG
+    }})
+
+    dispatch(
+      setUserDetailState({
+      ...userDetail,
+      currentGroups: newCurrG
+      })
+    );
     setIsMember(true);
   }
 

@@ -113,7 +113,7 @@ export default function GroupsPage() {
             {!isLoading && currentGroups && currentGroups.length > 0 ?
               currentGroups.map((group) => {
                 return (
-                  <button onClick={() => router.push(`/groups/${group._id}`)}>
+                  <button key={`btn-${group._id}`} onClick={() => router.push(`/groups/${group._id}`)}>
                     <Card key={`group-${group.name}`}>
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-2xl font-bold">
