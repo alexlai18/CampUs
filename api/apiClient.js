@@ -117,6 +117,24 @@ export const updateUser = async (id, body) => {
   } catch (error) {}
 }
 
+export const getUserById = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch users");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
 export const getCourses = async (body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/course?prefix=${body}`, {

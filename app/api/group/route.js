@@ -42,6 +42,7 @@ export async function GET(request) {
   await connectMongoDB();
   const course = search.get("course");
   const filter = search.get("prefix");
+  const id = search.get("id");
   if (course) {
     const groups = await Group.find({courseCode: course});
     const res = [];
@@ -50,6 +51,9 @@ export async function GET(request) {
         res.push(g);
       }
     });
+    return NextResponse.json(res, { status: 200 });
+  } else if (id) {
+    const res = await Group.findById(id);
     return NextResponse.json(res, { status: 200 });
   }
 

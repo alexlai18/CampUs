@@ -85,7 +85,7 @@ export async function GET(request, {params}) {
     return NextResponse.json({message: "This user does not exist in the database"}, { status: 404 });
   }
 
-  return NextResponse.json({ user }, { status: 200 });
+  return NextResponse.json(user, { status: 200 });
 }
 
 // Delete a specific user from the database
