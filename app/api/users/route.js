@@ -31,6 +31,7 @@ export async function POST(request) {
 export async function GET(request) {
   const search = new URL(request.url).searchParams;
   const email = search.get("email");
+  // search.get find 
   await connectMongoDB();
 
   if (email) {

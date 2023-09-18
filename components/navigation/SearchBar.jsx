@@ -1,13 +1,27 @@
+"use client"
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input"
+import { useRouter } from "next/navigation";
 
 export function SearchBar() {
+  const [search, setSearch] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    router.push(`/search?val=${search}`);
+  }
+
   return (
     <div>
-      <Input
-        type="search"
-        placeholder="Search..."
-        className="md:w-[100px] lg:w-[300px]"
-      />
+      <form onSubmit={handleSubmit}>
+        <Input
+          type="search"
+          placeholder="Search..."
+          className="md:w-[100px] lg:w-[300px]"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </form>
     </div>
   )
 }
