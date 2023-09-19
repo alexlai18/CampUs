@@ -31,7 +31,8 @@ export async function POST(request) {
 export async function GET(request) {
   const search = new URL(request.url).searchParams;
   const email = search.get("email");
-  // search.get find 
+  const find = search.get("val");
+
   await connectMongoDB();
 
   if (email) {
@@ -41,7 +42,42 @@ export async function GET(request) {
     }
   
     return NextResponse.json(user, { status: 200 });
-  } else {
+  } else if (find !== null) {
+    const users = await User.find();
+    const res = []
+
+    async function getSearchUsers() {
+      await Promise.all(
+        users.map(async (u) => {
+          // Get user details
+          const detailId = u.details[0];
+          const details = await UserDetail.findById(detailId).lean();
+          if (!details) {
+            return;
+          }
+          const fullName = details.fname + " " + details.lname;
+          if (fullName.toLowerCase().includes(find.toLowerCase())) {
+            details.email = u.email;
+            details.fullName = fullName;
+            res.push(details);
+          }
+        })
+      );
+    }
+    await getSearchUsers();
+
+    const sortedNames = res.sort((a, b) => {
+      const idxA = a.fullName.toLowerCase().indexOf(find.toLowerCase());
+      const idxB = b.fullName.toLowerCase().indexOf(find.toLowerCase());
+
+      if (idxA === idxB) {
+        return a.fullName.toLowerCase().split(find.toLowerCase()).length - 1 > b.fullName.toLowerCase().split(find.toLowerCase()).length - 1
+      }
+      return idxA - idxB;
+    });
+
+    return NextResponse.json(sortedNames, { status: 200 });
+  }else {
     const users = await User.find();
 
     if (!users || users.length === 0) {

@@ -55,6 +55,24 @@ export async function GET(request) {
   } else if (id) {
     const res = await Group.findById(id);
     return NextResponse.json(res, { status: 200 });
+  } else if (filter !== null) {
+    const groups = await Group.find();
+    const res = [];
+    groups.map((g) => {
+      if ((g.name.toLowerCase()).includes(filter.toLowerCase())) {
+        res.push(g);
+      }
+    });
+    const sortedCourses = res.sort((a, b) => {
+      const idxA = a.name.toLowerCase().indexOf(filter.toLowerCase());
+      const idxB = b.name.toLowerCase().indexOf(filter.toLowerCase());
+  
+      if (idxA === idxB) {
+        return a.name.toLowerCase().split(filter.toLowerCase()).length - 1 > b.name.toLowerCase().split(filter.toLowerCase()).length - 1
+      }
+      return idxA - idxB;
+    });
+    return NextResponse.json(sortedCourses, { status: 200 });
   }
 
   return NextResponse.json({message: "Invalid Request"}, { status: 400 });

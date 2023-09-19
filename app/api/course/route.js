@@ -39,7 +39,17 @@ export async function GET(request) {
     }
   });
 
-  return NextResponse.json(res, { status: 200 });
+  const sortedCourses = res.sort((a, b) => {
+    const idxA = a.code.toLowerCase().indexOf(filter.toLowerCase());
+    const idxB = b.code.toLowerCase().indexOf(filter.toLowerCase());
+
+    if (idxA === idxB) {
+      return a.code.toLowerCase().split(filter.toLowerCase()).length - 1 > b.code.toLowerCase().split(filter.toLowerCase()).length - 1
+    }
+    return idxA - idxB;
+  });
+
+  return NextResponse.json(sortedCourses, { status: 200 });
 }
 
 // Can't change course code ever

@@ -17,6 +17,24 @@ export const getUsers = async () => {
   } catch (error) {}
 }
 
+export const getFilterUsers = async (val) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/users?val=${val}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch users");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
 export const createUser = async (body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/users`, {
@@ -250,6 +268,24 @@ export const getGroup = async (id) => {
 export const getCourseGroups = async (course, search) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group?course=${course}&prefix=${search}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const getFilteredGroups = async (search) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/group?prefix=${search}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
