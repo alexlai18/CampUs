@@ -46,7 +46,6 @@ export default function Dashboard() {
         setNotifs(ping ? ping : [])
       }
       notifs();
-
       // This is all fake
       const mates = getGroupMates(email);
       setFavGroupMates(mates ? mates : []);
@@ -77,7 +76,7 @@ export default function Dashboard() {
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <CurrentLoadCard />
-                <DashboardGroupCard />
+                <DashboardGroupCard currentGroups={details.currentGroups.length} pastGroups={details.pastGroups.length}/>
                 <DashboardRatingCard rating={rating} />
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
