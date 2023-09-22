@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/card";
 
 export function DashboardGroupCard(props) {
-  const { currentGroups, pastGroups } = props;
+  const { details } = props;
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -29,9 +29,9 @@ export function DashboardGroupCard(props) {
         </svg>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold"> {currentGroups} Groups</div>
+        <div className="text-2xl font-bold"> {details && details.currentGroups ? details.currentGroups.length : "No"} Groups</div>
         <p className="text-xs text-muted-foreground">
-          {currentGroups + pastGroups} Groups Joined All-Time
+          {details && details.currentGroups && details.pastGroups ? details.currentGroups.length + details.pastGroups.length : "No"} Groups Joined All-Time
         </p>
       </CardContent>
     </Card>

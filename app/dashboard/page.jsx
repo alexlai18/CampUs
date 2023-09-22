@@ -75,8 +75,8 @@ export default function Dashboard() {
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <CurrentLoadCard />
-                <DashboardGroupCard currentGroups={details.currentGroups.length} pastGroups={details.pastGroups.length}/>
+                <CurrentLoadCard details={details}/>
+                <DashboardGroupCard details={details}/>
                 <DashboardRatingCard rating={rating} />
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">

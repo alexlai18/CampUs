@@ -1,3 +1,4 @@
+"use client"
 import {
   Card,
   CardContent,
@@ -5,7 +6,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function CurrentLoadCard() {
+import React from "react";
+
+export function CurrentLoadCard(props) {
+  const { details } = props;
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -28,10 +33,10 @@ export function CurrentLoadCard() {
       <CardContent>
         <div className="text-2xl font-bold">
           {/* We will get this information from how many courses they have joined */}
-          3 Courses
+          {details && details.currentCourses ? details.currentCourses.length : "No"} Courses
         </div>
         <p className="text-xs text-muted-foreground">
-          23 Courses Enrolled All-Time
+          {details && details.currentCourses && details.pastCourses ? details.currentCourses.length + details.pastCourses.length : "No"} Courses Enrolled All-Time
         </p>
       </CardContent>
     </Card>

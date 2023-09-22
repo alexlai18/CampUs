@@ -16,6 +16,7 @@ import { getCourseGroups, getCourses, getUserById, getUserDetails, joinCourse } 
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { Loading } from '@/components/utils/Loading';
+import { Icons } from '@/components/ui/icons';
 
 export default function CoursesPage({ params }) {
   const { code } = params;
@@ -26,6 +27,7 @@ export default function CoursesPage({ params }) {
   const [joined, setJoined] = useState(false);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [buttonLoad, setButtonLoad] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -47,6 +49,7 @@ export default function CoursesPage({ params }) {
 
   const handleJoinCourse = async (event) => {
     event.preventDefault();
+    setButtonLoad(true);
     if (joined) {
       const leave = await joinCourse(userAuth.userId, code, false);
       if (leave) {setJoined(false)};
@@ -54,6 +57,7 @@ export default function CoursesPage({ params }) {
       const join = await joinCourse(userAuth.userId, code, true);
       if (join) {setJoined(true)};
     }
+    setButtonLoad(false);
   }
 
   if (loading) {
@@ -81,7 +85,7 @@ export default function CoursesPage({ params }) {
               />
               <Button><MagnifyingGlassIcon /></Button>
             </form>
-            <Button onClick={handleJoinCourse}>{joined ? "Leave Course" : "Join Course"}</Button>
+            <Button onClick={handleJoinCourse}>{buttonLoad && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}{joined ? "Leave Course" : "Join Course"}</Button>
           </div>
           {groupList.length > 0 ?
             groupList.map((g) => {
