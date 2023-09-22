@@ -12,20 +12,30 @@ import {
 } from "@/components/ui/card";
 
 import { FullNav } from "@/components/navigation/FullNav";
-import { getCourseGroups, getCourses } from '@/api/apiClient';
+import { getCourseGroups, getCourses, getUserById, getUserDetails, joinCourse } from '@/api/apiClient';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { Loading } from '@/components/utils/Loading';
 
 export default function CoursesPage({ params }) {
   const { code } = params;
   const [info, setInfo] = useState({});
   const [search, setSearch] = useState("");
   const [groupList, setGroupList] = useState([]);
+  const userAuth = useSelector((state) => state.authenticationState.value);
+  const [joined, setJoined] = useState(false);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const get = await getCourses(code)
+      setLoading(true);
+      const get = await getCourses(code);
+      const user = await getUserById(userAuth.userId);
+      const details = await getUserDetails(user.details[0]);
       setInfo(get[0]);
+      setJoined(details.currentCourses ? details.currentCourses.includes(get[0]._id) : false);
+      setLoading(false);
     }
     load();
   }, []);
@@ -33,6 +43,21 @@ export default function CoursesPage({ params }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setGroupList(await getCourseGroups(info.code, search));
+  }
+
+  const handleJoinCourse = async (event) => {
+    event.preventDefault();
+    if (joined) {
+      const leave = await joinCourse(userAuth.userId, code, false);
+      if (leave) {setJoined(false)};
+    } else {
+      const join = await joinCourse(userAuth.userId, code, true);
+      if (join) {setJoined(true)};
+    }
+  }
+
+  if (loading) {
+    return <Loading />
   }
 
   return (
@@ -46,15 +71,18 @@ export default function CoursesPage({ params }) {
             </div>
           </div>
           <h3 className="text-2xl font-bold tracking-tight">This course has {info.perGroup === 1 ? "no group assignments. You can still find study buddies!" : `group assignments consisting of ${info.perGroup}`}</h3>
-          <form className="flex" onSubmit={handleSubmit}>
-            <Input
-              type="search"
-              placeholder="Search Groups..."
-              className="md:w-[100px] lg:w-[300px]"
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <Button><MagnifyingGlassIcon /></Button>
-          </form>
+          <div className="flex flex-row justify-between">
+            <form className="flex" onSubmit={handleSubmit}>
+              <Input
+                type="search"
+                placeholder="Search Groups..."
+                className="md:w-[100px] lg:w-[300px]"
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Button><MagnifyingGlassIcon /></Button>
+            </form>
+            <Button onClick={handleJoinCourse}>{joined ? "Leave Course" : "Join Course"}</Button>
+          </div>
           {groupList.length > 0 ?
             groupList.map((g) => {
               return (

@@ -420,3 +420,26 @@ export const addGroupMember = async (groupId, userId) => {
     return res.json();
   } catch (error) {}
 }
+
+export const joinCourse = async (userId, courseCode, isJoining) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/usercourse`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        "id": userId,
+        "courseCode": courseCode,
+        "isJoining": isJoining
+      }),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}

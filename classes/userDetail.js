@@ -9,7 +9,9 @@ const userDetailSchema = new Schema(
     about: String,
     uni: String,
     currentGroups: [{type: Schema.ObjectId, ref: 'Group'}],
-    pastGroups: [{type: Schema.ObjectId, ref: 'Group'}]
+    pastGroups: [{type: Schema.ObjectId, ref: 'Group'}],
+    currentCourses: [{type: Schema.ObjectId, ref: 'Course'}],
+    pastCourses: [{type: Schema.ObjectId, ref: 'Course'}]
   },
 )
 
