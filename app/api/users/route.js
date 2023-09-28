@@ -55,8 +55,9 @@ export async function GET(request) {
           if (!details) {
             return;
           }
+
           const fullName = details.fname + " " + details.lname;
-          if (fullName.toLowerCase().includes(find.toLowerCase())) {
+          if (fullName.toLowerCase().includes(find.toLowerCase()) && search.get("user") !== u._id.toString()) {
             details.email = u.email;
             details.fullName = fullName;
             res.push(details);

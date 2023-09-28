@@ -17,9 +17,9 @@ export const getUsers = async () => {
   } catch (error) {}
 }
 
-export const getFilterUsers = async (val) => {
+export const getFilterUsers = async (val, id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/users?val=${val}`, {
+    const res = await fetch(`http://localhost:3000/api/users?val=${val}&user=${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"

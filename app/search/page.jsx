@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FullNav } from "@/components/navigation/FullNav";
 import { Loading } from "@/components/utils/Loading";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -14,6 +15,7 @@ import {
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const val = searchParams.get("val");
+  const userAuth = useSelector((state) => state.authenticationState.value);
 
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState([]);
@@ -27,7 +29,7 @@ export default function SearchPage() {
     const getInfo = async () => {
       setCourses(await getCourses(val));
       // Function that searches for first name and last name of all users
-      setUsers(await getFilterUsers(val));
+      setUsers(await getFilterUsers(val, userAuth.userId));
       setGroups(await getFilteredGroups(val));
       setLoading(false);
     }
