@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import { Check, Plus, Send } from "lucide-react"
 import { FullNav } from "@/components/navigation/FullNav"
@@ -24,7 +24,13 @@ export default function GroupChatPage({ params }) {
   const [input, setInput] = React.useState("");
   const inputLength = input.trim().length;
   const [messages, setMessages] = useState([{user: true, content: "Hello"}, {user: false, content: "Wassup"}]);
+  const messagesEndRef = useRef(null);
 
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }
   useEffect(() => {
     setLoading(true);
     const load = async () => {
@@ -34,6 +40,10 @@ export default function GroupChatPage({ params }) {
     }
     load();
   }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   if (loading) {
     return <Loading />
@@ -57,6 +67,7 @@ export default function GroupChatPage({ params }) {
               <div className="space-y-4 h-[50px]">
                 {messages.map((m) => {
                   return (<div
+                    key={m.content}
                     className={cn(
                       "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
                       m.user === true ? "ml-auto bg-primary text-primary-foreground"
@@ -66,6 +77,7 @@ export default function GroupChatPage({ params }) {
                     {m.content}
                   </div>)
                 })}
+                <div ref={messagesEndRef} />
               </div>
             </ScrollArea>
           </CardContent>
