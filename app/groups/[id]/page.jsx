@@ -17,13 +17,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/navigation";
 import { setUserDetailState } from '@/app/store/reducers/userDetailState';
 
-export default function CoursesPage({ params }) {
+export default function GroupPage({ params }) {
   const { id } = params;
   const [info, setInfo] = useState({});
   const dispatch = useDispatch();
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMember, setIsMember] = useState(false);
+  const [change, setChange] = useState(false);
   const router = useRouter();
   const userAuth = useSelector((state) => state.authenticationState.value);
   const userDetail = useSelector((state) => state.userDetailState.value);
@@ -56,11 +57,11 @@ export default function CoursesPage({ params }) {
       setLoading(false);
     }
     load();
-  }, [isMember]);
+  }, [change]);
 
-  const leaveGroup = () => {
+  const leaveGroup = async () => {
     // Do something
-    removeGroupMember(id, userAuth.userId);
+    await removeGroupMember(id, userAuth.userId);
     const newDetails = userDetail.currentGroups.filter(function (i) {
       return i !== id;
     });
@@ -76,12 +77,12 @@ export default function CoursesPage({ params }) {
       currentGroups: newDetails
       })
     );
-    setIsMember(false);
+    setChange(!change);
   }
 
-  const joinGroup = () => {
+  const joinGroup = async () => {
     // Do something
-    addGroupMember(id, userAuth.userId);
+    await addGroupMember(id, userAuth.userId);
     const newCurrG = Object.assign([], userDetail.currentGroups);
     newCurrG.push(id);
     updateUser(userAuth.userId, {details: {
@@ -95,7 +96,11 @@ export default function CoursesPage({ params }) {
       currentGroups: newCurrG
       })
     );
-    setIsMember(true);
+    setChange(!change);
+  }
+
+  const openChat = () => {
+    router.push(`/groups/${id}/chat`)
   }
 
   if (loading) {
@@ -159,7 +164,7 @@ export default function CoursesPage({ params }) {
             </div>
           }
           <div className="flex items-center justify-end space-y-2">
-            <Button>Join Chat!</Button>
+            {isMember && <Button onClick={openChat}>Open Chat!</Button>}
           </div>
         </div>
       </div>
