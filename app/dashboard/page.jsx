@@ -20,6 +20,7 @@ import { DashboardRatingCard } from '../../components/dashboard-cards/DashboardR
 import { Loading } from '../../components/utils/Loading'
 import { useSelector } from 'react-redux'
 import { getNotifs } from '@/api/apiClient'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Dashboard() {
   const [userDetails, setUserDetails] = useState({});
@@ -54,17 +55,17 @@ export default function Dashboard() {
     }
   }, [router, details]);
 
-  if (loading) {
-    return <Loading />
-  }
-
   return (
     <>
       <div className="hidden flex-col md:flex">
         <FullNav />
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Hi {userDetails.fname}!</h2>
+            {loading ?
+              <Skeleton className="h-9 w-[30%]" />
+              :
+              <h2 className="text-3xl font-bold tracking-tight">Hi {userDetails.fname}!</h2>
+            }
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
@@ -75,13 +76,13 @@ export default function Dashboard() {
             </TabsList>
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <CurrentLoadCard details={details}/>
-                <DashboardGroupCard details={details}/>
-                <DashboardRatingCard rating={rating} />
+                <CurrentLoadCard details={details} loading={loading}/>
+                <DashboardGroupCard details={details} loading={loading}/>
+                <DashboardRatingCard rating={rating} loading={loading}/>
               </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <AboutMeCard aboutMe={aboutMe} setAboutMe={setAboutMe} isUser={true} />
-                <GroupMateCard favGroupMates={favGroupMates} userDetails={userDetails} />
+                <AboutMeCard aboutMe={aboutMe} setAboutMe={setAboutMe} isUser={true} loading={loading} />
+                <GroupMateCard favGroupMates={favGroupMates} userDetails={userDetails} loading={loading} />
               </div>
             </TabsContent>
             <TabsContent value="notifications" className="space-y-1">

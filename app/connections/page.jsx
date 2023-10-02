@@ -15,16 +15,20 @@ import { FullNav } from '../../components/navigation/FullNav';
 import { getConnections } from '@/api/apiClient';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import { Icons } from '@/components/ui/icons';
 
 export default function ConnectionsPage() {
   const [search, setSearch] = useState("");
   const [userList, setUserList] = useState([]);
   const userAuth = useSelector((state) => state.authenticationState.value);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (event) => {
+    setLoading(true);
     event.preventDefault();
     setUserList(await getConnections(search, userAuth.email));
+    setLoading(false);
   }
 
   return (
@@ -44,7 +48,7 @@ export default function ConnectionsPage() {
               className="md:w-[100px] lg:w-[300px]"
               onChange={(e) => setSearch(e.target.value)}
             />
-            <Button><MagnifyingGlassIcon /></Button>
+            <Button>{loading ? <Icons.spinner className="h-4 w-4 animate-spin" /> :<MagnifyingGlassIcon />}</Button>
           </form>
           {userList.length > 0 ?
             userList.map((user) => {

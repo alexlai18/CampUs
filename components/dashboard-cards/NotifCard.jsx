@@ -8,11 +8,10 @@ import {
 
 import { Card } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-import { Icons } from "@/components/ui/icons";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addUserNotif } from "@/app/store/reducers/userNotifState";
-import { setUserNotifState } from "@/app/store/reducers/userNotifState";
+import { Skeleton } from "../ui/skeleton";
 
 
 export function NotifCard(props) {
@@ -75,9 +74,13 @@ export function NotifCard(props) {
 
   if (isLoading) {
     return (
-      <Card className="rounded-full">
-        <Icons.spinner className="mr-2 h-8 w-8 animate-spin text-primary" />
-      </Card>
+      <div className="flex items-center space-x-4">
+        <Skeleton className="h-12 w-12 rounded-full" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-[250px]" />
+          <Skeleton className="h-4 w-[200px]" />
+        </div>
+      </div>
     )
   }
 

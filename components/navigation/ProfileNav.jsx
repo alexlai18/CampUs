@@ -42,7 +42,7 @@ export function ProfileNav() {
     } else {
       setUserDetails(details);
       setInitials(details.fname.slice(0, 1) + details.lname.slice(0, 1));
-      setName(details.fname + " " + details.lname)
+      setName(details.fname + " " + details.lname);
     }
   }, [email, router])
 

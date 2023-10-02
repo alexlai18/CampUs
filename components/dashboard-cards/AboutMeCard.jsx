@@ -12,9 +12,10 @@ import { useSelector } from 'react-redux'
 import { updateUser } from "@/api/apiClient";
 import { useDispatch } from "react-redux";
 import { setUserDetailState } from "@/app/store/reducers/userDetailState";
+import { AboutMeSkeleton } from "../skeletons/AboutMeSkeleton";
 
 export function AboutMeCard(props) {
-  const { aboutMe, setAboutMe, isUser } = props;
+  const { aboutMe, setAboutMe, isUser, loading } = props;
   const [newInfo, setNewInfo] = useState(aboutMe);
   const [onEdit, setOnEdit] = useState(false);
   const userAuth = useSelector((state) => state.authenticationState.value);
@@ -41,45 +42,52 @@ export function AboutMeCard(props) {
   };
 
   return (
-    <Card className="col-span-4">
-      <CardHeader>
-        <div className="flex items-center justify-between space-y-2">
-          <CardTitle>About Me</CardTitle>
-          {isUser && <Button onClick={handleEdit}>Edit</Button>}
-        </div>
-      </CardHeader>
-      <CardContent>
-        {
-          !onEdit && (
-            <div>
-              {aboutMe.split('\n').map((line, index) => (
-                <React.Fragment key={index}>
-                  {line}
-                  <br />
-                </React.Fragment>
-              ))}
-            </div>
-          )
-        }
-        <div className="space-y-2">
-          {
-            onEdit && (
-              <Textarea
-                placeholder="Write something about yourself"
-                onChange={(e) => {
-                  setNewInfo(e.target.value)
-                }}
-                defaultValue={aboutMe}
-              />
-            )
-          }
-          <div className="flex justify-end">
-            {onEdit && (
-              <Button onClick={handleSubmit}>Submit Changes</Button>
-            )}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <>
+      {
+        loading ?
+          <AboutMeSkeleton />
+        :
+          <Card className="col-span-4">
+            <CardHeader>
+              <div className="flex items-center justify-between space-y-2">
+                <CardTitle>About Me</CardTitle>
+                {isUser && <Button onClick={handleEdit}>Edit</Button>}
+              </div>
+            </CardHeader>
+            <CardContent>
+              {
+                !onEdit && (
+                  <div>
+                    {aboutMe.split('\n').map((line, index) => (
+                      <React.Fragment key={index}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                  </div>
+                )
+              }
+              <div className="space-y-2">
+                {
+                  onEdit && (
+                    <Textarea
+                      placeholder="Write something about yourself"
+                      onChange={(e) => {
+                        setNewInfo(e.target.value)
+                      }}
+                      defaultValue={aboutMe}
+                    />
+                  )
+                }
+                <div className="flex justify-end">
+                  {onEdit && (
+                    <Button onClick={handleSubmit}>Submit Changes</Button>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+      }
+    </>
   )
 }

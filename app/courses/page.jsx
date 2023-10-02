@@ -14,15 +14,19 @@ import {
 import { FullNav } from '../../components/navigation/FullNav';
 import { getCourses } from '@/api/apiClient';
 import { useRouter } from 'next/navigation';
+import { Icons } from '@/components/ui/icons';
 
 export default function CoursesPage() {
   const [search, setSearch] = useState("");
   const [courseList, setCourseList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (event) => {
+    setLoading(true);
     event.preventDefault();
     setCourseList(await getCourses(search));
+    setLoading(false);
   }
 
   return (
@@ -42,7 +46,7 @@ export default function CoursesPage() {
               className="md:w-[100px] lg:w-[300px]"
               onChange={(e) => setSearch(e.target.value)}
             />
-            <Button><MagnifyingGlassIcon /></Button>
+            <Button>{loading ? <Icons.spinner className="h-4 w-4 animate-spin" /> :<MagnifyingGlassIcon />}</Button>
           </form>
           {courseList.length > 0 ?
             courseList.map((course) => {
