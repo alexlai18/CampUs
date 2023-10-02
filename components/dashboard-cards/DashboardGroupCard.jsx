@@ -8,6 +8,7 @@ import { DashboardSkeleton } from "../skeletons/DashboardSkeleton";
 
 export function DashboardGroupCard(props) {
   const { details, loading } = props;
+
   return (
     <>
       {

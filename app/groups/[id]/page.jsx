@@ -19,15 +19,19 @@ import { setUserDetailState } from '@/app/store/reducers/userDetailState';
 
 export default function GroupPage({ params }) {
   const { id } = params;
+
+  const router = useRouter();
+
   const [info, setInfo] = useState({});
-  const dispatch = useDispatch();
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMember, setIsMember] = useState(false);
   const [change, setChange] = useState(false);
-  const router = useRouter();
-  const userAuth = useSelector((state) => state.authenticationState.value);
+
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.authenticationState.value).userId;
   const userDetail = useSelector((state) => state.userDetailState.value);
+
   const targetMap = {
     "PS": "Pass",
     "CR": "Credit",
@@ -41,6 +45,7 @@ export default function GroupPage({ params }) {
       const get = await getGroup(id);
       setInfo(get);
 
+      // Get all user details of all group members, except for the authenticated user
       const res = [];
       const use = [];
       await Promise.all(
@@ -53,20 +58,20 @@ export default function GroupPage({ params }) {
         })
       )
       setUserList(res);
-      setIsMember(use.some(function (el) { return el._id == userAuth.userId; }))
+      setIsMember(use.some(function (el) { return el._id == userId; }))
       setLoading(false);
     }
     load();
   }, [change]);
 
   const leaveGroup = async () => {
-    // Do something
-    await removeGroupMember(id, userAuth.userId);
+    // Remove group member from database and update state
+    await removeGroupMember(id, userId);
     const newDetails = userDetail.currentGroups.filter(function (i) {
       return i !== id;
     });
 
-    updateUser(userAuth.userId, {details: {
+    updateUser(userId, {details: {
       ...userDetail,
       currentGroups: newDetails
     }})
@@ -82,10 +87,10 @@ export default function GroupPage({ params }) {
 
   const joinGroup = async () => {
     // Do something
-    await addGroupMember(id, userAuth.userId);
+    await addGroupMember(id, userId);
     const newCurrG = Object.assign([], userDetail.currentGroups);
     newCurrG.push(id);
-    updateUser(userAuth.userId, {details: {
+    updateUser(userId, {details: {
       ...userDetail,
       currentGroups: newCurrG
     }})

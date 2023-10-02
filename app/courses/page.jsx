@@ -17,10 +17,10 @@ import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/ui/icons';
 
 export default function CoursesPage() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [courseList, setCourseList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (event) => {
     setLoading(true);

@@ -21,10 +21,12 @@ import { useDispatch } from "react-redux"
 import { setAuthenticationState } from "@/app/store/reducers/authenticationState"
 
 export function RegisterForm() {
+  const router = useRouter(); 
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  const router = useRouter(); 
+
   const dispatch = useDispatch();
 
   const onSubmit = async (event) => {

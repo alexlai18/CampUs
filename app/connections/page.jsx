@@ -18,16 +18,16 @@ import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/ui/icons';
 
 export default function ConnectionsPage() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [userList, setUserList] = useState([]);
-  const userAuth = useSelector((state) => state.authenticationState.value);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const email = useSelector((state) => state.authenticationState.value).email;
 
   const handleSubmit = async (event) => {
     setLoading(true);
     event.preventDefault();
-    setUserList(await getConnections(search, userAuth.email));
+    setUserList(await getConnections(search, email));
     setLoading(false);
   }
 

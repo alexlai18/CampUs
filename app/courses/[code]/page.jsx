@@ -20,21 +20,24 @@ import { Icons } from '@/components/ui/icons';
 
 export default function CoursesPage({ params }) {
   const { code } = params;
+
+  const router = useRouter();
+
   const [info, setInfo] = useState({});
   const [search, setSearch] = useState("");
   const [groupList, setGroupList] = useState([]);
-  const userAuth = useSelector((state) => state.authenticationState.value);
   const [joined, setJoined] = useState(false);
-  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [searchLoad, setSearchLoad] = useState(false);
   const [buttonLoad, setButtonLoad] = useState(false);
 
+  const userId = useSelector((state) => state.authenticationState.value).userId;
+
   useEffect(() => {
+    setLoading(true);
     const load = async () => {
-      setLoading(true);
       const get = await getCourses(code);
-      const user = await getUserById(userAuth.userId);
+      const user = await getUserById(userId);
       const details = await getUserDetails(user.details[0]);
       setInfo(get[0]);
       setJoined(details.currentCourses ? details.currentCourses.includes(get[0]._id) : false);
@@ -54,10 +57,10 @@ export default function CoursesPage({ params }) {
     event.preventDefault();
     setButtonLoad(true);
     if (joined) {
-      const leave = await joinCourse(userAuth.userId, code, false);
+      const leave = await joinCourse(userId, code, false);
       if (leave) {setJoined(false)};
     } else {
-      const join = await joinCourse(userAuth.userId, code, true);
+      const join = await joinCourse(userId, code, true);
       if (join) {setJoined(true)};
     }
     setButtonLoad(false);

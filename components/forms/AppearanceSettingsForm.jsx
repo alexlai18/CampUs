@@ -28,21 +28,21 @@ const appearanceFormSchema = z.object({
 // This can come from your database or API.
 
 export function AppearanceSettingsForm() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
   const defaultValues = {
     theme: theme,
-  }
+  };
   const form = useForm({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues,
-  })
-  const [mounted, setMounted] = useState(false)
+  });
+
+  const [mounted, setMounted] = useState(false);
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
     setMounted(true)
   }, [])
-
   if (!mounted) {
     return null
   }

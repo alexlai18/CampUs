@@ -16,10 +16,12 @@ import { Skeleton } from "../ui/skeleton";
 
 export function NotifCard(props) {
   const { notif } = props;
+
   const [info, setInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const userNotifs = useSelector((state) => state.userNotifState.value);
+
   const dispatch = useDispatch();
+  const userNotifs = useSelector((state) => state.userNotifState.value);
   const reduxIdx = userNotifs.findIndex(item => item.key === notif._id);
 
 

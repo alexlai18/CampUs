@@ -8,6 +8,7 @@ import { DashboardSkeleton } from "../skeletons/DashboardSkeleton";
 
 export function DashboardRatingCard(props) {
   const { rating, loading } = props;
+
   return (
     <>
       {

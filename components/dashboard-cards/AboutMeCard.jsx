@@ -16,18 +16,20 @@ import { AboutMeSkeleton } from "../skeletons/AboutMeSkeleton";
 
 export function AboutMeCard(props) {
   const { aboutMe, setAboutMe, isUser, loading } = props;
+
   const [newInfo, setNewInfo] = useState(aboutMe);
   const [onEdit, setOnEdit] = useState(false);
-  const userAuth = useSelector((state) => state.authenticationState.value);
-  const userDetails = useSelector((state) => state.userDetailState.value);
+
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.authenticationState.value).userId;
+  const userDetails = useSelector((state) => state.userDetailState.value);
 
   const handleEdit = () => {
     setOnEdit(!onEdit);
   };
 
   const handleSubmit = async () => {
-    const res = await updateUser(userAuth.userId, {details: {
+    const res = await updateUser(userId, {details: {
       ...userDetails,
       about: newInfo
     }});

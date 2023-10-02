@@ -17,24 +17,25 @@ import { AboutMeCard } from '../../components/dashboard-cards/AboutMeCard'
 import { CurrentLoadCard } from '../../components/dashboard-cards/CurrentLoadCard'
 import { DashboardGroupCard } from '../../components/dashboard-cards/DashboardGroupCard'
 import { DashboardRatingCard } from '../../components/dashboard-cards/DashboardRatingCard'
-import { Loading } from '../../components/utils/Loading'
 import { useSelector } from 'react-redux'
 import { getNotifs } from '@/api/apiClient'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Dashboard() {
+  const router = useRouter();
+
   const [userDetails, setUserDetails] = useState({});
   const [aboutMe, setAboutMe] = useState("");
   const [favGroupMates, setFavGroupMates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rating, setRating] = useState(0);
   const [notifs, setNotifs] = useState([]);
-  const router = useRouter();
-  const userAuth = useSelector((state) => state.authenticationState.value);
+
+  const email = useSelector((state) => state.authenticationState.value).email;
   const details = useSelector((state) => state.userDetailState.value);
 
   useEffect(() => {
-    const email = userAuth.email;
+    // Checks if email and details are existent in redux store. If they are, retrieve more details for database
     if (email === undefined) {
       router.push("/");
     } else if (details === undefined) {
@@ -47,10 +48,12 @@ export default function Dashboard() {
         setNotifs(ping ? ping : [])
       }
       notifs();
-      // This is all fake
+
+      // This is all fake (will be replaced later)
       const mates = getGroupMates(email);
       setFavGroupMates(mates ? mates : []);
       setRating(getAverageRating(email));
+
       setLoading(false);
     }
   }, [router, details]);

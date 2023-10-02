@@ -43,6 +43,8 @@ import { ErrorPopup } from "../utils/ErrorPopup"
 import { createGroup, getConnections, getCourses, getUser, getUserDetails, updateUser } from "@/api/apiClient"
 
 export function NewGroupForm() {
+  const router = useRouter();
+
   const [error, setError] = useState(false);
   const [msg, setMsg] = useState("You must fill out all the fields!");
   const [name, setName] = useState("");
@@ -53,15 +55,15 @@ export function NewGroupForm() {
   const [connections, setConnections] = useState(["Loading..."]);
   const [courses, setCourses] = useState(["Loading..."]);
   const [openCourse, setOpenCourse] = useState(false);
-  const router = useRouter();
-  const userAuth = useSelector((state) => state.authenticationState.value);
-  const [users, setUsers] = useState([userAuth.email]);
+
+  const email = useSelector((state) => state.authenticationState.value).email;
+  const [users, setUsers] = useState([email]);
   const [severity, setSeverity] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getVals = async () => {
-      setConnections(await getConnections("", userAuth.email));
+      setConnections(await getConnections("", email));
       const cList = await getCourses("");
       const courseRes = []
       cList.map((c) => {

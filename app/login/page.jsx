@@ -8,11 +8,11 @@ import { LoginForm } from '../../components/forms/LoginForm'
 import { useRouter } from 'next/navigation';
 
 export default function Login() {
-  const userAuth = useSelector((state) => state.authenticationState.value);
+  const email = useSelector((state) => state.authenticationState.value).email;
   const router = useRouter();
 
   useEffect(() => {
-    if (userAuth.email !== undefined) {
+    if (email !== undefined) {
       router.push('/dashboard');
     }
   }, []);
