@@ -30,7 +30,8 @@ export async function POST(request) {
       name,
       courseCode,
       members: memberList,
-      target
+      target,
+      messages: []
     }
   );
   return NextResponse.json(group, {status: 200})

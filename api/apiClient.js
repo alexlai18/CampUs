@@ -1,4 +1,8 @@
-// User methods
+//////////////////////////////////////////////////////////////
+//////////////////////// USER FUNCTIONS //////////////////////
+//////////////////////////////////////////////////////////////
+
+// Get all users from the database
 export const getUsers = async () => {
   try {
     const res = await fetch("http://localhost:3000/api/users", {
@@ -17,6 +21,7 @@ export const getUsers = async () => {
   } catch (error) {}
 }
 
+// Get users either via their userId or a filtered value
 export const getFilterUsers = async (val, id) => {
   try {
     const res = await fetch(`http://localhost:3000/api/users?val=${val}&user=${id}`, {
@@ -35,6 +40,7 @@ export const getFilterUsers = async (val, id) => {
   } catch (error) {}
 }
 
+// Add a user to the database
 export const createUser = async (body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/users`, {
@@ -54,6 +60,7 @@ export const createUser = async (body) => {
   } catch (error) {}
 }
 
+// Get a user using a specific user given a query and value (mainly used for email)
 export const getUser = async (query, value) => {
   try {
     const res = await fetch(`http://localhost:3000/api/users?${query}=${value}`, {
@@ -74,6 +81,26 @@ export const getUser = async (query, value) => {
   }
 }
 
+// Get a User given the id
+export const getUserById = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch users");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+// See if a user exists and if the username and password align
 export const logUser = async (email, password) => {
   try {
     const res = await fetch(`http://localhost:3000/api/login?email=${email}&password=${password}`, {
@@ -95,7 +122,11 @@ export const logUser = async (email, password) => {
 }
 
 
-// User Detail methods
+/////////////////////////////////////////////////////////////////////
+//////////////////////// USER DETAIL FUNCTIONS //////////////////////
+/////////////////////////////////////////////////////////////////////
+
+// Get the UserDetails document given the id of such document
 export const getUserDetails = async (id) => {
   try {
     const res = await fetch(`http://localhost:3000/api/details?id=${id}`, {
@@ -116,6 +147,7 @@ export const getUserDetails = async (id) => {
   }
 }
 
+// Update UserDetail Document
 export const updateUser = async (id, body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/users/${id}`, {
@@ -135,24 +167,11 @@ export const updateUser = async (id, body) => {
   } catch (error) {}
 }
 
-export const getUserById = async (id) => {
-  try {
-    const res = await fetch(`http://localhost:3000/api/users/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json"
-      },
-      cache: "no-store"
-    })
+/////////////////////////////////////////////////////////////////////
+//////////////////////// COURSES FUNCTIONS //////////////////////////
+/////////////////////////////////////////////////////////////////////
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch users");
-    }
-
-    return res.json();
-  } catch (error) {}
-}
-
+// Get courses given a filter value
 export const getCourses = async (body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/course?prefix=${body}`, {
@@ -171,7 +190,35 @@ export const getCourses = async (body) => {
   } catch (error) {}
 }
 
-// Connections methods
+// Join or Leave a course given userId, courseCode and isJoining boolean
+export const joinCourse = async (userId, courseCode, isJoining) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/usercourse`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        "id": userId,
+        "courseCode": courseCode,
+        "isJoining": isJoining
+      }),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+/////////////////////////////////////////////////////////////////////
+//////////////////////// CONNECTIONS FUNCTIONS //////////////////////
+/////////////////////////////////////////////////////////////////////
+
+// Get another user given either a filter value and/or email
 export const getConnections = async (search, email) => {
   try {
     const res = await fetch(`http://localhost:3000/api/friends?prefix=${search}&email=${email}`, {
@@ -190,6 +237,7 @@ export const getConnections = async (search, email) => {
   } catch (error) {}
 }
 
+// Add a friend
 export const addConnections = async (body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/friends`, {
@@ -209,6 +257,7 @@ export const addConnections = async (body) => {
   } catch (error) {}
 }
 
+// Remove a friend (unfriend)
 export const removeConnection = async (body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/friends`, {
@@ -228,7 +277,11 @@ export const removeConnection = async (body) => {
   } catch (error) {}
 }
 
-// Group operations
+/////////////////////////////////////////////////////////////////////
+//////////////////////// GROUPS FUNCTIONS ///////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+// Create a new group
 export const createGroup = async (body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group`, {
@@ -247,6 +300,7 @@ export const createGroup = async (body) => {
   } catch (error) {}
 }
 
+// Get a group given its groupId
 export const getGroup = async (id) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group?id=${id}`, {
@@ -265,6 +319,7 @@ export const getGroup = async (id) => {
   } catch (error) {}
 }
 
+// Get all the groups of a specific course, can also filter this
 export const getCourseGroups = async (course, search) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group?course=${course}&prefix=${search}`, {
@@ -283,6 +338,7 @@ export const getCourseGroups = async (course, search) => {
   } catch (error) {}
 }
 
+// Get all groups with a filter
 export const getFilteredGroups = async (search) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group?prefix=${search}`, {
@@ -301,6 +357,7 @@ export const getFilteredGroups = async (search) => {
   } catch (error) {}
 }
 
+// Delete a group from the database
 export const deleteGroup = async (id) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group`, {
@@ -322,6 +379,7 @@ export const deleteGroup = async (id) => {
   } catch (error) {}
 }
 
+// Change the details of a group given information and the groupId
 export const updateGroup = async (id, body) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group/${id}`, {
@@ -341,44 +399,7 @@ export const updateGroup = async (id, body) => {
   } catch (error) {}
 }
 
-// Notifications Operations
-export const createNotif = async (body) => {
-  try {
-    const res = await fetch(`http://localhost:3000/api/notifications`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify(body),
-      cache: "no-store"
-    })
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch courses");
-    }
-
-    return res.json();
-  } catch (error) {}
-}
-
-export const getNotifs = async (email) => {
-  try {
-    const res = await fetch(`http://localhost:3000/api/notifications?receiver=${email}`, {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json"
-      },
-      cache: "no-store"
-    })
-
-    if (!res.ok) {
-      throw new Error("Failed to fetch courses");
-    }
-
-    return res.json();
-  } catch (error) {}
-}
-
+// Remove a group member given the groupId and userId
 export const removeGroupMember = async (groupId, userId) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group/${groupId}`, {
@@ -400,6 +421,7 @@ export const removeGroupMember = async (groupId, userId) => {
   } catch (error) {}
 }
 
+// Join a group given groupId and userId
 export const addGroupMember = async (groupId, userId) => {
   try {
     const res = await fetch(`http://localhost:3000/api/group/${groupId}`, {
@@ -421,18 +443,120 @@ export const addGroupMember = async (groupId, userId) => {
   } catch (error) {}
 }
 
-export const joinCourse = async (userId, courseCode, isJoining) => {
+/////////////////////////////////////////////////////////////////////
+////////////////////// NOTIFICATIONS FUNCTIONS //////////////////////
+/////////////////////////////////////////////////////////////////////
+
+// Create a notification (should be called upon every interaction)
+export const createNotif = async (body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/usercourse`, {
-      method: "PUT",
+    const res = await fetch(`http://localhost:3000/api/notifications`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(body),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+// Get the notifs of a user given the email
+export const getNotifs = async (email) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/notifications?receiver=${email}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+/////////////////////////////////////////////////////////////////////
+//////////////////////// MESSAGE FUNCTIONS //////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+export const addMessage = async (body) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/message`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(body),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const getMessage = async (messageId) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/message?messageId=${messageId}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+      },
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const deleteMessage = async (messageId, groupId) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/message`, {
+      method: "DELETE",
       headers: {
         "Content-type": "application/json"
       },
       body: JSON.stringify({
-        "id": userId,
-        "courseCode": courseCode,
-        "isJoining": isJoining
+        "messageId": messageId,
+        "groupId": groupId
       }),
+      cache: "no-store"
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const editMessage = async (messageId, body) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/message?messageId=${messageId}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(body),
       cache: "no-store"
     })
 
