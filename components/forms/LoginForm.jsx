@@ -34,7 +34,7 @@ export function LoginForm({ className, ...props }) {
     setIsLoading(true);
     const res = await logUser(email, password);
 
-    if(res.length === 0) {
+    if(res.length === 0 || !res) {
       setError(true);
     } else {
       dispatch(

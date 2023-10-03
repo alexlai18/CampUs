@@ -7,13 +7,19 @@ import { NextResponse } from "next/server";
 export async function GET(request) {
   const search = new URL(request.url).searchParams;
   await connectMongoDB();
-  const messages = await Message.findOne({_id: search.get("messageId")});
-
+  const group = await Group.findOne({_id: search.get("groupId")}).lean();
+  const messages = group.messages;
+  const res = [];
+  await Promise.all(
+    messages.map(async (m) => {
+      res.push(await Message.findById(m));
+    })
+  )
   if (!messages) {
     return NextResponse.json({message: "Either the email or password is incorrect"}, { status: 404 });
   }
 
-  return NextResponse.json(messages, { status: 200 });
+  return NextResponse.json(res, { status: 200 });
 }
 
 // Create new message

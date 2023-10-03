@@ -509,9 +509,9 @@ export const addMessage = async (body) => {
   } catch (error) {}
 }
 
-export const getMessage = async (messageId) => {
+export const getGroupMessages = async (groupId) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/message?messageId=${messageId}`, {
+    const res = await fetch(`http://localhost:3000/api/message?groupId=${groupId}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"

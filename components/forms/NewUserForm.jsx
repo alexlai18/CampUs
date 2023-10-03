@@ -62,6 +62,7 @@ export function NewUserForm(props) {
   const userId = useSelector((state) => state.authenticationState.value).userId;
 
   useEffect(() => {
+    dispatch(setAuthenticationState({}))
     const getUni = async () => {
       setUniList(await getUniversities());
     }

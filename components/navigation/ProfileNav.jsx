@@ -23,6 +23,7 @@ import { setAuthenticationState } from "@/app/store/reducers/authenticationState
 import { useSelector } from "react-redux"
 import { setUserDetailState } from "@/app/store/reducers/userDetailState";
 import { setUserNotifState } from "@/app/store/reducers/userNotifState";
+import { Loading } from "../utils/Loading";
   
 export function ProfileNav() {
   const router = useRouter();
@@ -31,6 +32,7 @@ export function ProfileNav() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [userDetails, setUserDetails] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const userAuth = useSelector((state) => state.authenticationState.value);
@@ -49,10 +51,16 @@ export function ProfileNav() {
   }, [email, router])
 
   const handleLogout = () => {
+    setLoading(true);
     dispatch(setAuthenticationState({}));
     dispatch(setUserDetailState({}));
     dispatch(setUserNotifState([]));
     router.push('/');
+    setLoading(false);
+  }
+
+  if (loading) {
+    return <Loading />
   }
 
   return (
