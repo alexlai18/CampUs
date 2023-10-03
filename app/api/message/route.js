@@ -8,23 +8,27 @@ export async function GET(request) {
   const search = new URL(request.url).searchParams;
   await connectMongoDB();
   const group = await Group.findOne({_id: search.get("groupId")}).lean();
+  
+  if (!group) {
+    return NextResponse.json({message: "This group does not exist"}, { status: 404 });
+  }
+
   const messages = group.messages;
   const res = [];
+
   await Promise.all(
     messages.map(async (m) => {
       res.push(await Message.findById(m));
     })
   )
-  if (!messages) {
-    return NextResponse.json({message: "Either the email or password is incorrect"}, { status: 404 });
-  }
-
+  res.sort((a, b) => a.timestamps.createdAt - b.timestamps.createdAt);
   return NextResponse.json(res, { status: 200 });
 }
 
 // Create new message
 export async function POST(request) {
   const { sender, content, timestamps, groupId } = await request.json();
+  console.log(timestamps);
   await connectMongoDB();
 
   const group = await Group.findOne({_id: groupId}).lean();

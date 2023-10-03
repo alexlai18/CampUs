@@ -101,13 +101,15 @@ export default function GroupChatPage({ params }) {
                     setSending(true);
                     event.preventDefault()
                     if (inputLength === 0) return;
+                    const content = input;
+                    setInput("");
                     setMessages([
                       ...messages,
                       {
                         groupId: id,
                         sender: userId,
-                        content: input,
-                        timeStamps: {
+                        content,
+                        timestamps: {
                           createdAt: new Date(),
                           updatedAt: new Date()
                         }
@@ -115,14 +117,13 @@ export default function GroupChatPage({ params }) {
                     ])
                     await addMessage({
                       sender: userId,
-                      content: input,
-                      timeStamps: {
+                      content,
+                      timestamps: {
                         createdAt: new Date(),
                         updatedAt: new Date()
                       },
                       groupId: id
                     })
-                    setInput("");
                     setSending(false);
                   }}
                   className="flex w-full items-center space-x-2"

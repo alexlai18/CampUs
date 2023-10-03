@@ -1,5 +1,4 @@
 import { useRouter } from "next/navigation"
-
 import {
     Avatar,
     AvatarFallback,
@@ -23,7 +22,6 @@ import { setAuthenticationState } from "@/app/store/reducers/authenticationState
 import { useSelector } from "react-redux"
 import { setUserDetailState } from "@/app/store/reducers/userDetailState";
 import { setUserNotifState } from "@/app/store/reducers/userNotifState";
-import { Loading } from "../utils/Loading";
   
 export function ProfileNav() {
   const router = useRouter();
@@ -51,16 +49,10 @@ export function ProfileNav() {
   }, [email, router])
 
   const handleLogout = () => {
-    setLoading(true);
+    router.push('/');
     dispatch(setAuthenticationState({}));
     dispatch(setUserDetailState({}));
     dispatch(setUserNotifState([]));
-    router.push('/');
-    setLoading(false);
-  }
-
-  if (loading) {
-    return <Loading />
   }
 
   return (
