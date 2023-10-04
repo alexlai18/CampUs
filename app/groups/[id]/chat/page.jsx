@@ -13,6 +13,33 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import {
+  Dialog,
+  DialogHeader,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogFooter
+} from "@/components/ui/dialog";
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty
+} from "@/components/ui/command";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChatSkeleton } from "@/components/skeletons/ChatSkeleton"
@@ -26,6 +53,7 @@ export default function GroupChatPage({ params }) {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [sending, setSending] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const inputLength = input.trim().length;
   const messagesEndRef = useRef(null);
@@ -73,20 +101,46 @@ export default function GroupChatPage({ params }) {
               <Separator className="my-6 mb-0" />
               <CardContent className="h-[600px]">
                 <ScrollArea className="h-full">
-                  <div className="space-y-4 h-[50px]">
+                  <div className="space-y-4 h-[50px] pb-2">
                     {
                       messages.length > 0 ?
                           messages.map((m) => {
-                            return (<div
-                              key={m._id}
-                              className={cn(
-                                "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                                m.sender === userId ? "ml-auto bg-primary text-primary-foreground"
-                                  : "bg-muted"
-                              )}
-                            >
-                              {m.content}
-                            </div>)
+                            return (
+                              <div className={cn("flex", m.sender === userId ? "flex flex-row-reverse gap-2 justify-end" : "flex flex-row gap-2")} >
+                                <Avatar className="h-9 w-9">
+                                  <AvatarImage alt="Avatar" />
+                                  <AvatarFallback className={m.sender === userId ? "bg-muted" : "bg-primary text-primary-foreground"}>USR</AvatarFallback>
+                                </Avatar>
+                                <div
+                                  key={m._id}
+                                  className={cn(
+                                    "flex w-max max-w-[30%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
+                                    m.sender === userId ? "flex-wrap bg-primary text-primary-foreground"
+                                      : "flex-wrap bg-muted"
+                                  )}
+                                >
+                                  {m.content}
+                                </div>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button
+                                      size="icon"
+                                      variant="outline"
+                                      className={cn("flex", m.sender === userId ? "rounded-full ml-auto" : "rounded-full")}
+                                      onClick={() => setOpen(true)}
+                                    >
+                                      <Plus className="h-4 w-4" />
+                                      <span className="sr-only">Message Settings</span>
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent className="w-56" side="right" align="start">
+                                    <DropdownMenuItem>Reply</DropdownMenuItem>
+                                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </div>
+                            )
                         })
                       :
                         <div className="text-center mt-5 text-muted-foreground">Start the conversation!</div>
@@ -146,6 +200,32 @@ export default function GroupChatPage({ params }) {
               </CardFooter>
             </Card>
         }
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogContent className="gap-0 p-0 outline-none">
+            <DialogHeader className="px-4 pb-4 pt-5">
+              <DialogTitle>New message</DialogTitle>
+              <DialogDescription>
+                Invite a user to this thread. This will create a new group
+                message.
+              </DialogDescription>
+            </DialogHeader>
+            <Command className="overflow-hidden rounded-t-none border-t">
+              <CommandInput placeholder="Search user..." />
+              <CommandList>
+                <CommandEmpty>No users found.</CommandEmpty>
+              </CommandList>
+            </Command>
+            <DialogFooter className="flex items-center border-t p-4 sm:justify-between">
+              <Button
+                onClick={() => {
+                  setOpen(false)
+                }}
+              >
+                Continue
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   )
