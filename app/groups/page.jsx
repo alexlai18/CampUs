@@ -19,45 +19,45 @@ import { getGroup, getUser, getUserDetails } from '@/api/apiClient';
 import { setUserDetailState } from '../store/reducers/userDetailState';
 
 export default function GroupsPage() {
+  const router = useRouter();
+
   const [search, setSearch] = useState("");
   const [currentGroups, setCurrentGroups] = useState([]);
   const [pastGroups, setPastGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const userDetails = useSelector((state) => state.userDetailState.value);
-  const userAuth = useSelector((state) => state.authenticationState.value);
+
   const dispatch = useDispatch();
-  const router = useRouter();
+  const userDetails = useSelector((state) => state.userDetailState.value);
+  const email = useSelector((state) => state.authenticationState.value).email;
 
   useEffect(() => {
     setIsLoading(true);
     async function grouping() {
-      const user = await getUser("email", userAuth.email);
+      const user = await getUser("email", email);
       if (user && user.details) {
+        const currList = [];
+        const pastList = [];
+
         const detailId = user.details[0];
         const details = await getUserDetails(detailId);
-        const currList = []
-        const pastList = []
+        // Non-dependent promises can be ran concurrently
         await Promise.all(
-          details.currentGroups.map(async (g) => {
-            currList.push(await getGroup(g));
-          })
+          [
+            ...details.currentGroups.map(async (g) => {
+              currList.push(await getGroup(g));
+            }),
+            ...details.pastGroups.map(async (g) => {
+              pastList.push(await getGroup(g));
+            })
+          ]
         )
-        await Promise.all(
-          details.pastGroups.map(async (g) => {
-            pastList.push(await getGroup(g));
-          })
-        )
-        setIsLoading(false);
         setCurrentGroups(currList);
         setPastGroups(pastList);
         dispatch(
           setUserDetailState(details)
         );
-      } else {
-        setIsLoading(false);
-        setCurrentGroups([]);
-        setPastGroups([]);
       }
+      setIsLoading(false);
     }
     grouping();
   }, [])
@@ -68,6 +68,7 @@ export default function GroupsPage() {
     const currGroup = userDetails.currentGroups;
     const pastG = userDetails.pastGroups;
 
+    // Filtering the current groups
     if (currGroup) {
       const currRes = []
       currGroup.map((g) => {
@@ -79,6 +80,7 @@ export default function GroupsPage() {
       setCurrentGroups(currRes);
     }
 
+    // Filtering the past groups
     if (pastG) {
       const pastRes = []
       pastG.map((g) => {

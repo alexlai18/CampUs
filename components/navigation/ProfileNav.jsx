@@ -1,5 +1,4 @@
 import { useRouter } from "next/navigation"
-
 import {
     Avatar,
     AvatarFallback,
@@ -26,10 +25,13 @@ import { setUserNotifState } from "@/app/store/reducers/userNotifState";
   
 export function ProfileNav() {
   const router = useRouter();
+
   const [initials, setInitials] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [userDetails, setUserDetails] = useState({});
+  const [loading, setLoading] = useState(false);
+
   const dispatch = useDispatch();
   const userAuth = useSelector((state) => state.authenticationState.value);
   const details = useSelector((state) => state.userDetailState.value);
@@ -42,15 +44,15 @@ export function ProfileNav() {
     } else {
       setUserDetails(details);
       setInitials(details.fname.slice(0, 1) + details.lname.slice(0, 1));
-      setName(details.fname + " " + details.lname)
+      setName(details.fname + " " + details.lname);
     }
   }, [email, router])
 
   const handleLogout = () => {
+    router.push('/');
     dispatch(setAuthenticationState({}));
     dispatch(setUserDetailState({}));
     dispatch(setUserNotifState([]));
-    router.push('/');
   }
 
   return (

@@ -67,7 +67,7 @@ export async function PUT(request, {params}) {
   }
 }
 
-// Get specific user from the database
+// Get specific user from the database given an email or userId
 export async function GET(request, {params}) {
   const { id } = params;
   const { email } = request;

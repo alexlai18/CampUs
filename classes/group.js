@@ -14,6 +14,7 @@ const groupSchema = new Schema(
         message: props => `${props.value} is not a valid grade`
       },
     },
+    messages:[{type: Schema.ObjectId, ref: 'Message'}]
   },
 )
 

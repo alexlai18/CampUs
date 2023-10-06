@@ -46,17 +46,20 @@ import { setUserDetailState } from "@/app/store/reducers/userDetailState"
 
 export function NewUserForm(props) {
   const { email } = props;
+
+  const router = useRouter();
+
   const [error, setError] = useState(false);
-  const [msg, setMsg] = useState("You must fill out all the fields!")
+  const [msg, setMsg] = useState("You must fill out all the fields!");
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
   const [grade, setGrade] = useState("");
   const [uni, setUni] = useState("");
-  const [uniList, setUniList] = useState(["Loading..."])
-  const [open, setOpen] = useState(false)
-  const router = useRouter();
-  const userAuth = useSelector((state) => state.authenticationState.value);
+  const [uniList, setUniList] = useState(["Loading..."]);
+  const [open, setOpen] = useState(false);
+
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.authenticationState.value).userId;
 
   useEffect(() => {
     const getUni = async () => {
@@ -82,7 +85,7 @@ export function NewUserForm(props) {
         uni: capitalisedUni,
       }
     }
-    const res = await updateUser(userAuth.userId, details);
+    const res = await updateUser(userId, details);
     if (res) {
       dispatch(
         setUserDetailState(res)

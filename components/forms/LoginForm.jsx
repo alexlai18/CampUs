@@ -20,11 +20,13 @@ import { setUserDetailState } from "@/app/store/reducers/userDetailState"
 
 
 export function LoginForm({ className, ...props }) {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
   const [password, setPassword] = useState("");
-  const router = useRouter();
+
   const dispatch = useDispatch();
 
   async function onSubmit(event) {
@@ -32,7 +34,7 @@ export function LoginForm({ className, ...props }) {
     setIsLoading(true);
     const res = await logUser(email, password);
 
-    if(res.length === 0) {
+    if(res.length === 0 || !res) {
       setError(true);
     } else {
       dispatch(

@@ -4,8 +4,9 @@ import { Input } from "@/components/ui/input"
 import { useRouter } from "next/navigation";
 
 export function SearchBar() {
-  const [search, setSearch] = useState("");
   const router = useRouter();
+
+  const [search, setSearch] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();

@@ -13,23 +13,24 @@ import {
 } from "@/components/ui/card";
 
 export default function SearchPage() {
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const val = searchParams.get("val");
-  const userAuth = useSelector((state) => state.authenticationState.value);
 
   const [loading, setLoading] = useState(true);
   const [courses, setCourses] = useState([]);
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
 
-  const router = useRouter();
+  const userId = useSelector((state) => state.authenticationState.value).userId;
 
   useEffect(() => {
     setLoading(true);
     const getInfo = async () => {
       setCourses(await getCourses(val));
       // Function that searches for first name and last name of all users
-      setUsers(await getFilterUsers(val, userAuth.userId));
+      setUsers(await getFilterUsers(val, userId));
       setGroups(await getFilteredGroups(val));
       setLoading(false);
     }

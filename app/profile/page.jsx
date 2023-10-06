@@ -34,8 +34,9 @@ import { useSelector } from 'react-redux';
 import { Icons } from '@/components/ui/icons';
 
 export default function ProfilePage() {
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const email = searchParams.get("email");
+
   const [friends, setFriends] = useState(false);
   const [name, setName] = useState("");
   const [aboutMe, setAboutMe] = useState("");
@@ -44,6 +45,7 @@ export default function ProfilePage() {
   const [initials, setInitials] = useState("");
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
   const userAuth = useSelector((state) => state.authenticationState.value);
   const searcherEmail = userAuth.email;
   const searcherId = userAuth.userId;
@@ -54,6 +56,7 @@ export default function ProfilePage() {
       const userId = user.details[0];
       const details = await getUserDetails(userId);
 
+      // If there are no details, then the user is not properly authenticated
       if (!details) {
         router.push("/");
       } else {

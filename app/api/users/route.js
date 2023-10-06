@@ -4,7 +4,7 @@ import connectMongoDB from "@/lib/mongodb";
 import { NextResponse } from "next/server";
 
 // As UserDetail is a subdocument of User, we only need to update User to update UserDetail as well
-
+// Creating a user
 export async function POST(request) {
   const { email, password } = await request.json();
 
@@ -28,6 +28,7 @@ export async function POST(request) {
 }
 
 // Get either all users in database, or specific user
+// Find is a filter (given in the search bar) that finds all users with the filter in it
 export async function GET(request) {
   const search = new URL(request.url).searchParams;
   const email = search.get("email");
@@ -78,7 +79,7 @@ export async function GET(request) {
     });
 
     return NextResponse.json(sortedNames, { status: 200 });
-  }else {
+  } else {
     const users = await User.find();
 
     if (!users || users.length === 0) {

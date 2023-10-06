@@ -17,16 +17,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/navigation";
 import { setUserDetailState } from '@/app/store/reducers/userDetailState';
 
-export default function CoursesPage({ params }) {
+export default function GroupPage({ params }) {
   const { id } = params;
+
+  const router = useRouter();
+
   const [info, setInfo] = useState({});
-  const dispatch = useDispatch();
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMember, setIsMember] = useState(false);
-  const router = useRouter();
-  const userAuth = useSelector((state) => state.authenticationState.value);
+  const [change, setChange] = useState(false);
+
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.authenticationState.value).userId;
   const userDetail = useSelector((state) => state.userDetailState.value);
+
   const targetMap = {
     "PS": "Pass",
     "CR": "Credit",
@@ -40,6 +45,7 @@ export default function CoursesPage({ params }) {
       const get = await getGroup(id);
       setInfo(get);
 
+      // Get all user details of all group members, except for the authenticated user
       const res = [];
       const use = [];
       await Promise.all(
@@ -52,20 +58,20 @@ export default function CoursesPage({ params }) {
         })
       )
       setUserList(res);
-      setIsMember(use.some(function (el) { return el._id == userAuth.userId; }))
+      setIsMember(use.some(function (el) { return el._id == userId; }))
       setLoading(false);
     }
     load();
-  }, [isMember]);
+  }, [change]);
 
-  const leaveGroup = () => {
-    // Do something
-    removeGroupMember(id, userAuth.userId);
+  const leaveGroup = async () => {
+    // Remove group member from database and update state
+    await removeGroupMember(id, userId);
     const newDetails = userDetail.currentGroups.filter(function (i) {
       return i !== id;
     });
 
-    updateUser(userAuth.userId, {details: {
+    updateUser(userId, {details: {
       ...userDetail,
       currentGroups: newDetails
     }})
@@ -76,15 +82,15 @@ export default function CoursesPage({ params }) {
       currentGroups: newDetails
       })
     );
-    setIsMember(false);
+    setChange(!change);
   }
 
-  const joinGroup = () => {
+  const joinGroup = async () => {
     // Do something
-    addGroupMember(id, userAuth.userId);
+    await addGroupMember(id, userId);
     const newCurrG = Object.assign([], userDetail.currentGroups);
     newCurrG.push(id);
-    updateUser(userAuth.userId, {details: {
+    updateUser(userId, {details: {
       ...userDetail,
       currentGroups: newCurrG
     }})
@@ -95,7 +101,11 @@ export default function CoursesPage({ params }) {
       currentGroups: newCurrG
       })
     );
-    setIsMember(true);
+    setChange(!change);
+  }
+
+  const openChat = () => {
+    router.push(`/groups/${id}/chat`)
   }
 
   if (loading) {
@@ -159,7 +169,7 @@ export default function CoursesPage({ params }) {
             </div>
           }
           <div className="flex items-center justify-end space-y-2">
-            <Button>Join Chat!</Button>
+            {isMember && <Button onClick={openChat}>Open Chat!</Button>}
           </div>
         </div>
       </div>
