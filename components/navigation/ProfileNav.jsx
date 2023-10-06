@@ -22,6 +22,7 @@ import { setAuthenticationState } from "@/app/store/reducers/authenticationState
 import { useSelector } from "react-redux"
 import { setUserDetailState } from "@/app/store/reducers/userDetailState";
 import { setUserNotifState } from "@/app/store/reducers/userNotifState";
+import { getUser, getUserDetails } from "@/api/apiClient";
   
 export function ProfileNav() {
   const router = useRouter();
@@ -30,7 +31,6 @@ export function ProfileNav() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [userDetails, setUserDetails] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
   const userAuth = useSelector((state) => state.authenticationState.value);
@@ -39,14 +39,29 @@ export function ProfileNav() {
   useEffect(() => {
     const { email } = userAuth;
     setEmail(email);
-    if (!details || Object.keys(details).length === 0) {
+    if (!email) {
+      router.push("/");
+    } else if (!details || Object.keys(details).length === 0) {
+      const getDetails = async () => {
+        const user = await getUser("email", email);
+        const deets = await getUserDetails(user.details[0]);
+  
+        if (!deets) {
+          router.push("/");
+          return false;
+        }
+        return true;
+      }
+      if (!getDetails()) {
+        return;
+      }
       router.push(`/newuser/?email=${email}`);
     } else {
       setUserDetails(details);
       setInitials(details.fname.slice(0, 1) + details.lname.slice(0, 1));
       setName(details.fname + " " + details.lname);
     }
-  }, [email, router])
+  }, [email, router, userAuth])
 
   const handleLogout = () => {
     router.push('/');
