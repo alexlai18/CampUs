@@ -9,6 +9,7 @@ import { PersistGate } from "redux-persist/es/integration/react";
 import persistStore from "redux-persist/es/persistStore";
 import { useEffect } from 'react';
 import { PrivateRoute } from '../components/PrivateRoute';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -23,6 +24,7 @@ export default function RootLayout({children}) {
             <PersistGate loading={null} persistor={persistor}>
               <PrivateRoute>
                 {children}
+                <Toaster />
               </PrivateRoute>
             </PersistGate>
           </Provider>

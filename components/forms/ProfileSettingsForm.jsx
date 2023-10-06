@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input"
-import { Toast } from "@/components/ui/toast"
 import {
   Popover,
   PopoverTrigger,
@@ -36,69 +35,73 @@ import {
 import { Calendar } from "@/components/ui/calendar"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
-
-const profileFormSchema = z.object({
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
-  name: z.string().max(70).min(2),
-  bio: z.string().max(160).min(4),
-  language: z.string({
-    required_error: "Please select a language.",
-  }),
-  dob: z.date({
-    required_error: "A date of birth is required.",
-  }),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: "Please enter a valid URL." }),
-      })
-    )
-    .optional(),
-});
-
-// This can come from your database or API.
-const defaultValues = {
-  bio: "",
-  urls: [
-    { value: "https://alexlai18.github.io/" },
-    { value: "https://www.linkedin.com/in/alexander-lai-a7a677200/" },
-  ],
-}
+import { Label } from "../ui/label"
+import { updateUser } from "@/api/apiClient"
+import { useSelector } from "react-redux"
+import { Icons } from "../ui/icons"
+import { useToast } from "../ui/use-toast"
 
 export function ProfileSettingsForm() {
   const [languages, setLanguages] = useState(["Loading..."]);
+  const [newEmail, setNewEmail] = useState("");
+  const [newName, setNewName] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { toast } = useToast()
+
+  const userId = useSelector((state) => state.authenticationState.value).userId;
 
   useEffect(() => {
     const getLang = async () => {
       setLanguages(await getLanguages());
     }
     getLang();
-  }, [])
+  }, []);
 
-  const form = useForm({
-    resolver: zodResolver(profileFormSchema),
-    defaultValues,
-    mode: "onChange",
-  })
-
-  const { fields, append } = useFieldArray({
-    name: "urls",
-    control: form.control,
-  })
-
-  function onSubmit() {
-    Toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (newName.trim() === "") {
+      await updateUser(userId, {
+        email: email !== "" ? newEmail : undefined
+      })
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="flex mt-2 w-full rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify({
+              email: email !== "" ? newEmail : undefined
+            })}</code>
+          </pre>
+        ),
+      })
+    } else {
+      const name = newName.split(" ");
+      await updateUser(userId, {
+        details: {
+          fname: name[0],
+          lname: name[1]
+        },
+        email: email !== "" ? newEmail : undefined
+      });
+      toast({
+        title: "These values have been updated:",
+        description: (
+          <pre className="mt-2 rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              {
+                JSON.stringify({
+                  fname: name[0],
+                  lname: name[1],
+                  email: email !== "" ? newEmail : undefined
+                }, null, 2)
+              }
+            </code>
+          </pre>
+        ),
+      })
+    }
+    setLoading(false);
   }
 
   return (
@@ -107,46 +110,25 @@ export function ProfileSettingsForm() {
         "flex items-center justify-center [&>div]:w-full",
       )}
     >
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div>
-            <h2 className="text-lg font-medium tracking-tight">Account</h2>
-            <p className="text-sm text-muted-foreground">
-              Update your account settings.
-            </p>
-          </div>
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your email" {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is email you want to link to this account.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="fullname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your name" {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is the full name that is displayed.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <form onSubmit={handleSubmit} className="space-y-8 w-[50%]">
+        <div>
+          <h2 className="text-lg font-medium tracking-tight">Account</h2>
+          <p className="text-sm text-muted-foreground">
+            Update your account settings.
+          </p>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" placeholder="name@example.com" onChange={(e) => setNewEmail(e.target.value)} required />
+          <div className="text-muted-foreground text-sm">This is email you want to link to this account.</div>
+        </div>
+        <div className="w-full grid gap-2">
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" placeholder="Your Name" onChange={(e) => setNewName(e.target.value)} required />
+          <div className="text-muted-foreground text-sm">This is the full name that is displayed.</div>
+        </div>
+
+        {/*
           <FormField
             control={form.control}
             name="language"
@@ -254,7 +236,7 @@ export function ProfileSettingsForm() {
               </FormItem>
             )}
           />
-          <div>
+            <div>
             {fields.map((field, index) => (
               <FormField
                 control={form.control}
@@ -286,9 +268,9 @@ export function ProfileSettingsForm() {
               Add URL
             </Button>
           </div>
-          <Button type="submit">Update profile</Button>
-        </form>
-      </Form>
+        */}
+        <Button type="submit">{loading && <Icons.spinner className="h-4 w-4 animate-spin" />}Update profile</Button>
+      </form>
     </div>
   )
 }
