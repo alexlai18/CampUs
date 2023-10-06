@@ -5,7 +5,7 @@ import { Check, Plus, Send } from "lucide-react"
 import { Icons } from "@/components/ui/icons"
 import { FullNav } from "@/components/navigation/FullNav"
 import { Separator } from "@/components/ui/separator"
-import { addMessage, getGroup, getGroupMessages } from "@/api/apiClient";
+import { addMessage, deleteMessage, getGroup, getGroupMessages } from "@/api/apiClient";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,6 +18,17 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import {
   Dialog,
   DialogHeader,
@@ -50,25 +61,52 @@ export default function GroupChatPage({ params }) {
 
   const [info, setInfo] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [sending, setSending] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteMsg, setDeleteMsg] = useState("");
+  const [scrollBar, setScrollBar] = useState(false);
   const inputLength = input.trim().length;
   const messagesEndRef = useRef(null);
+  const containerRef = useRef(null);
+  const divHeightRef = useRef(null);
 
   const userId = useSelector((state) => state.authenticationState.value).userId;
   // Function to scroll to the bottom everytime a new message is sent
   const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (divHeightRef.current && messagesEndRef.current) {
+      const div = divHeightRef.current;
+      const messagesEnd = messagesEndRef.current;
+  
+      const scrollPosition = messagesEnd.offsetTop - div.offsetTop;
+      div.scrollBy({
+        top: scrollPosition,
+        behavior : "smooth"
+      });
     }
+    containerRef.current.scrollTo(0,0);
   }
 
+  const isScrollBarNeeded = () => {
+    if (divHeightRef.current) {
+      return divHeightRef.current.scrollHeight > divHeightRef.current.clientHeight;
+    }
+    return false;
+  };
+
   useEffect(() => {
+    setScrollBar(isScrollBarNeeded());
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    if (scrollBar === true) {
+      scrollToBottom();
+    }
+  }, [scrollBar])
 
   // Load information in
   useEffect(() => {
@@ -76,14 +114,28 @@ export default function GroupChatPage({ params }) {
     const load = async () => {
       const get = await getGroup(id);
       setInfo(get);
-      setMessages(await getGroupMessages(id));
+      setMessages(await getGroupMessages(id) || []);
       setLoading(false);
     }
     load();
   }, []);
 
+  const handleDeleteMessage = () => {
+    // Remove message
+    setIsLoading(true);
+    const remove = async () => {
+      await deleteMessage(deleteMsg, id);
+      setMessages(await getGroupMessages(id) || []);
+      setDeleteMsg("");
+      setIsLoading(false);
+      setOpenDelete(false);
+    }
+    remove();
+  }
+
+
   return (
-    <div className="hidden flex-col md:flex">
+    <div className="hidden flex-col md:flex overflow-hidden" ref={containerRef}>
       <FullNav />
       <div className="hidden space-y-6 p-10 pb-0 md:block">
         {/* Chat feature here */}
@@ -100,14 +152,14 @@ export default function GroupChatPage({ params }) {
               </CardHeader>
               <Separator className="my-6 mb-0" />
               <CardContent className="h-[600px]">
-                <ScrollArea className="h-full">
+                <div className={`h-full !m-0 ${scrollBar ? 'overflow-auto' : ''}`} ref={divHeightRef}>
                   <div className="space-y-4 h-[50px] pb-2">
                     {
                       messages.length > 0 ?
                           messages.map((m) => {
                             return (
-                              <div className={cn("flex", m.sender === userId ? "flex flex-row-reverse gap-2 justify-end" : "flex flex-row gap-2")} >
-                                <Avatar className="h-9 w-9">
+                              <div key={`${m._id}-div`} className={cn("flex", m.sender === userId ? "flex flex-row-reverse gap-2 justify-end" : "flex flex-row gap-2")} >
+                                <Avatar key={`${m._id}-avatar`} className="h-9 w-9">
                                   <AvatarImage alt="Avatar" />
                                   <AvatarFallback className={m.sender === userId ? "bg-muted" : "bg-primary text-primary-foreground"}>USR</AvatarFallback>
                                 </Avatar>
@@ -124,19 +176,22 @@ export default function GroupChatPage({ params }) {
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
                                     <Button
+                                      key={`${m._id}-options`}
                                       size="icon"
                                       variant="outline"
                                       className={cn("flex", m.sender === userId ? "rounded-full ml-auto" : "rounded-full")}
                                       onClick={() => setOpen(true)}
                                     >
-                                      <Plus className="h-4 w-4" />
-                                      <span className="sr-only">Message Settings</span>
+                                      <Plus key={`${m._id}-icon`} className="h-4 w-4" />
+                                      <span key={`${m._id}-span`} className="sr-only">Message Settings</span>
                                     </Button>
                                   </DropdownMenuTrigger>
-                                  <DropdownMenuContent className="w-56" side="right" align="start">
-                                    <DropdownMenuItem>Reply</DropdownMenuItem>
+                                  <DropdownMenuContent className="w-56" side={m.sender === userId ? "left" : "right"} align="start">
                                     <DropdownMenuItem>Edit</DropdownMenuItem>
-                                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => {
+                                      setDeleteMsg(m._id);
+                                      setOpenDelete(true);
+                                    }}>Delete</DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>
                               </div>
@@ -147,7 +202,7 @@ export default function GroupChatPage({ params }) {
                     }
                     <div ref={messagesEndRef} />
                   </div>
-                </ScrollArea>
+                </div>
               </CardContent>
               <CardFooter className="absolute bottom-0 w-full">
                 <form
@@ -157,19 +212,7 @@ export default function GroupChatPage({ params }) {
                     if (inputLength === 0) return;
                     const content = input;
                     setInput("");
-                    setMessages([
-                      ...messages,
-                      {
-                        groupId: id,
-                        sender: userId,
-                        content,
-                        timestamps: {
-                          createdAt: new Date(),
-                          updatedAt: new Date()
-                        }
-                      }
-                    ])
-                    await addMessage({
+                    const newMsg = await addMessage({
                       sender: userId,
                       content,
                       timestamps: {
@@ -177,7 +220,11 @@ export default function GroupChatPage({ params }) {
                         updatedAt: new Date()
                       },
                       groupId: id
-                    })
+                    });
+                    setMessages([
+                      ...messages,
+                      newMsg
+                    ])
                     setSending(false);
                   }}
                   className="flex w-full items-center space-x-2"
@@ -226,6 +273,25 @@ export default function GroupChatPage({ params }) {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        <AlertDialog open={openDelete} messageId={deleteMsg} id={id}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action will delete your message. This is not reversable.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setOpenDelete(false)}>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDeleteMessage}>
+                {isLoading && (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                Delete Message
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   )

@@ -28,7 +28,6 @@ export async function GET(request) {
 // Create new message
 export async function POST(request) {
   const { sender, content, timestamps, groupId } = await request.json();
-  console.log(timestamps);
   await connectMongoDB();
 
   const group = await Group.findOne({_id: groupId}).lean();
