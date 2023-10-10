@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getLanguages } from "@/api/getLanguages"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFieldArray, useForm } from "react-hook-form"
@@ -44,17 +44,24 @@ import { setAuthenticationState } from "@/app/store/reducers/authenticationState
 import { setUserDetailState } from "@/app/store/reducers/userDetailState"
 import { ErrorPopup } from "../utils/ErrorPopup"
 import { getUniversities } from "@/api/getUniversities"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 export function ProfileSettingsForm() {
   const [languages, setLanguages] = useState(["Loading..."]);
   const [newEmail, setNewEmail] = useState("");
   const [newName, setNewName] = useState("");
   const [newUni, setNewUni] = useState("");
+  const [newGrade, setNewGrade] = useState("");
   const [uniList, setUniList] = useState(["Loading..."]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const emailRef = useRef(null);
+  const nameRef = useRef(null);
+  const yearRef = useRef(null);
+
   const dispatch = useDispatch();
 
   const { toast } = useToast()
@@ -77,12 +84,12 @@ export function ProfileSettingsForm() {
     e.preventDefault();
     setLoading(true);
     const name = newName.split(" ");
-    console.log((name[0] !== "" && name[0]) ? name[0] : undefined);
     const updated = await updateUser(userAuth.userId, {
       details: {
         fname: (name[0] !== "" && name[0]) ? name[0] : undefined,
         lname: (name[1] !== "" && name[1]) ? name[1] : undefined,
         uni: newUni !== "" ? newUni : undefined,
+        grade: newGrade !== "" ? newGrade : undefined
       },
       email: newEmail !== "" ? newEmail : undefined
     });
@@ -102,7 +109,8 @@ export function ProfileSettingsForm() {
                 JSON.stringify({
                   fname: (name[0] !== "" && name[0]) ? name[0] : "Not Modified",
                   lname: (name[1] !== "" && name[1]) ? name[1] : "Not Modified",
-                  email: email !== "" ? newEmail : "Not Modified"
+                  email: newEmail !== "" ? newEmail : "Not Modified",
+                  grade: newGrade !== "" ? newGrade : "Not Modified"
                 }, null, 2)
               }
             </code>
@@ -115,7 +123,18 @@ export function ProfileSettingsForm() {
     setNewEmail("");
     setNewName("");
     setNewUni("");
+    setNewGrade("");
     setLoading(false);
+  }
+
+  const handleClear = (e) => {
+    e.preventDefault();
+    emailRef.current.value = "";
+    nameRef.current.value = "";
+    setNewEmail("");
+    setNewName("");
+    setNewUni("");
+    setNewGrade("");
   }
 
   return (
@@ -139,12 +158,12 @@ export function ProfileSettingsForm() {
         </div>
         <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="name@example.com" onChange={(e) => setNewEmail(e.target.value)} />
+          <Input id="email" type="email" placeholder="name@example.com" onChange={(e) => setNewEmail(e.target.value)} ref={emailRef}/>
           <div className="text-muted-foreground text-sm">This is email you want to link to this account.</div>
         </div>
         <div className="w-full grid gap-2">
           <Label htmlFor="name">Name</Label>
-          <Input id="name" placeholder="Your Name" onChange={(e) => setNewName(e.target.value)} />
+          <Input id="name" placeholder="Your Name" onChange={(e) => setNewName(e.target.value)} ref={nameRef}/>
           <div className="text-muted-foreground text-sm">This is the full name that is displayed.</div>
         </div>
         <div className="grid gap-2">
@@ -192,6 +211,20 @@ export function ProfileSettingsForm() {
               </Command>
             </PopoverContent>
           </Popover>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="grade">What year are you in?</Label>
+          <Select id="grade" onValueChange={(value) => setNewGrade(value)} >
+            <SelectTrigger id="framework">
+              {newGrade !== "" ? <SelectValue placeholder="Select Grade" /> : "Select Grade"}
+            </SelectTrigger>
+            <SelectContent position="popper">
+              <SelectItem value="1">1st Year</SelectItem>
+              <SelectItem value="2">2nd Year</SelectItem>
+              <SelectItem value="3">3rd Year</SelectItem>
+              <SelectItem value="4">4th Year or Above</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         {/*
           <FormField
@@ -334,7 +367,10 @@ export function ProfileSettingsForm() {
             </Button>
           </div>
         */}
-        <Button type="submit">{loading && <Icons.spinner className="h-4 w-4 animate-spin" />}Update profile</Button>
+        <div className="flex justify-between">
+          <Button type="submit">{loading && <Icons.spinner className="h-4 w-4 animate-spin" />}Update profile</Button>
+          <Button onClick={handleClear}>Clear Values</Button>
+        </div>
       </form>
     </div>
   )
