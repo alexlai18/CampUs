@@ -2,7 +2,7 @@ import { AppearanceSettingsForm } from "@/components/forms/AppearanceSettingsFor
 
 export default function SettingsPage() {
   return (
-    <div className="hidden flex-col md:flex">
+    <div className="flex flex-col">
       <AppearanceSettingsForm />
     </div>
   )

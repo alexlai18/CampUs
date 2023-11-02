@@ -75,7 +75,7 @@ export function AppearanceSettingsForm() {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="grid max-w-md grid-cols-2 gap-8 pt-2"
+                className="grid max-w-md grid-cols-1 w-[80%] items-center sm:w-[100%] sm:grid-cols-2 gap-8 pt-2"
               >
                 <FormItem>
                   <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
