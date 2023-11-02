@@ -72,7 +72,7 @@ export default function CoursesPage({ params }) {
 
   return (
     <>
-      <div className="hidden flex-col md:flex">
+      <div className="flex flex-col">
         <FullNav />
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
@@ -81,12 +81,12 @@ export default function CoursesPage({ params }) {
             </div>
           </div>
           <h3 className="text-2xl font-bold tracking-tight">This course has {info.perGroup === 1 ? "no group assignments. You can still find study buddies!" : `group assignments consisting of ${info.perGroup}`}</h3>
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 justify-between">
             <form className="flex" onSubmit={handleSubmit}>
               <Input
                 type="search"
                 placeholder="Search Groups..."
-                className="md:w-[100px] lg:w-[300px]"
+                className="sm:w-[300px]"
                 onChange={(e) => setSearch(e.target.value)}
               />
               <Button>{searchLoad ? <Icons.spinner className="h-4 w-4 animate-spin" /> :<MagnifyingGlassIcon />}</Button>

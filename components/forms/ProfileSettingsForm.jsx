@@ -149,7 +149,7 @@ export function ProfileSettingsForm() {
           message="Could not update user. Please try again later"
         />
       }
-      <form onSubmit={handleSubmit} className="space-y-8 w-[50%]">
+      <form onSubmit={handleSubmit} className="space-y-8 w-[100%] sm:w-[50%]">
         <div>
           <h2 className="text-lg font-medium tracking-tight">Account</h2>
           <p className="text-sm text-muted-foreground">
@@ -367,7 +367,7 @@ export function ProfileSettingsForm() {
             </Button>
           </div>
         */}
-        <div className="flex justify-between">
+        <div className="flex flex-col space-y-4 sm:justify-between sm:flex-row sm:space-y-0">
           <Button type="submit">{loading && <Icons.spinner className="h-4 w-4 animate-spin" />}Update profile</Button>
           <Button onClick={handleClear}>Clear Values</Button>
         </div>

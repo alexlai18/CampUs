@@ -105,19 +105,19 @@ export default function ProfilePage() {
 
   return (
     <>
-      <div className="hidden flex-col md:flex">
+      <div className="flex flex-col">
         <FullNav />
         <div className="flex justify-center">
           <div className="flex flex-col w-[60%] pt-6">
             <Card className=" bg-secondary w-full">
-              <CardHeader>
-                <Avatar className="overflow-hidden bg-border rounded-full h-[200px] w-[200px]">
+              <CardHeader className="items-center md:items-start">
+                <Avatar className="overflow-hidden h-[150px] w-[150px] bg-border rounded-full sm:h-[200px] sm:w-[200px]">
                   <AvatarImage alt="profile" src="./assets/profile.jpg" className="w-full h-full"/>
                   <AvatarFallback className="bg-primary text-primary-foreground">{initials}</AvatarFallback>
                 </Avatar>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-row justify-between items-center">
+                <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-6 justify-between items-center">
                   <div>
                     {name}
                     <br/>

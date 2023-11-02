@@ -31,7 +31,7 @@ export default function CoursesPage() {
 
   return (
     <>
-      <div className="hidden flex-col md:flex">
+      <div className="flex flex-col">
         <FullNav />
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
@@ -43,7 +43,7 @@ export default function CoursesPage() {
             <Input
               type="search"
               placeholder="Search Courses..."
-              className="md:w-[100px] lg:w-[300px]"
+              className="sm:w-[300px]"
               onChange={(e) => setSearch(e.target.value)}
             />
             <Button>{loading ? <Icons.spinner className="h-4 w-4 animate-spin" /> :<MagnifyingGlassIcon />}</Button>
