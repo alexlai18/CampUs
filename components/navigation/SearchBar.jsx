@@ -19,7 +19,7 @@ export function SearchBar() {
         <Input
           type="search"
           placeholder="Search..."
-          className="md:w-[100px] lg:w-[300px]"
+          className="sm:w-[150px], md:w-[250px] lg:w-[300px]"
           onChange={(e) => setSearch(e.target.value)}
         />
       </form>
