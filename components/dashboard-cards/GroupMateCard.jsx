@@ -44,7 +44,7 @@ export function GroupMateCard(props) {
                           {mate.email}
                         </p>
                       </div>
-                      <div className="ml-auto font-medium">{mate.course}</div>
+                      <div className="hidden sm:block ml-auto font-medium">{mate.course}</div>
                     </div>
                   )
                 }) : <div className='text-lg font-medium'>You have not had any past groupmates. Connect through groups!</div>}
