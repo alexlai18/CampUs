@@ -19,9 +19,9 @@ export default function Login() {
 
   return (
     <>
-      <div className="hidden flex-col md:flex">
+      <div className="flex">
         <div className="flex-1 space-y-4 p-8 pt-6">
-          <div className="flex items-center justify-between space-y-2">
+          <div className="flex flex-col sm:flex-row md:flex-row lg:flex-row items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">CampUs: A smarter way to find group partners</h2>
             <div className="flex items-center space-x-2 px-8">
               <Button asChild>
@@ -31,7 +31,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="container relative h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="relative hidden h-full flex-col p-10 text-foreground dark:border-r lg:flex">
           <div className="absolute inset-0 dark:bg-zinc-900 bg-primary" />
           <div className="relative z-20 flex items-center text-lg font-medium">
