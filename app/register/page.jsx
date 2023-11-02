@@ -5,9 +5,9 @@ import { RegisterForm } from '../../components/forms/RegisterForm'
 export default function Register() {
   return (
     <>
-      <div className="hidden flex-col md:flex">
+      <div className="flex">
         <div className="flex-1 space-y-4 p-8 pt-6">
-          <div className="flex items-center justify-between space-y-2">
+          <div className="flex flex-col sm:max-2xl:flex-row items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">CampUs: A smarter way to find group partners</h2>
             <div className="flex items-center space-x-2 px-8">
               <Button asChild>
@@ -17,7 +17,7 @@ export default function Register() {
           </div>
         </div>
       </div>
-      <div className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:px-0">
+      <div className="container relative h-[800px] flex-col items-center justify-center md:grid lg:px-0">
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">
             <div className="flex flex-col space-y-2 text-center">

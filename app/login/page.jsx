@@ -21,7 +21,7 @@ export default function Login() {
     <>
       <div className="flex">
         <div className="flex-1 space-y-4 p-8 pt-6">
-          <div className="flex flex-col sm:flex-row md:flex-row lg:flex-row items-center justify-between space-y-2">
+          <div className="flex flex-col sm:max-2xl:flex-row items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">CampUs: A smarter way to find group partners</h2>
             <div className="flex items-center space-x-2 px-8">
               <Button asChild>
