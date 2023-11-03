@@ -17,7 +17,7 @@ export default function NewUser() {
       </div>
       <div className="container relative h-[800px] flex-col items-center justify-center md:grid lg:px-0">
         <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 w-[400px]">
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
                 Welcome to CampUs!
