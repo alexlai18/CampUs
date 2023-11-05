@@ -6,6 +6,10 @@ The idea for this app was to have it be a social media app, where you could look
 
 The only feature outside of searching for people is a chat room.
 
+## Backend
+The backend is at this repository (currently migrating), moving away from full-stack in one codebase.
+https://github.com/alexlai18/CampUs-backend
+
 ## Tech Stack
 
 - Vercel (PaaS)
