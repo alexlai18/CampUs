@@ -24,7 +24,7 @@ export const getUsers = async () => {
 // Get users either via their userId or a filtered value
 export const getFilterUsers = async (val, id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/users?val=${val}&user=${id}`, {
+    const res = await fetch(`http://localhost:3000/api/users?val=${val}&userId=${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
