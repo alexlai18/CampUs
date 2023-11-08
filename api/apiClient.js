@@ -1,3 +1,5 @@
+const API_URL = "https://campus-backend-blond.vercel.app/api/v1";
+
 //////////////////////////////////////////////////////////////
 //////////////////////// USER FUNCTIONS //////////////////////
 //////////////////////////////////////////////////////////////
@@ -5,7 +7,7 @@
 // Get all users from the database
 export const getUsers = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/users", {
+    const res = await fetch(`${API_URL}/users`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -24,7 +26,7 @@ export const getUsers = async () => {
 // Get users either via their userId or a filtered value
 export const getFilterUsers = async (val, id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/users?val=${val}&userId=${id}`, {
+    const res = await fetch(`${API_URL}/users?val=${val}&user=${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -33,7 +35,7 @@ export const getFilterUsers = async (val, id) => {
     })
 
     if (!res.ok) {
-      throw new Error("Failed to fetch users");
+      throw new Error("Failed to  users");
     }
 
     return res.json();
@@ -43,7 +45,7 @@ export const getFilterUsers = async (val, id) => {
 // Add a user to the database
 export const createUser = async (body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/users`, {
+    const res = await fetch(`${API_URL}/users`, {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -53,7 +55,7 @@ export const createUser = async (body) => {
     })
 
     if (!res.ok) {
-      throw new Error("Failed to fetch users");
+      throw new Error("Failed to  users");
     }
 
     return res.json();
@@ -63,7 +65,7 @@ export const createUser = async (body) => {
 // Get a user using a specific user given a query and value (mainly used for email)
 export const getUser = async (query, value) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/users?${query}=${value}`, {
+    const res = await fetch(`${API_URL}/users?${query}=${value}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -71,7 +73,7 @@ export const getUser = async (query, value) => {
       cache: "no-store"
     });
     if (!res.ok) {
-      throw new Error("Failed to fetch users");
+      throw new Error("Failed to  users");
     }
 
     return res.json();
@@ -84,7 +86,7 @@ export const getUser = async (query, value) => {
 // Get a User given the id
 export const getUserById = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+    const res = await fetch(`${API_URL}/users/${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -93,7 +95,7 @@ export const getUserById = async (id) => {
     })
 
     if (!res.ok) {
-      throw new Error("Failed to fetch users");
+      throw new Error("Failed to  users");
     }
 
     return res.json();
@@ -103,7 +105,7 @@ export const getUserById = async (id) => {
 // See if a user exists and if the username and password align
 export const logUser = async (email, password) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/login?email=${email}&password=${password}`, {
+    const res = await fetch(`${API_URL}/login?email=${email}&password=${password}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -111,7 +113,7 @@ export const logUser = async (email, password) => {
       cache: "no-store"
     });
     if (!res.ok) {
-      throw new Error("Failed to fetch users");
+      throw new Error("Failed to  users");
     }
 
     return res.json();
@@ -129,7 +131,7 @@ export const logUser = async (email, password) => {
 // Get the UserDetails document given the id of such document
 export const getUserDetails = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/details?id=${id}`, {
+    const res = await fetch(`${API_URL}/details?id=${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -137,7 +139,7 @@ export const getUserDetails = async (id) => {
       cache: "no-store"
     });
     if (!res.ok) {
-      throw new Error("Failed to fetch users");
+      throw new Error("Failed to  users");
     }
 
     return res.json();
@@ -150,7 +152,7 @@ export const getUserDetails = async (id) => {
 // Update UserDetail Document
 export const updateUser = async (id, body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/users/${id}`, {
+    const res = await fetch(`${API_URL}/users/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json"
@@ -174,7 +176,7 @@ export const updateUser = async (id, body) => {
 // Get courses given a filter value
 export const getCourses = async (body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/course?prefix=${body}`, {
+    const res = await fetch(`${API_URL}/course?prefix=${body}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -193,7 +195,7 @@ export const getCourses = async (body) => {
 // Join or Leave a course given userId, courseCode and isJoining boolean
 export const joinCourse = async (userId, courseCode, isJoining) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/usercourse`, {
+    const res = await fetch(`${API_URL}/usercourse`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json"
@@ -221,7 +223,7 @@ export const joinCourse = async (userId, courseCode, isJoining) => {
 // Get another user given either a filter value and/or email
 export const getConnections = async (search, email) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/friends?prefix=${search}&email=${email}`, {
+    const res = await fetch(`${API_URL}/friends?prefix=${search}&email=${email}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -240,7 +242,7 @@ export const getConnections = async (search, email) => {
 // Add a friend
 export const addConnections = async (body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/friends`, {
+    const res = await fetch(`${API_URL}/friends`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json"
@@ -260,7 +262,7 @@ export const addConnections = async (body) => {
 // Remove a friend (unfriend)
 export const removeConnection = async (body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/friends`, {
+    const res = await fetch(`${API_URL}/friends`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json"
@@ -284,7 +286,7 @@ export const removeConnection = async (body) => {
 // Create a new group
 export const createGroup = async (body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/group`, {
+    const res = await fetch(`${API_URL}/group`, {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -303,7 +305,7 @@ export const createGroup = async (body) => {
 // Get a group given its groupId
 export const getGroup = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/group?id=${id}`, {
+    const res = await fetch(`${API_URL}/group?id=${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -322,7 +324,7 @@ export const getGroup = async (id) => {
 // Get all the groups of a specific course, can also filter this
 export const getCourseGroups = async (course, search) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/group?course=${course}&prefix=${search}`, {
+    const res = await fetch(`${API_URL}/group?course=${course}&prefix=${search}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -341,7 +343,7 @@ export const getCourseGroups = async (course, search) => {
 // Get all groups with a filter
 export const getFilteredGroups = async (search) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/group?prefix=${search}`, {
+    const res = await fetch(`${API_URL}/group?prefix=${search}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -360,7 +362,7 @@ export const getFilteredGroups = async (search) => {
 // Delete a group from the database
 export const deleteGroup = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/group`, {
+    const res = await fetch(`${API_URL}/group`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json"
@@ -382,7 +384,7 @@ export const deleteGroup = async (id) => {
 // Change the details of a group given information and the groupId
 export const updateGroup = async (id, body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/group/${id}`, {
+    const res = await fetch(`${API_URL}/group/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json"
@@ -402,7 +404,7 @@ export const updateGroup = async (id, body) => {
 // Remove a group member given the groupId and userId
 export const removeGroupMember = async (groupId, userId) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/group/${groupId}`, {
+    const res = await fetch(`${API_URL}/group/${groupId}`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json"
@@ -424,7 +426,7 @@ export const removeGroupMember = async (groupId, userId) => {
 // Join a group given groupId and userId
 export const addGroupMember = async (groupId, userId) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/group/${groupId}`, {
+    const res = await fetch(`${API_URL}/group/${groupId}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json"
@@ -450,7 +452,7 @@ export const addGroupMember = async (groupId, userId) => {
 // Create a notification (should be called upon every interaction)
 export const createNotif = async (body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/notifications`, {
+    const res = await fetch(`${API_URL}/notifications`, {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -470,7 +472,7 @@ export const createNotif = async (body) => {
 // Get the notifs of a user given the email
 export const getNotifs = async (email) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/notifications?receiver=${email}`, {
+    const res = await fetch(`${API_URL}/notifications?receiver=${email}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -492,7 +494,7 @@ export const getNotifs = async (email) => {
 
 export const addMessage = async (body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/message`, {
+    const res = await fetch(`${API_URL}/message`, {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -511,7 +513,7 @@ export const addMessage = async (body) => {
 
 export const getGroupMessages = async (groupId) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/message?groupId=${groupId}`, {
+    const res = await fetch(`${API_URL}/message?groupId=${groupId}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -529,7 +531,7 @@ export const getGroupMessages = async (groupId) => {
 
 export const deleteMessage = async (messageId, groupId) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/message`, {
+    const res = await fetch(`${API_URL}/message`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json"
@@ -551,7 +553,7 @@ export const deleteMessage = async (messageId, groupId) => {
 
 export const editMessage = async (messageId, body) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/message?messageId=${messageId}`, {
+    const res = await fetch(`${API_URL}/message?messageId=${messageId}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json"
