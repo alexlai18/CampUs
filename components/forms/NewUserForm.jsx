@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { RocketIcon } from "lucide-react"
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
+import { Icons } from "@/components/ui/icons"
 import { cn } from "@/lib/utils"
 import {
   Card,
@@ -49,6 +50,7 @@ export function NewUserForm(props) {
 
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [msg, setMsg] = useState("You must fill out all the fields!");
   const [fname, setFName] = useState("");
@@ -70,6 +72,7 @@ export function NewUserForm(props) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     if (uni === "" || fname === "" || lname === "" || grade === "") {
       setMsg("You must fill out all the fields!");
       setError(true);
@@ -95,6 +98,7 @@ export function NewUserForm(props) {
       setMsg("There was an issue saving your info. Try again later");
       setError(true);
     }
+    setIsLoading(false);
   }
 
   return (
@@ -194,7 +198,13 @@ export function NewUserForm(props) {
                 </div>
               </div>
               <div className="pt-6">
-                <Button className="w-full"><RocketIcon className="h-4 w-4" />&nbsp;&nbsp;Enter CampUs</Button>
+                <Button className="w-full" disabled={isLoading}>
+                  <RocketIcon className="h-4 w-4" />
+                  &nbsp;&nbsp;Enter CampUs
+                  {isLoading && (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                </Button>
               </div>
             </div>
           </form>

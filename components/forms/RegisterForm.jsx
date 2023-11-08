@@ -23,6 +23,7 @@ import { setAuthenticationState } from "@/app/store/reducers/authenticationState
 export function RegisterForm() {
   const router = useRouter(); 
 
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -31,11 +32,11 @@ export function RegisterForm() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     const user = await createUser({
       email: email,
       password: password,
     });
-
     if (!user) {
       setError(true);
     } else {
@@ -47,6 +48,7 @@ export function RegisterForm() {
       );
       router.push(`/newuser/?email=${email}`);
     }
+    setIsLoading(false);
   }
 
   return (
@@ -102,7 +104,12 @@ export function RegisterForm() {
                 <Input id="password" type="password" onChange={(e) => {setPassword(e.target.value)}} required />
               </div>
               <div className="pt-6">
-                <Button className="w-full">Create account</Button>
+                <Button className="w-full" disabled={isLoading}>
+                  {isLoading && (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Create account
+                </Button>
               </div>
             </div>
           </form>

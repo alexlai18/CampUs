@@ -153,7 +153,7 @@ export const getUserDetails = async (id) => {
 export const updateUser = async (id, body) => {
   try {
     const res = await fetch(`${API_URL}/users/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-type": "application/json"
       },
@@ -196,7 +196,7 @@ export const getCourses = async (body) => {
 export const joinCourse = async (userId, courseCode, isJoining) => {
   try {
     const res = await fetch(`${API_URL}/usercourse`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-type": "application/json"
       },
@@ -243,7 +243,7 @@ export const getConnections = async (search, email) => {
 export const addConnections = async (body) => {
   try {
     const res = await fetch(`${API_URL}/friends`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-type": "application/json"
       },
@@ -385,7 +385,7 @@ export const deleteGroup = async (id) => {
 export const updateGroup = async (id, body) => {
   try {
     const res = await fetch(`${API_URL}/group/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-type": "application/json"
       },
@@ -427,7 +427,7 @@ export const removeGroupMember = async (groupId, userId) => {
 export const addGroupMember = async (groupId, userId) => {
   try {
     const res = await fetch(`${API_URL}/group/${groupId}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-type": "application/json"
       },
@@ -554,7 +554,7 @@ export const deleteMessage = async (messageId, groupId) => {
 export const editMessage = async (messageId, body) => {
   try {
     const res = await fetch(`${API_URL}/message?messageId=${messageId}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-type": "application/json"
       },
