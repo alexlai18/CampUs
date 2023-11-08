@@ -45,7 +45,7 @@ export const getFilterUsers = async (val, id) => {
 // Add a user to the database
 export const createUser = async (body) => {
   try {
-    const res = await (`${API_URL}/users`, {
+    const res = await fetch(`${API_URL}/users`, {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -65,7 +65,7 @@ export const createUser = async (body) => {
 // Get a user using a specific user given a query and value (mainly used for email)
 export const getUser = async (query, value) => {
   try {
-    const res = await (`${API_URL}/users?${query}=${value}`, {
+    const res = await fetch(`${API_URL}/users?${query}=${value}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -86,7 +86,7 @@ export const getUser = async (query, value) => {
 // Get a User given the id
 export const getUserById = async (id) => {
   try {
-    const res = await (`${API_URL}/users/${id}`, {
+    const res = await fetch(`${API_URL}/users/${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -105,7 +105,7 @@ export const getUserById = async (id) => {
 // See if a user exists and if the username and password align
 export const logUser = async (email, password) => {
   try {
-    const res = await (`${API_URL}/login?email=${email}&password=${password}`, {
+    const res = await fetch(`${API_URL}/login?email=${email}&password=${password}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
@@ -131,7 +131,7 @@ export const logUser = async (email, password) => {
 // Get the UserDetails document given the id of such document
 export const getUserDetails = async (id) => {
   try {
-    const res = await (`${API_URL}/details?id=${id}`, {
+    const res = await fetch(`${API_URL}/details?id=${id}`, {
       method: "GET",
       headers: {
         "Content-type": "application/json"
