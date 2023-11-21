@@ -28,7 +28,7 @@ import { AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 import { AboutMeCard } from '../../components/dashboard-cards/AboutMeCard';
 import { Loading } from '../../components/utils/Loading';
-import { getUser, getUserDetails, getConnections, addConnections, removeConnection } from '@/api/apiClient';
+import { getUser, getUserDetails, getConnections, addConnections, removeConnection, addProfilePic } from '@/api/apiClient';
 import { Button } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
 import { Icons } from '@/components/ui/icons';
@@ -103,6 +103,11 @@ export default function ProfilePage() {
     remove();
   }
 
+  const handleNewPic = async (e) => {
+    e.preventDefault();
+    await addProfilePic(e.target.value);
+  }
+
   return (
     <>
       <div className="flex flex-col">
@@ -111,10 +116,23 @@ export default function ProfilePage() {
           <div className="flex flex-col w-[60%] pt-6">
             <Card className=" bg-secondary w-full">
               <CardHeader className="items-center md:items-start">
-                <Avatar className="overflow-hidden h-[150px] w-[150px] bg-border rounded-full sm:h-[200px] sm:w-[200px]">
-                  <AvatarImage alt="profile" src="./assets/profile.jpg" className="w-full h-full"/>
-                  <AvatarFallback className="bg-primary text-primary-foreground">{initials}</AvatarFallback>
-                </Avatar>
+                <label htmlFor="file-upload" className="relative group overflow-hidden h-[150px] w-[150px] bg-border rounded-full sm:h-[200px] sm:w-[200px]">
+                  <div className="hidden text-white group-hover:block absolute top-[42%] left-[15%] sm:top-[45%] sm:left-[23%]">Upload Image</div>
+                  <div className=" group-hover:opacity-40 h-full w-full">
+                    <Avatar>
+                      <AvatarImage alt="profile" src="./assets/user.png" className="w-full h-full"/>
+                      <AvatarFallback className="bg-primary text-primary-foreground">{initials}</AvatarFallback>
+                    </Avatar>
+                  </div>
+                </label>
+                <input
+                  type="file"
+                  label="Image"
+                  id="file-upload"
+                  accept=".jpeg, .png, .jpg"
+                  className="hidden"
+                  onChange={handleNewPic}
+                />
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-6 justify-between items-center">

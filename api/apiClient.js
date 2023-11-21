@@ -569,3 +569,23 @@ export const editMessage = async (messageId, body) => {
     return res.json();
   } catch (error) {}
 }
+
+export const addProfilePic = async (img) => {
+  try {
+    const res = await fetch(`${API_URL}/profileImg`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        "profilePic": img
+      })
+    })
+
+    if (!res.ok) {
+      throw new Error("Failed to add image");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
