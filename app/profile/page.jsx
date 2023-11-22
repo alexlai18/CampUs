@@ -72,6 +72,7 @@ export default function ProfilePage() {
         const about = details.about;
         setAboutMe(about ? about : "");
         setUserDetails(details);
+        setProfilePic(details.profilePic ? {...profilePic, myFile:  details.profilePic} : { myFile: "" })
         setInitials(details.fname.slice(0, 1) + details.lname.slice(0, 1));
         setName(details.fname + " " + details.lname)
         setLoading(false);
@@ -109,16 +110,14 @@ export default function ProfilePage() {
   const handleNewPic = async (e) => {
     e.preventDefault();
 
+    setProfileLoad(true);
     const img = e.target.files[0];
     if (!img) return;
-    
+
     const base64 = await convertToBase64(img);
     setProfilePic({...profilePic, myFile: base64});
-    setProfileLoad(true);
-    // await addProfilePic(e.target.value);
-    setTimeout(function () {
-      setProfileLoad(false);
-    }, 2000)
+    await addProfilePic(searcherId, base64);
+    setProfileLoad(false);
   }
 
   return (
