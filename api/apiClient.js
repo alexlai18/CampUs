@@ -1,4 +1,4 @@
-const API_URL = "https://campus-backend-blond.vercel.app/api/v1";
+const API_URL = "http://localhost:5000/api/v1";
 
 //////////////////////////////////////////////////////////////
 //////////////////////// USER FUNCTIONS //////////////////////
@@ -564,6 +564,26 @@ export const editMessage = async (messageId, body) => {
 
     if (!res.ok) {
       throw new Error("Failed to fetch courses");
+    }
+
+    return res.json();
+  } catch (error) {}
+}
+
+export const addProfilePic = async (id, img) => {
+  try {
+    const res = await fetch(`${API_URL}/profileImg/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        "imgUrl": img
+      })
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to add image");
     }
 
     return res.json();
